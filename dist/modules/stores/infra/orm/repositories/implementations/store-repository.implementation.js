@@ -1,0 +1,62 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const store_entity_1 = __importDefault(require("../../entities/store.entity"));
+const database_1 = __importDefault(require("../../../../../../shared/infra/orm/database"));
+class StoreRepository {
+    repository;
+    constructor() {
+        this.repository = database_1.default.getRepository(store_entity_1.default);
+    }
+    async find(options) {
+        const query = this.repository.createQueryBuilder("stores");
+        if (options.id)
+            query.andWhere("stores.id = :id", { id: options.id });
+        if (options.street)
+            query.andWhere("stores.street = :street", { street: options.street });
+        if (options.neighborhood)
+            query.andWhere("stores.neighborhood = :neighborhood", { neighborhood: options.neighborhood });
+        if (options.city)
+            query.andWhere("stores.city = :city", { city: options.city });
+        if (options.state)
+            query.andWhere("stores.state = :state", { state: options.state });
+        if (options.number)
+            query.andWhere("stores.number = :number", { number: options.number });
+        if (options.created_at)
+            query.andWhere("stores.created_at = :created_at", {
+                created_at: options.created_at,
+            });
+        if (options.updated_at)
+            query.andWhere("stores.updated_at = :updated_at", {
+                updated_at: options.updated_at,
+            });
+        if (options.start_date)
+            query.andWhere("stores.create_at >= :start_date", {
+                start_date: options.start_date,
+            });
+        if (options.end_date)
+            query.andWhere("stores.create_at <= :end_date", {
+                end_date: options.end_date,
+            });
+        if (options.offset)
+            query.skip(options.offset);
+        if (options.limit)
+            query.take(options.limit);
+        return await query.getMany();
+    }
+    async create(data) {
+        const createStore = this.repository.create(data);
+        const saveStore = await this.repository.save(createStore);
+        return saveStore;
+    }
+    async update(id, data) {
+        await this.repository.update(id, data);
+    }
+    async delete(id) {
+        await this.repository.delete(id);
+    }
+}
+exports.default = StoreRepository;
+//# sourceMappingURL=store-repository.implementation.js.map

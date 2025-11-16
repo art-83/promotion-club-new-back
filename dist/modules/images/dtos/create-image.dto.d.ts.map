@@ -1,0 +1,1 @@
+{"version":3,"file":"create-image.dto.d.ts","sourceRoot":"","sources":["../../../../src/modules/images/dtos/create-image.dto.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,SAAS,CAAC;AAElC,UAAU,cAAe,SAAQ,OAAO,CAAC,EAAE,EAAE,EAAE,EAAE;IAAE,UAAU,EAAE,MAAM,CAAA;CAAE,CAAC;CAAG;AAE3E,eAAe,cAAc,CAAC"}

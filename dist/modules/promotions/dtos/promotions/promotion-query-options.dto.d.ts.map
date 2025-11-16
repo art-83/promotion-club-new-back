@@ -1,0 +1,1 @@
+{"version":3,"file":"promotion-query-options.dto.d.ts","sourceRoot":"","sources":["../../../../../src/modules/promotions/dtos/promotions/promotion-query-options.dto.ts"],"names":[],"mappings":"AAAA,OAAO,mBAAmB,MAAM,6DAA6D,CAAC;AAC9F,OAAO,SAAS,MAAM,2CAA2C,CAAC;AAElE,UAAU,wBAAyB,SAAQ,SAAS,EAAE,mBAAmB;IACvE,YAAY,EAAE,OAAO,CAAC;CACvB;AAED,eAAe,wBAAwB,CAAC"}
