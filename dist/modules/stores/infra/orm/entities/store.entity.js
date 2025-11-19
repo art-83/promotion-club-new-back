@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const user_entity_1 = __importDefault(require("../../../../users/infra/orm/entities/user.entity"));
 const product_entity_1 = __importDefault(require("../../../../promotions/infra/orm/entities/product.entity"));
+const image_entity_1 = __importDefault(require("../../../../images/infra/orm/entities/image.entity"));
 let Store = class Store {
     id;
     name;
@@ -26,6 +27,7 @@ let Store = class Store {
     created_at;
     updated_at;
     // relations
+    image;
     users;
     products;
 };
@@ -65,6 +67,14 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Store.prototype, "updated_at", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => image_entity_1.default, {
+        onDelete: "CASCADE",
+        nullable: true,
+    }),
+    (0, typeorm_1.JoinColumn)({ name: "image_id" }),
+    __metadata("design:type", image_entity_1.default)
+], Store.prototype, "image", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => user_entity_1.default, (user) => user.store),
     __metadata("design:type", Array)

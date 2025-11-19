@@ -19,6 +19,7 @@ async function main() {
 
   server.use(cors());
 
+  server.use("/files", express.static("storage/images"));
   server.use(express.json());
   server.use(routes);
   server.use(errors());

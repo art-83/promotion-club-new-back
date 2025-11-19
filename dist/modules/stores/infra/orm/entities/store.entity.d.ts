@@ -1,5 +1,6 @@
 import User from "../../../../users/infra/orm/entities/user.entity";
 import Product from "../../../../promotions/infra/orm/entities/product.entity";
+import Image from "../../../../images/infra/orm/entities/image.entity";
 declare class Store {
     id: string;
     name: string;
@@ -10,6 +11,7 @@ declare class Store {
     number: string;
     created_at: Date;
     updated_at: Date;
+    image: Image;
     users: User[];
     products: Product[];
 }

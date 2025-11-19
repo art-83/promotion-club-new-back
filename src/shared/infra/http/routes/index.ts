@@ -12,7 +12,7 @@ const routes = Router();
 
 routes.use("/auth", authRouter);
 
-routes.use(authMiddleware);
+//routes.use(authMiddleware);
 
 routes.use("/users", userRoutes);
 routes.use("/stores", storeRoutes);

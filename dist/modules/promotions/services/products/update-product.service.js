@@ -11,21 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
+const app_error_1 = __importDefault(require("../../../../shared/infra/http/errors/app-error"));
 let UpdateProductService = class UpdateProductService {
     productRepository;
-    constructor(productRepository) {
+    imageRepository;
+    constructor(productRepository, imageRepository) {
         this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
     }
     async execute(id, data) {
-        await this.productRepository.update(id, data);
+        let image;
+        if (data.image_id) {
+            image = (await this.imageRepository.find({ id: data.image_id })).at(0);
+            if (!image)
+                throw new app_error_1.default(404, "Image not found");
+        }
+        await this.productRepository.update(id, { ...data, image });
     }
 };
 UpdateProductService = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("ProductRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, tsyringe_1.inject)("ImageRepository")),
+    __metadata("design:paramtypes", [Object, Object])
 ], UpdateProductService);
 exports.default = UpdateProductService;
 //# sourceMappingURL=update-product.service.js.map

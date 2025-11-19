@@ -14,22 +14,36 @@ class PromotionRepository implements PromotionRepositoryProviders {
   public async find(options: PromotionQueryOptionsDTO): Promise<Promotion[]> {
     const query = this.repository.createQueryBuilder("promotions");
 
+    query.leftJoinAndSelect("promotions.product", "product");
+    query.leftJoinAndSelect("product.image", "image");
+    query.leftJoinAndSelect("product.store", "store");
+
     if (options.id) query.andWhere("promotions.id = :id", { id: options.id });
+
     if (options.discount_percentage) {
       query.andWhere("promotions.discount_percentage = :discount_percentage", {
         discount_percentage: options.discount_percentage,
       });
     }
+
     if (options.final_price)
       query.andWhere("promotions.final_price = :final_price", {
         final_price: options.final_price,
       });
+
+    if (options.start_final_price) query.andWhere("promotions.final_price >= :start_final_price", { start_final_price: options.start_final_price });
+    if (options.end_final_price) query.andWhere("promotions.final_price <= :end_final_price", { end_final_price: options.end_final_price });
+
     if (options.expire_at)
       query.andWhere("promotions.expire_at = :expire_at", {
         expire_at: options.expire_at,
       });
 
-    if (options.join_product) query.leftJoinAndSelect("promotions.product", "products");
+    if (options.store_id) {
+      query.andWhere("product.store_id = :store_id", {
+        store_id: options.store_id,
+      });
+    }
 
     if (options.start_date)
       query.andWhere("promotions.create_at >= :start_date", {
@@ -62,7 +76,7 @@ class PromotionRepository implements PromotionRepositoryProviders {
 
   public async removeAllExpiredPromotions(): Promise<void> {
     const now = new Date();
-    await this.repository.createQueryBuilder("promotions").delete().from(Promotion).where("promotions.expire_at < :now", { now }).execute();
+    await this.repository.createQueryBuilder("promotions").delete().where("promotions.expire_at < :now", { now }).execute();
   }
 }
 

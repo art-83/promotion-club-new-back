@@ -10,16 +10,19 @@ const storeRoutes = (0, express_1.Router)();
 const storeController = new store_controller_1.default();
 storeRoutes.post("/", (0, celebrate_1.celebrate)({
     [celebrate_1.Segments.BODY]: {
+        name: celebrate_1.Joi.string().required(),
         street: celebrate_1.Joi.string().required(),
         neighborhood: celebrate_1.Joi.string().required(),
         city: celebrate_1.Joi.string().required(),
         state: celebrate_1.Joi.string().required(),
         number: celebrate_1.Joi.string().required(),
+        image_id: celebrate_1.Joi.string().uuid().optional(),
     },
 }), storeController.create);
 storeRoutes.get("/", (0, celebrate_1.celebrate)({
     [celebrate_1.Segments.QUERY]: {
         id: celebrate_1.Joi.string().uuid(),
+        name: celebrate_1.Joi.string(),
         street: celebrate_1.Joi.string(),
         neighborhood: celebrate_1.Joi.string(),
         city: celebrate_1.Joi.string(),
@@ -32,11 +35,13 @@ storeRoutes.put("/:id", (0, celebrate_1.celebrate)({
         id: celebrate_1.Joi.string().uuid().required(),
     },
     [celebrate_1.Segments.BODY]: {
-        street: celebrate_1.Joi.string(),
-        neighborhood: celebrate_1.Joi.string(),
-        city: celebrate_1.Joi.string(),
-        state: celebrate_1.Joi.string(),
-        number: celebrate_1.Joi.string(),
+        name: celebrate_1.Joi.string().optional(),
+        street: celebrate_1.Joi.string().optional(),
+        neighborhood: celebrate_1.Joi.string().optional(),
+        city: celebrate_1.Joi.string().optional(),
+        state: celebrate_1.Joi.string().optional(),
+        number: celebrate_1.Joi.string().optional(),
+        image_id: celebrate_1.Joi.string().uuid().optional(),
     },
 }), storeController.update);
 storeRoutes.delete("/:id", (0, celebrate_1.celebrate)({

@@ -11,10 +11,9 @@ const promotion_routes_1 = __importDefault(require("../../../../modules/promotio
 const image_routes_1 = __importDefault(require("../../../../modules/images/infra/http/routers/image.routes"));
 const qr_code_routes_1 = __importDefault(require("../../../../modules/qr-code/infra/http/routers/qr-code.routes"));
 const auth_routes_1 = __importDefault(require("../../../../modules/users/infra/http/routers/auth.routes"));
-const auth_middleware_1 = __importDefault(require("../middlewares/auth.middleware"));
 const routes = (0, express_1.Router)();
 routes.use("/auth", auth_routes_1.default);
-routes.use(auth_middleware_1.default);
+//routes.use(authMiddleware);
 routes.use("/users", user_routes_1.default);
 routes.use("/stores", store_routes_1.default);
 routes.use("/products", product_routes_1.default);

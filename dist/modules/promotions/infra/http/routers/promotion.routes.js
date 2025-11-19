@@ -19,8 +19,14 @@ promotionRoutes.get("/", (0, celebrate_1.celebrate)({
     [celebrate_1.Segments.QUERY]: {
         id: celebrate_1.Joi.string().uuid(),
         discount_percentage: celebrate_1.Joi.number(),
-        final_price: celebrate_1.Joi.number(),
+        start_final_price: celebrate_1.Joi.number(),
+        end_final_price: celebrate_1.Joi.number(),
         expire_at: celebrate_1.Joi.date(),
+        store_id: celebrate_1.Joi.string().uuid(),
+        start_date: celebrate_1.Joi.date(),
+        end_date: celebrate_1.Joi.date(),
+        offset: celebrate_1.Joi.number().integer(),
+        limit: celebrate_1.Joi.number().integer(),
     },
 }), promotionController.show);
 promotionRoutes.put("/:id", (0, celebrate_1.celebrate)({

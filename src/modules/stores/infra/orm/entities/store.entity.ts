@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "../../../../users/infra/orm/entities/user.entity";
 import Product from "../../../../promotions/infra/orm/entities/product.entity";
+import Image from "../../../../images/infra/orm/entities/image.entity";
 
 @Entity({ name: "stores" })
 class Store {
@@ -32,6 +33,13 @@ class Store {
   updated_at: Date;
 
   // relations
+  @OneToOne(() => Image, {
+    onDelete: "CASCADE",
+    nullable: true,
+  })
+  @JoinColumn({ name: "image_id" })
+  image: Image;
+
   @OneToMany(() => User, (user) => user.store)
   users: User[];
 

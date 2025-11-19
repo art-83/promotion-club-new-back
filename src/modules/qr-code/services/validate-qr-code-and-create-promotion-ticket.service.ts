@@ -10,7 +10,7 @@ import PromotionQueryOptionsDTO from "../../promotions/dtos/promotions/promotion
 import UserQueryOptionsDTO from "../../users/dtos/user-query-options.dto";
 
 @injectable()
-class ValidateQrCodeService {
+class ValidateQrCodeAndCreatePromotionTicketService {
   constructor(
     @inject("CacheProvider")
     private cache: CacheProvider<CreateQrCodeDTO>,
@@ -35,7 +35,6 @@ class ValidateQrCodeService {
 
     const promotionsQueryOptions = {
       id: qrCodeParsed.promotion_id,
-      join_product: true,
     } as PromotionQueryOptionsDTO;
 
     const [user, promotion] = await Promise.all([
@@ -47,9 +46,12 @@ class ValidateQrCodeService {
     if (!promotion) throw new AppError(404, "Promotion not found.");
 
     const createPromotionTicketData = {
+      product_name: promotion.product.name,
+      product_price: promotion.product.price,
+      promotion_discount_percentage: promotion.discount_percentage,
+      promotion_final_price: promotion.final_price,
       saved_money: promotion.product.price - promotion.final_price,
       user: user,
-      promotion: promotion,
     } as Partial<PromotionTicket>;
 
     const createPromotionTicket = await this.promotionTicketRepository.create(createPromotionTicketData);
@@ -61,4 +63,4 @@ class ValidateQrCodeService {
   }
 }
 
-export default ValidateQrCodeService;
+export default ValidateQrCodeAndCreatePromotionTicketService;

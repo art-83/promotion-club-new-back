@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", String)
 ], Product.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: "decimal" }),
     __metadata("design:type", Number)
 ], Product.prototype, "price", void 0);
 __decorate([
@@ -48,14 +48,18 @@ __decorate([
     __metadata("design:type", Date)
 ], Product.prototype, "updated_at", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => store_entity_1.default, (store) => store.products),
+    (0, typeorm_1.ManyToOne)(() => store_entity_1.default, (store) => store.products, {
+        onDelete: "CASCADE",
+    }),
     (0, typeorm_1.JoinColumn)({ name: "store_id" }),
     __metadata("design:type", store_entity_1.default)
 ], Product.prototype, "store", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => image_entity_1.default, (image) => image.product, {
         onDelete: "CASCADE",
+        nullable: true,
     }),
+    (0, typeorm_1.JoinColumn)({ name: "image_id" }),
     __metadata("design:type", image_entity_1.default)
 ], Product.prototype, "image", void 0);
 __decorate([

@@ -23,8 +23,14 @@ promotionRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
       discount_percentage: Joi.number(),
-      final_price: Joi.number(),
+      start_final_price: Joi.number(),
+      end_final_price: Joi.number(),
       expire_at: Joi.date(),
+      store_id: Joi.string().uuid(),
+      start_date: Joi.date(),
+      end_date: Joi.date(),
+      offset: Joi.number().integer(),
+      limit: Joi.number().integer(),
     },
   }),
   promotionController.show

@@ -9,11 +9,13 @@ storeRoutes.post(
   "/",
   celebrate({
     [Segments.BODY]: {
+      name: Joi.string().required(),
       street: Joi.string().required(),
       neighborhood: Joi.string().required(),
       city: Joi.string().required(),
       state: Joi.string().required(),
       number: Joi.string().required(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   storeController.create
@@ -42,12 +44,13 @@ storeRoutes.put(
       id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      name: Joi.string(),
-      street: Joi.string(),
-      neighborhood: Joi.string(),
-      city: Joi.string(),
-      state: Joi.string(),
-      number: Joi.string(),
+      name: Joi.string().optional(),
+      street: Joi.string().optional(),
+      neighborhood: Joi.string().optional(),
+      city: Joi.string().optional(),
+      state: Joi.string().optional(),
+      number: Joi.string().optional(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   storeController.update

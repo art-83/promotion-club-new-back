@@ -14,17 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const product_entity_1 = __importDefault(require("./product.entity"));
-const promotion_ticket_entity_1 = __importDefault(require("../../../../tickets/infra/orm/entities/promotion-ticket.entity"));
 let Promotion = class Promotion {
     id;
     is_approved;
+    active;
     discount_percentage;
     expire_at;
     final_price;
     created_at;
     updated_at;
     product;
-    promotion_tickets;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
@@ -35,6 +34,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Promotion.prototype, "is_approved", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], Promotion.prototype, "active", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Promotion.prototype, "discount_percentage", void 0);
@@ -43,7 +46,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Promotion.prototype, "expire_at", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: "decimal" }),
     __metadata("design:type", Number)
 ], Promotion.prototype, "final_price", void 0);
 __decorate([
@@ -61,10 +64,6 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: "product_id" }),
     __metadata("design:type", product_entity_1.default)
 ], Promotion.prototype, "product", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => promotion_ticket_entity_1.default, (promotion_tickets) => promotion_tickets.promotion),
-    __metadata("design:type", Array)
-], Promotion.prototype, "promotion_tickets", void 0);
 Promotion = __decorate([
     (0, typeorm_1.Entity)({ name: "promotions" })
 ], Promotion);

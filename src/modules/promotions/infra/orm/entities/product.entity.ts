@@ -11,7 +11,7 @@ class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: "decimal" })
   price: number;
 
   @CreateDateColumn()
@@ -21,13 +21,17 @@ class Product {
   updated_at: Date;
 
   // relations
-  @ManyToOne(() => Store, (store) => store.products)
+  @ManyToOne(() => Store, (store) => store.products, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "store_id" })
   store: Store;
 
   @OneToOne(() => Image, (image) => image.product, {
     onDelete: "CASCADE",
+    nullable: true,
   })
+  @JoinColumn({ name: "image_id" })
   image: Image;
 
   @OneToOne(() => Promotion, (promotion) => promotion.product)

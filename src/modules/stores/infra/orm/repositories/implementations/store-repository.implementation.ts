@@ -3,6 +3,7 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import Store from "../../entities/store.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import StoreQueryOptionsDTO from "../../../../dtos/store-query-options.dto";
+import CreateOrUpdateStoreDTO from "../../../../dtos/create-or-update-store.dto";
 
 class StoreRepository implements RepositoryProvider<Store> {
   private repository: Repository<Store>;
@@ -11,8 +12,10 @@ class StoreRepository implements RepositoryProvider<Store> {
     this.repository = dataSource.getRepository(Store);
   }
 
-  public async find(options: StoreQueryOptionsDTO): Promise<Store[]> {
+  public async find(options: Partial<StoreQueryOptionsDTO>): Promise<Store[]> {
     const query = this.repository.createQueryBuilder("stores");
+
+    query.leftJoinAndSelect("stores.image", "image");
 
     if (options.id) query.andWhere("stores.id = :id", { id: options.id });
     if (options.name) query.andWhere("stores.name = :name", { name: options.name });
@@ -45,14 +48,15 @@ class StoreRepository implements RepositoryProvider<Store> {
     return await query.getMany();
   }
 
-  public async create(data: Partial<Store>): Promise<Store> {
+  public async create(data: Partial<CreateOrUpdateStoreDTO>): Promise<Store> {
     const createStore = this.repository.create(data);
     const saveStore = await this.repository.save(createStore);
     return saveStore;
   }
 
-  public async update(id: string, data: Partial<Store>): Promise<void> {
-    await this.repository.update(id, data);
+  public async update(id: string, data: Partial<CreateOrUpdateStoreDTO>): Promise<void> {
+    const updateStore = this.repository.create(data);
+    await this.repository.update(id, updateStore);
   }
 
   public async delete(id: string): Promise<void> {

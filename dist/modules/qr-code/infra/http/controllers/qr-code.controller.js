@@ -18,8 +18,8 @@ class QrCodeController {
         return response.status(201).json(qrCode);
     }
     async validate(request, response) {
-        const validateQrCodeService = tsyringe_1.container.resolve(validate_qr_code_and_create_promotion_ticket_service_1.default);
-        const qrCode = await validateQrCodeService.execute(request.user_id);
+        const validateQrCodeAndCreatePromotionTicketService = tsyringe_1.container.resolve(validate_qr_code_and_create_promotion_ticket_service_1.default);
+        const qrCode = await validateQrCodeAndCreatePromotionTicketService.execute(request.user_id);
         return response.status(200).json(qrCode);
     }
 }

@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 async function main() {
     const server = (0, express_1.default)();
     server.use((0, cors_1.default)());
+    server.use("/files", express_1.default.static("storage/images"));
     server.use(express_1.default.json());
     server.use(routes_1.default);
     server.use((0, celebrate_1.errors)());

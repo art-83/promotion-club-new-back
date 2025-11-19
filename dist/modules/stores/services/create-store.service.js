@@ -11,14 +11,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
+const app_error_1 = __importDefault(require("../../../shared/infra/http/errors/app-error"));
 let CreateStoreService = class CreateStoreService {
     storeRepository;
-    constructor(storeRepository) {
+    imageRepository;
+    constructor(storeRepository, imageRepository) {
         this.storeRepository = storeRepository;
+        this.imageRepository = imageRepository;
     }
     async execute(data) {
+        if (data.image_id) {
+            const image = (await this.imageRepository.find({ id: data.image_id })).at(0);
+            if (!image)
+                throw new app_error_1.default(404, "Image not found");
+            data.image = image;
+        }
         const store = await this.storeRepository.create(data);
         return store;
     }
@@ -26,7 +38,8 @@ let CreateStoreService = class CreateStoreService {
 CreateStoreService = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("StoreRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, tsyringe_1.inject)("ImageRepository")),
+    __metadata("design:paramtypes", [Object, Object])
 ], CreateStoreService);
 exports.default = CreateStoreService;
 //# sourceMappingURL=create-store.service.js.map

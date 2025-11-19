@@ -14,22 +14,13 @@ class PromotionTicketRepository implements RepositoryProvider<PromotionTicket> {
   public async find(options: PromotionTicketQueryOptionsDTO): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
 
-    if (options.id)
-      query.andWhere("promotion_tickets.id = :id", {
-        id: options.id,
-      });
+    if (options.id) query.andWhere("promotion_tickets.id = :id", { id: options.id });
 
     if (options.join_user) query.leftJoinAndSelect("promotion_tickets.user", "users");
-    if (options.join_promotion) query.leftJoinAndSelect("promotion_tickets.promotion", "promotions");
 
-    if (options.start_date)
-      query.andWhere("promotion_tickets.created_at >= :start_date", {
-        start_date: options.start_date,
-      });
-    if (options.end_date)
-      query.andWhere("promotion_tickets.created_at <= :end_date", {
-        end_date: options.end_date,
-      });
+    if (options.start_date) query.andWhere("promotion_tickets.created_at >= :start_date", { start_date: options.start_date });
+
+    if (options.end_date) query.andWhere("promotion_tickets.created_at <= :end_date", { end_date: options.end_date });
 
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);

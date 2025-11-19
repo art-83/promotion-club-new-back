@@ -15,6 +15,11 @@ class ImageRepository {
         const saveImage = await this.repository.save(createImage);
         return saveImage;
     }
+    async find(options) {
+        const query = this.repository.createQueryBuilder("image");
+        query.andWhere("image.id = :id", { id: options.id });
+        return await query.getMany();
+    }
 }
 exports.default = ImageRepository;
 //# sourceMappingURL=image-repository.implementation.js.map

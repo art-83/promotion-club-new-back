@@ -12,8 +12,11 @@ class StoreRepository {
     }
     async find(options) {
         const query = this.repository.createQueryBuilder("stores");
+        query.leftJoinAndSelect("stores.image", "image");
         if (options.id)
             query.andWhere("stores.id = :id", { id: options.id });
+        if (options.name)
+            query.andWhere("stores.name = :name", { name: options.name });
         if (options.street)
             query.andWhere("stores.street = :street", { street: options.street });
         if (options.neighborhood)
@@ -52,7 +55,8 @@ class StoreRepository {
         return saveStore;
     }
     async update(id, data) {
-        await this.repository.update(id, data);
+        const updateStore = this.repository.create(data);
+        await this.repository.update(id, updateStore);
     }
     async delete(id) {
         await this.repository.delete(id);

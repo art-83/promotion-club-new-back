@@ -2,7 +2,10 @@ import DefaultQueryOptions from "../../../../shared/infra/orm/dtos/default-query
 import Promotion from "../../infra/orm/entities/promotion.entity";
 
 interface PromotionQueryOptionsDTO extends Promotion, DefaultQueryOptions {
-  join_product: boolean;
+  start_final_price: number;
+  end_final_price: number;
+
+  store_id: string;
 }
 
 export default PromotionQueryOptionsDTO;

@@ -1,1 +1,1 @@
-{"version":3,"file":"image.routes.d.ts","sourceRoot":"","sources":["../../../../../../src/modules/images/infra/http/routers/image.routes.ts"],"names":[],"mappings":"AAKA,QAAA,MAAM,WAAW,4CAAW,CAAC;AAc7B,eAAe,WAAW,CAAC"}
+{"version":3,"file":"image.routes.d.ts","sourceRoot":"","sources":["../../../../../../src/modules/images/infra/http/routers/image.routes.ts"],"names":[],"mappings":"AAIA,QAAA,MAAM,WAAW,4CAAW,CAAC;AAS7B,eAAe,WAAW,CAAC"}

@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import Store from "../../../../stores/infra/orm/entities/store.entity";
 import Product from "../../../../promotions/infra/orm/entities/product.entity";
 
 @Entity({ name: "images" })
@@ -18,11 +19,10 @@ class Image {
   @CreateDateColumn()
   created_at: Date;
 
-  // relations
-  @OneToOne(() => Product, (product) => product.image, {
-    nullable: false,
-  })
-  @JoinColumn({ name: "product_id" })
+  @OneToOne(() => Store, (store) => store.image)
+  store: Store;
+
+  @OneToOne(() => Product, (product) => product.image)
   product: Product;
 }
 

@@ -15,6 +15,14 @@ class ImageRepository implements ImageRepositoryProvider {
     const saveImage = await this.repository.save(createImage);
     return saveImage;
   }
+
+  public async find(options: Partial<Image>): Promise<Image[]> {
+    const query = this.repository.createQueryBuilder("image");
+
+    query.andWhere("image.id = :id", { id: options.id });
+
+    return await query.getMany();
+  }
 }
 
 export default ImageRepository;

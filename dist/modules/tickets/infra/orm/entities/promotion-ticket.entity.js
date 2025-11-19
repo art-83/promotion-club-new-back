@@ -14,13 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const user_entity_1 = __importDefault(require("../../../../users/infra/orm/entities/user.entity"));
-const promotion_entity_1 = __importDefault(require("../../../../promotions/infra/orm/entities/promotion.entity"));
 let PromotionTicket = class PromotionTicket {
     id;
+    product_name;
+    product_price;
+    promotion_discount_percentage;
+    promotion_final_price;
     saved_money;
     created_at;
     user;
-    promotion;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
@@ -28,6 +30,22 @@ __decorate([
 ], PromotionTicket.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], PromotionTicket.prototype, "product_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal" }),
+    __metadata("design:type", Number)
+], PromotionTicket.prototype, "product_price", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal" }),
+    __metadata("design:type", Number)
+], PromotionTicket.prototype, "promotion_discount_percentage", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal" }),
+    __metadata("design:type", Number)
+], PromotionTicket.prototype, "promotion_final_price", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal" }),
     __metadata("design:type", Number)
 ], PromotionTicket.prototype, "saved_money", void 0);
 __decorate([
@@ -39,11 +57,6 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: "user_id" }),
     __metadata("design:type", user_entity_1.default)
 ], PromotionTicket.prototype, "user", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => promotion_entity_1.default, (promotion) => promotion.promotion_tickets),
-    (0, typeorm_1.JoinColumn)({ name: "promotion_id" }),
-    __metadata("design:type", promotion_entity_1.default)
-], PromotionTicket.prototype, "promotion", void 0);
 PromotionTicket = __decorate([
     (0, typeorm_1.Entity)({ name: "promotion_tickets" })
 ], PromotionTicket);

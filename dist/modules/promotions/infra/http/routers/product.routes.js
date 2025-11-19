@@ -13,6 +13,7 @@ productRoutes.post("/", (0, celebrate_1.celebrate)({
         name: celebrate_1.Joi.string().required(),
         price: celebrate_1.Joi.number().required(),
         store_id: celebrate_1.Joi.string().uuid().required(),
+        image_id: celebrate_1.Joi.string().uuid().optional(),
     },
 }), productController.create);
 productRoutes.get("/", (0, celebrate_1.celebrate)({
@@ -20,6 +21,11 @@ productRoutes.get("/", (0, celebrate_1.celebrate)({
         id: celebrate_1.Joi.string().uuid(),
         name: celebrate_1.Joi.string(),
         price: celebrate_1.Joi.number(),
+        start_price: celebrate_1.Joi.number(),
+        end_price: celebrate_1.Joi.number(),
+        store_id: celebrate_1.Joi.string().uuid(),
+        join_store: celebrate_1.Joi.boolean(),
+        join_image: celebrate_1.Joi.boolean(),
     },
 }), productController.show);
 productRoutes.put("/:id", (0, celebrate_1.celebrate)({
@@ -27,8 +33,10 @@ productRoutes.put("/:id", (0, celebrate_1.celebrate)({
         id: celebrate_1.Joi.string().uuid().required(),
     },
     [celebrate_1.Segments.BODY]: {
-        name: celebrate_1.Joi.string(),
-        price: celebrate_1.Joi.number(),
+        name: celebrate_1.Joi.string().optional(),
+        price: celebrate_1.Joi.number().optional(),
+        store_id: celebrate_1.Joi.string().uuid().optional(),
+        image_id: celebrate_1.Joi.string().uuid().optional(),
     },
 }), productController.update);
 productRoutes.delete("/:id", (0, celebrate_1.celebrate)({

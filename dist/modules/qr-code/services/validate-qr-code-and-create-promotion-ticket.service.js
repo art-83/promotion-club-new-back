@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
 const app_error_1 = __importDefault(require("../../../shared/infra/http/errors/app-error"));
-let ValidateQrCodeService = class ValidateQrCodeService {
+let ValidateQrCodeAndCreatePromotionTicketService = class ValidateQrCodeAndCreatePromotionTicketService {
     cache;
     promotionTicketRepository;
     userRepository;
@@ -38,7 +38,6 @@ let ValidateQrCodeService = class ValidateQrCodeService {
         };
         const promotionsQueryOptions = {
             id: qrCodeParsed.promotion_id,
-            join_product: true,
         };
         const [user, promotion] = await Promise.all([
             (await this.userRepository.find(userQueryOptions)).at(0),
@@ -49,9 +48,12 @@ let ValidateQrCodeService = class ValidateQrCodeService {
         if (!promotion)
             throw new app_error_1.default(404, "Promotion not found.");
         const createPromotionTicketData = {
+            product_name: promotion.product.name,
+            product_price: promotion.product.price,
+            promotion_discount_percentage: promotion.discount_percentage,
+            promotion_final_price: promotion.final_price,
             saved_money: promotion.product.price - promotion.final_price,
             user: user,
-            promotion: promotion,
         };
         const createPromotionTicket = await this.promotionTicketRepository.create(createPromotionTicketData);
         const removeQrCode = await this.cache.delete(user_id);
@@ -60,13 +62,13 @@ let ValidateQrCodeService = class ValidateQrCodeService {
         return { message: "QrCode validated successfuly.", createPromotionTicket };
     }
 };
-ValidateQrCodeService = __decorate([
+ValidateQrCodeAndCreatePromotionTicketService = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("CacheProvider")),
     __param(1, (0, tsyringe_1.inject)("PromotionTicketRepository")),
     __param(2, (0, tsyringe_1.inject)("UserRepository")),
     __param(3, (0, tsyringe_1.inject)("PromotionRepository")),
     __metadata("design:paramtypes", [Object, Object, Object, Object])
-], ValidateQrCodeService);
-exports.default = ValidateQrCodeService;
+], ValidateQrCodeAndCreatePromotionTicketService);
+exports.default = ValidateQrCodeAndCreatePromotionTicketService;
 //# sourceMappingURL=validate-qr-code-and-create-promotion-ticket.service.js.map

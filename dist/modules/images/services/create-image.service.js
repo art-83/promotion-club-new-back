@@ -19,22 +19,16 @@ const tsyringe_1 = require("tsyringe");
 const app_error_1 = __importDefault(require("../../../shared/infra/http/errors/app-error"));
 let CreateImageService = class CreateImageService {
     imageRepository;
-    productRepository;
-    constructor(imageRepository, productRepository) {
+    constructor(imageRepository) {
         this.imageRepository = imageRepository;
-        this.productRepository = productRepository;
     }
     async execute(data) {
         if (!data.file)
             throw new app_error_1.default(400, "Image not provided.");
-        const product = (await this.productRepository.find({ id: data.body.product_id })).at(0);
-        if (!product)
-            throw new app_error_1.default(404, "Product not found.");
         const image = await this.imageRepository.create({
             name: data.file.originalname,
             path: data.file.filename,
             mimetype: data.file.mimetype,
-            product: product,
         });
         return image;
     }
@@ -42,8 +36,7 @@ let CreateImageService = class CreateImageService {
 CreateImageService = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("ImageRepository")),
-    __param(1, (0, tsyringe_1.inject)("ProductRepository")),
-    __metadata("design:paramtypes", [Object, Object])
+    __metadata("design:paramtypes", [Object])
 ], CreateImageService);
 exports.default = CreateImageService;
 //# sourceMappingURL=create-image.service.js.map

@@ -8,6 +8,18 @@ class PromotionTicket {
   id: string;
 
   @Column()
+  product_name: string;
+
+  @Column({ type: "decimal" })
+  product_price: number;
+  
+  @Column({ type: "decimal" })
+  promotion_discount_percentage: number;
+
+  @Column({ type: "decimal" })
+  promotion_final_price: number;
+
+  @Column({ type: "decimal" })
   saved_money: number;
 
   @CreateDateColumn()
@@ -16,10 +28,6 @@ class PromotionTicket {
   @ManyToOne(() => User, (user) => user.promotional_ticket)
   @JoinColumn({ name: "user_id" })
   user: User;
-
-  @ManyToOne(() => Promotion, (promotion) => promotion.promotion_tickets)
-  @JoinColumn({ name: "promotion_id" })
-  promotion: Promotion;
 }
 
 export default PromotionTicket;

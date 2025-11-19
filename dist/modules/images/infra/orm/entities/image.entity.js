@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
+const store_entity_1 = __importDefault(require("../../../../stores/infra/orm/entities/store.entity"));
 const product_entity_1 = __importDefault(require("../../../../promotions/infra/orm/entities/product.entity"));
 let Image = class Image {
     id;
@@ -20,7 +21,7 @@ let Image = class Image {
     path;
     mimetype;
     created_at;
-    // relations
+    store;
     product;
 };
 __decorate([
@@ -44,10 +45,11 @@ __decorate([
     __metadata("design:type", Date)
 ], Image.prototype, "created_at", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => product_entity_1.default, (product) => product.image, {
-        nullable: false,
-    }),
-    (0, typeorm_1.JoinColumn)({ name: "product_id" }),
+    (0, typeorm_1.OneToOne)(() => store_entity_1.default, (store) => store.image),
+    __metadata("design:type", store_entity_1.default)
+], Image.prototype, "store", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => product_entity_1.default, (product) => product.image),
     __metadata("design:type", product_entity_1.default)
 ], Image.prototype, "product", void 0);
 Image = __decorate([

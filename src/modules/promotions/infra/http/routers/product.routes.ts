@@ -12,6 +12,7 @@ productRoutes.post(
       name: Joi.string().required(),
       price: Joi.number().required(),
       store_id: Joi.string().uuid().required(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   productController.create
@@ -24,6 +25,11 @@ productRoutes.get(
       id: Joi.string().uuid(),
       name: Joi.string(),
       price: Joi.number(),
+      start_price: Joi.number(),
+      end_price: Joi.number(),
+      store_id: Joi.string().uuid(),
+      join_store: Joi.boolean(),
+      join_image: Joi.boolean(),
     },
   }),
   productController.show
@@ -36,8 +42,10 @@ productRoutes.put(
       id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      name: Joi.string(),
-      price: Joi.number(),
+      name: Joi.string().optional(),
+      price: Joi.number().optional(),
+      store_id: Joi.string().uuid().optional(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   productController.update

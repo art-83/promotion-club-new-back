@@ -4,7 +4,7 @@ import RepositoryProvider from "../../../shared/infra/orm/repositories/providers
 import PromotionTicket from "../../tickets/infra/orm/entities/promotion-ticket.entity";
 import User from "../../users/infra/orm/entities/user.entity";
 import Promotion from "../../promotions/infra/orm/entities/promotion.entity";
-declare class ValidateQrCodeService {
+declare class ValidateQrCodeAndCreatePromotionTicketService {
     private cache;
     private promotionTicketRepository;
     private userRepository;
@@ -15,5 +15,5 @@ declare class ValidateQrCodeService {
         createPromotionTicket: Partial<PromotionTicket>;
     }>;
 }
-export default ValidateQrCodeService;
+export default ValidateQrCodeAndCreatePromotionTicketService;
 //# sourceMappingURL=validate-qr-code-and-create-promotion-ticket.service.d.ts.map
