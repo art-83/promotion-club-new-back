@@ -8,8 +8,6 @@ services:
     container_name: indaiatuba-new-back-app
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
     env_file:
       - .env
     depends_on:
@@ -36,7 +34,7 @@ services:
     image: dpage/pgadmin4
     container_name: indaiatuba-new-back-pgadmin
     ports:
-      - "5050:80"
+      - "5050:5050"
     environment:
       PGADMIN_DEFAULT_EMAIL: docker@docker.com
       PGADMIN_DEFAULT_PASSWORD: docker
