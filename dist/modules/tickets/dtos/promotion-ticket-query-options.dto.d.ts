@@ -1,7 +1,0 @@
-import DefaultQueryOptions from "../../../shared/infra/orm/dtos/default-query-options.dto";
-import PromotionTicket from "../infra/orm/entities/promotion-ticket.entity";
-interface PromotionTicketQueryOptionsDTO extends PromotionTicket, DefaultQueryOptions {
-    join_user?: boolean;
-}
-export default PromotionTicketQueryOptionsDTO;
-//# sourceMappingURL=promotion-ticket-query-options.dto.d.ts.map
