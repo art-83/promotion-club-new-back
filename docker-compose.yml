@@ -8,6 +8,8 @@ services:
     container_name: indaiatuba-new-back-app
     ports:
       - "3000:3000"
+    volumes:
+      - .:/
     env_file:
       - .env
     depends_on:
