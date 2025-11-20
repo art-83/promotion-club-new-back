@@ -36,7 +36,7 @@ jobs:
         echo "${{ secrets.SSH_ENV }}" > .env
         echo ".env file created successfully"
 
-    - name: Test SSH connection
+    - name: Prepare VPS directory
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -44,10 +44,15 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          echo "Testing SSH connection..."
+          echo "Stopping Docker containers..."
+          cd /home/user/app 2>/dev/null || true
+          sudo docker-compose down 2>/dev/null || true
+          echo "Preparing deployment directory..."
           mkdir -p /home/user/app
-          ls -la /home/user/app
-          whoami
+          cd /home/user/app
+          rm -rf dist package.json package-lock.json docker-compose.yml Dockerfile .env 2>/dev/null || true
+          echo "Directory cleaned and ready"
+          ls -la /home/user/app || echo "Directory is empty (expected)"
 
     - name: Copy files to VPS
       uses: appleboy/scp-action@master
@@ -58,7 +63,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         source: "dist,package.json,package-lock.json,docker-compose.yml,Dockerfile,.env"
         target: "/home/user/app"
-        rm: true
+        rm: false
         debug: true
 
     - name: Deploy to VPS
