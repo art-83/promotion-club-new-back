@@ -14,9 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const user_entity_1 = __importDefault(require("./user.entity"));
+const store_entity_1 = __importDefault(require("../../../../stores/infra/orm/entities/store.entity"));
 let UserPermissions = class UserPermissions {
     id;
     permissions;
+    store;
     // relations
     user;
 };
@@ -28,6 +30,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: "varchar", array: true, nullable: true }),
     __metadata("design:type", Array)
 ], UserPermissions.prototype, "permissions", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => store_entity_1.default, (store) => store.user_permissions, {
+        nullable: true,
+        onDelete: "SET NULL",
+    }),
+    (0, typeorm_1.JoinColumn)({ name: "store_id" }),
+    __metadata("design:type", store_entity_1.default)
+], UserPermissions.prototype, "store", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.default, (user) => user.user_permissions, {
         onDelete: "CASCADE",

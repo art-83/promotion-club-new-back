@@ -5,7 +5,7 @@ import HashProvider from "../../../../shared/infra/hash/infra/providers/hash.pro
 import UserPermissions from "../../infra/orm/entities/user-permissions.entity";
 
 @injectable()
-class CreateUserService {
+class CreateUserAndVinculateUserPermissionsService {
   constructor(
     @inject("UserRepository")
     private userRepository: RepositoryProvider<User>,
@@ -16,11 +16,12 @@ class CreateUserService {
   ) {}
 
   public async execute(data: Partial<User>): Promise<{ user: User; userPermissions: UserPermissions }> {
-    data.password = await this.hash.encrypt(String(data.password));
+    const passwordHash = await this.hash.encrypt(String(data.password));
+    data.password = passwordHash;
     const user = await this.userRepository.create(data);
-    const userPermissions = await this.userPermissionsRepository.create({ id: user.id });
+    const userPermissions = await this.userPermissionsRepository.create({ user: user });
     return { user, userPermissions };
   }
 }
 
-export default CreateUserService;
+export default CreateUserAndVinculateUserPermissionsService;

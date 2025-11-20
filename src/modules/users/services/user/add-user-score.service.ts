@@ -14,8 +14,6 @@ class AddUserScoreService {
     const user = (await this.userRepository.find({ id: id })).at(0);
     if (!user) throw new AppError(404, "User not found.");
     const newScore = user.score + scoreToAdd;
-    const updateUser = await this.userRepository.update(id, {
-      score: newScore,
-    });
+    await this.userRepository.update(id, { score: newScore });
   }
 }

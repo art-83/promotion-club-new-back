@@ -1,12 +1,12 @@
 import { container } from "tsyringe";
-import CreateUserService from "../../../services/user/create-user.service";
+import CreateUserAndVinculateUserPermissionsService from "../../../services/user/create-user-and-vinculate-user-permissions.service";
 import { Request, Response } from "express";
 import CreateUserSessionService from "../../../services/user/create-user-session.service";
 
 class AuthController {
   public async signUp(request: Request, response: Response) {
-    const createUserService = container.resolve(CreateUserService);
-    const createUser = await createUserService.execute(request.body);
+    const createUserAndVinculateUserPermissionsService = container.resolve(CreateUserAndVinculateUserPermissionsService);
+    const createUser = await createUserAndVinculateUserPermissionsService.execute(request.body);
     return response.status(201).json(createUser);
   }
 

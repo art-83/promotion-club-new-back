@@ -22,8 +22,8 @@ class ProductController {
     async update(request, response) {
         const id = String(request.params.id);
         const updateProductService = tsyringe_1.container.resolve(update_product_service_1.default);
-        const updateProduct = await updateProductService.execute(id, request.body);
-        return response.status(200).json(updateProduct);
+        await updateProductService.execute(id, request.body);
+        return response.status(200).send();
     }
     async delete(request, response) {
         const id = String(request.params.id);

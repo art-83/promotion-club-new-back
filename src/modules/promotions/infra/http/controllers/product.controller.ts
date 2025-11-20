@@ -22,8 +22,8 @@ class ProductController {
   public async update(request: Request, response: Response) {
     const id = String(request.params.id);
     const updateProductService = container.resolve(UpdateProductService);
-    const updateProduct = await updateProductService.execute(id, request.body);
-    return response.status(200).json(updateProduct);
+    await updateProductService.execute(id, request.body);
+    return response.status(200).send();
   }
 
   public async delete(request: Request, response: Response) {

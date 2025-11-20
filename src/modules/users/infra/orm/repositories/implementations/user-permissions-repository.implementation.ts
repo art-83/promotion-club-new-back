@@ -1,8 +1,9 @@
 import { Repository } from "typeorm";
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 import UserPermissions from "../../entities/user-permissions.entity";
+import UserPermissionsQueryOptionsDTO from "../../../../dtos/users-permissions/user-permissions-query-options.dto";
 import dataSource from "../../../../../../shared/infra/orm/database";
-import UserPermissionsQueryOptionsDTO from "../../../../dtos/user-permissions-query-options.dto";
+import CreateOrUpdateUserPermissions from "../../../../dtos/users-permissions/create-or-update-user-permissions.dto";
 
 class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
   private repository: Repository<UserPermissions>;
@@ -27,13 +28,13 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
     return await query.getMany();
   }
 
-  public async create(data: Partial<UserPermissions>): Promise<UserPermissions> {
+  public async create(data: Partial<CreateOrUpdateUserPermissions>): Promise<UserPermissions> {
     const createUserPermission = this.repository.create(data);
     const saveUserPermission = await this.repository.save(createUserPermission);
     return saveUserPermission;
   }
 
-  public async update(id: string, data: Partial<UserPermissions>): Promise<void> {
+  public async update(id: string, data: Partial<CreateOrUpdateUserPermissions>): Promise<void> {
     await this.repository.update(id, data);
   }
 

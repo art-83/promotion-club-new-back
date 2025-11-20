@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const user_permissions_entity_1 = __importDefault(require("./user-permissions.entity"));
-const store_entity_1 = __importDefault(require("../../../../stores/infra/orm/entities/store.entity"));
 const promotion_ticket_entity_1 = __importDefault(require("../../../../tickets/infra/orm/entities/promotion-ticket.entity"));
 let User = class User {
     id;
@@ -25,8 +24,6 @@ let User = class User {
     score;
     created_at;
     updated_at;
-    // joins
-    store;
     // relations
     user_permissions;
     promotional_ticket;
@@ -63,14 +60,6 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], User.prototype, "updated_at", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => store_entity_1.default, (store) => store.users, {
-        nullable: true,
-        onDelete: "SET NULL",
-    }),
-    (0, typeorm_1.JoinColumn)({ name: "store_id" }),
-    __metadata("design:type", store_entity_1.default)
-], User.prototype, "store", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_permissions_entity_1.default, (user_permissions) => user_permissions.user),
     __metadata("design:type", user_permissions_entity_1.default)

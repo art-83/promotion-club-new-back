@@ -29,14 +29,6 @@ class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  // joins
-  @ManyToOne(() => Store, (store) => store.users, {
-    nullable: true,
-    onDelete: "SET NULL",
-  })
-  @JoinColumn({ name: "store_id" })
-  store: Store;
-
   // relations
   @OneToOne(() => UserPermissions, (user_permissions) => user_permissions.user)
   user_permissions: UserPermissions;

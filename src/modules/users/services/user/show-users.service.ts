@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import UserQueryOptionsDTO from "../../dtos/user-query-options.dto";
+import UserQueryOptionsDTO from "../../dtos/users/user-query-options.dto";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import User from "../../infra/orm/entities/user.entity";
 

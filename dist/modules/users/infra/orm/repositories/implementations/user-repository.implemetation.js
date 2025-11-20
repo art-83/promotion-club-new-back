@@ -12,11 +12,10 @@ class UserRepository {
     }
     async find(options) {
         const query = this.repository.createQueryBuilder("users");
-        query.leftJoin("users.user_permissions", "user_permissions");
         if (options.id)
             query.andWhere("users.id = :id", { id: options.id });
         if (options.name)
-            query.andWhere("users.name = :name", { name: options.name });
+            query.andWhere("users.name ILIKE :name", { name: `%${options.name}%` });
         if (options.email)
             query.andWhere("users.email = :email", {
                 email: options.email,
@@ -31,8 +30,8 @@ class UserRepository {
             query.andWhere("users.updated_at = :updated_at", {
                 updated_at: options.updated_at,
             });
-        if (options.join_store)
-            query.leftJoinAndSelect("users.store", "stores");
+        if (options.join_user_permissions)
+            query.leftJoinAndSelect("users.user_permissions", "user_permissions");
         if (options.start_date)
             query.andWhere("users.create_at >= :start_date", {
                 start_date: options.start_date,

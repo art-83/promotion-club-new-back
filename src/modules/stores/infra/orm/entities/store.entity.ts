@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Prim
 import User from "../../../../users/infra/orm/entities/user.entity";
 import Product from "../../../../promotions/infra/orm/entities/product.entity";
 import Image from "../../../../images/infra/orm/entities/image.entity";
+import UserPermissions from "../../../../users/infra/orm/entities/user-permissions.entity";
 
 @Entity({ name: "stores" })
 class Store {
@@ -40,11 +41,11 @@ class Store {
   @JoinColumn({ name: "image_id" })
   image: Image;
 
-  @OneToMany(() => User, (user) => user.store)
-  users: User[];
-
   @OneToMany(() => Product, (product) => product.store)
   products: Product[];
+
+  @OneToMany(() => UserPermissions, (user_permissions) => user_permissions.store)
+  user_permissions: UserPermissions[];
 }
 
 export default Store;

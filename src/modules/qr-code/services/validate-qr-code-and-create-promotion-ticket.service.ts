@@ -7,7 +7,7 @@ import PromotionTicket from "../../tickets/infra/orm/entities/promotion-ticket.e
 import User from "../../users/infra/orm/entities/user.entity";
 import Promotion from "../../promotions/infra/orm/entities/promotion.entity";
 import PromotionQueryOptionsDTO from "../../promotions/dtos/promotions/promotion-query-options.dto";
-import UserQueryOptionsDTO from "../../users/dtos/user-query-options.dto";
+import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
 
 @injectable()
 class ValidateQrCodeAndCreatePromotionTicketService {

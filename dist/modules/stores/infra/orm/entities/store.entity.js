@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const user_entity_1 = __importDefault(require("../../../../users/infra/orm/entities/user.entity"));
 const product_entity_1 = __importDefault(require("../../../../promotions/infra/orm/entities/product.entity"));
 const image_entity_1 = __importDefault(require("../../../../images/infra/orm/entities/image.entity"));
+const user_permissions_entity_1 = __importDefault(require("../../../../users/infra/orm/entities/user-permissions.entity"));
 let Store = class Store {
     id;
     name;
@@ -28,8 +28,8 @@ let Store = class Store {
     updated_at;
     // relations
     image;
-    users;
     products;
+    user_permissions;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
@@ -76,13 +76,13 @@ __decorate([
     __metadata("design:type", image_entity_1.default)
 ], Store.prototype, "image", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => user_entity_1.default, (user) => user.store),
-    __metadata("design:type", Array)
-], Store.prototype, "users", void 0);
-__decorate([
     (0, typeorm_1.OneToMany)(() => product_entity_1.default, (product) => product.store),
     __metadata("design:type", Array)
 ], Store.prototype, "products", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => user_permissions_entity_1.default, (user_permissions) => user_permissions.store),
+    __metadata("design:type", Array)
+], Store.prototype, "user_permissions", void 0);
 Store = __decorate([
     (0, typeorm_1.Entity)({ name: "stores" })
 ], Store);

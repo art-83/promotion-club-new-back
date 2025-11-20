@@ -11,7 +11,10 @@ const permissionMiddleware = (requiredPermission) => {
         try {
             const showUserPermissionsService = tsyringe_1.container.resolve(show_user_permissions_service_1.default);
             const userPermissions = (await showUserPermissionsService.execute({ user_id: request.user_id })).at(0);
-            if (!userPermissions || !userPermissions.permissions.includes(requiredPermission)) {
+            if (!userPermissions)
+                throw new app_error_1.default(404, "User permissions not found.");
+            const hasPermission = userPermissions.permissions.includes(requiredPermission);
+            if (!hasPermission) {
                 return response.status(403).json({ message: "Insufficient permissions." });
             }
         }

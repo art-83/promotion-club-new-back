@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 import User from "../../entities/user.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
-import UserQueryOptionsDTO from "../../../../dtos/user-query-options.dto";
+import UserQueryOptionsDTO from "../../../../dtos/users/user-query-options.dto";
 
 class UserRepository implements RepositoryProvider<User> {
   private repository: Repository<User>;
@@ -14,10 +14,8 @@ class UserRepository implements RepositoryProvider<User> {
   public async find(options: UserQueryOptionsDTO): Promise<User[]> {
     const query = this.repository.createQueryBuilder("users");
 
-    query.leftJoin("users.user_permissions", "user_permissions");
-
     if (options.id) query.andWhere("users.id = :id", { id: options.id });
-    if (options.name) query.andWhere("users.name = :name", { name: options.name });
+    if (options.name) query.andWhere("users.name ILIKE :name", { name: `%${options.name}%` });
     if (options.email)
       query.andWhere("users.email = :email", {
         email: options.email,
@@ -32,7 +30,7 @@ class UserRepository implements RepositoryProvider<User> {
         updated_at: options.updated_at,
       });
 
-    if (options.join_store) query.leftJoinAndSelect("users.store", "stores");
+    if (options.join_user_permissions) query.leftJoinAndSelect("users.user_permissions", "user_permissions");
 
     if (options.start_date)
       query.andWhere("users.create_at >= :start_date", {

@@ -1,6 +1,6 @@
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 import User from "../../entities/user.entity";
-import UserQueryOptionsDTO from "../../../../dtos/user-query-options.dto";
+import UserQueryOptionsDTO from "../../../../dtos/users/user-query-options.dto";
 declare class UserRepository implements RepositoryProvider<User> {
     private repository;
     constructor();
