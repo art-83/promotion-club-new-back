@@ -21,4 +21,8 @@ routes.use("/promotions", promotionRoutes);
 routes.use("/images", imageRoutes);
 routes.use("/qr-codes", qrCodeRoutes);
 
+routes.use("/", (req, res) => {
+  return res.status(200).json({ message: "Hello, World! 1.0" });
+});
+
 export default routes;
