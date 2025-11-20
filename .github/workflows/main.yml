@@ -24,6 +24,31 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Verify build output
+      run: |
+        echo "Checking if dist directory exists..."
+        ls -la dist/ || echo "dist directory not found!"
+        echo "Checking required files..."
+        ls -la package.json package-lock.json docker-compose.yml Dockerfile || echo "Some files missing!"
+
+    - name: Create .env file
+      run: |
+        echo "${{ secrets.SSH_ENV }}" > .env
+        echo ".env file created successfully"
+
+    - name: Test SSH connection
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "Testing SSH connection..."
+          mkdir -p /home/user/app
+          ls -la /home/user/app
+          whoami
+
     - name: Copy files to VPS
       uses: appleboy/scp-action@master
       with:
@@ -31,8 +56,10 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        source: "dist,package.json,package-lock.json,docker-compose.yml,Dockerfile"
+        source: "dist,package.json,package-lock.json,docker-compose.yml,Dockerfile,.env"
         target: "/home/user/app"
+        rm: true
+        debug: true
 
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
