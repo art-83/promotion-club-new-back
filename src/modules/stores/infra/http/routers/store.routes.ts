@@ -32,6 +32,7 @@ storeRoutes.get(
       city: Joi.string(),
       state: Joi.string(),
       number: Joi.string(),
+      join_image: Joi.boolean(),
     },
   }),
   storeController.show

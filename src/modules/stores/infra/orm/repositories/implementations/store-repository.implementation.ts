@@ -15,8 +15,7 @@ class StoreRepository implements RepositoryProvider<Store> {
   public async find(options: Partial<StoreQueryOptionsDTO>): Promise<Store[]> {
     const query = this.repository.createQueryBuilder("stores");
 
-    query.leftJoinAndSelect("stores.image", "image");
-
+    if (options.join_image) query.leftJoinAndSelect("stores.image", "image");
     if (options.id) query.andWhere("stores.id = :id", { id: options.id });
     if (options.name) query.andWhere("stores.name = :name", { name: options.name });
     if (options.street) query.andWhere("stores.street = :street", { street: options.street });
