@@ -10,6 +10,8 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    volumes:
+      - app_storage:/storage
     depends_on:
       - db
       - redis
@@ -44,3 +46,4 @@ services:
 volumes:
   pgdata:
   redis_data:
+  app_storage:
