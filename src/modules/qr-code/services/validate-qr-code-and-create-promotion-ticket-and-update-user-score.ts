@@ -1,4 +1,4 @@
-import { container, inject, injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import CacheProvider from "../../../shared/infra/cache/providers/cache.provider";
 import AppError from "../../../shared/infra/http/errors/app-error";
 import CreateQrCodeDTO from "../dtos/create-qr-code.dto";
@@ -8,7 +8,6 @@ import User from "../../users/infra/orm/entities/user.entity";
 import Promotion from "../../promotions/infra/orm/entities/promotion.entity";
 import PromotionQueryOptionsDTO from "../../promotions/dtos/promotions/promotion-query-options.dto";
 import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
-import UpdateUserScoreService from "../../users/services/user/update-user-score.service";
 
 @injectable()
 class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
@@ -59,9 +58,9 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
 
     const removeQrCode = await this.cache.delete(user_id);
     if (removeQrCode == 0) throw new AppError(404, "QrCode invalid or expired.");
-
-    const updateUserScoreService = container.resolve(UpdateUserScoreService);
-    await updateUserScoreService.execute(user_id, promotion.final_price);
+    
+    const newScore = user.score + promotion.final_price;
+    await this.userRepository.update(user_id, { score: newScore });
 
     return { message: "QrCode validated successfuly.", createPromotionTicket };
   }
