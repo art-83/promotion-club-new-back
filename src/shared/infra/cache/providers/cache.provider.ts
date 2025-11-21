@@ -1,6 +1,6 @@
 interface CacheProvider<T> {
-  generate(data: T): Promise<string>;
-  find(id: string): Promise<string>;
+  generate(data: T): Promise<T>;
+  find(id: string): Promise<string | null>;
   delete(id: string): Promise<number>;
 }
 

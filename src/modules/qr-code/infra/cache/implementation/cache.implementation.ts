@@ -10,14 +10,14 @@ class Cache implements CacheProvider<CreateQrCodeDTO> {
     this.client = cacheClient;
   }
 
-  public async generate(data: CreateQrCodeDTO): Promise<string> {
+  public async generate(data: CreateQrCodeDTO): Promise<CreateQrCodeDTO> {
     const jsonData = JSON.stringify(data);
-    const save = String(await this.client.set(data.user_id, jsonData, cacheConfig.expiration));
-    return save;
+    await this.client.set(data.user_id, jsonData, cacheConfig.expiration);
+    return data;
   }
 
-  public async find(id: string): Promise<string> {
-    const qrCode = String(this.client.get(id));
+  public async find(id: string): Promise<string | null> {
+    const qrCode = await this.client.get(id);
     return qrCode;
   }
 

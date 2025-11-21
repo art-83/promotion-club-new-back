@@ -9,8 +9,7 @@ class GenerateQrCodeService {
     private cacheProvider: CacheProvider<CreateQrCodeDTO>
   ) {}
 
-  public async execute(data: CreateQrCodeDTO): Promise<string> {
-    
+  public async execute(data: CreateQrCodeDTO): Promise<CreateQrCodeDTO> {
     return await this.cacheProvider.generate(data);
   }
 }

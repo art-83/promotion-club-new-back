@@ -18,6 +18,14 @@ qrCodeRoutes.post(
   qrCodeController.create
 );
 
-qrCodeRoutes.delete("/:id", qrCodeController.validate);
+qrCodeRoutes.delete(
+  "/:user_id",
+  celebrate({
+    [Segments.PARAMS]: {
+      user_id: Joi.string().uuid().required(),
+    },
+  }),
+  qrCodeController.validate
+);
 
 export default qrCodeRoutes;

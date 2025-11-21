@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import GenerateQrCodeService from "../../../services/generate-qr-code.service";
-import ValidateQrCodeAndCreatePromotionTicketService from "../../../services/validate-qr-code-and-create-promotion-ticket.service";
+import ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService from "../../../services/validate-qr-code-and-create-promotion-ticket-and-update-user-score";
 
 class QrCodeController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -16,8 +16,11 @@ class QrCodeController {
   }
 
   public async validate(request: Request, response: Response): Promise<Response> {
-    const validateQrCodeAndCreatePromotionTicketService = container.resolve(ValidateQrCodeAndCreatePromotionTicketService);
-    const qrCode = await validateQrCodeAndCreatePromotionTicketService.execute(request.user_id);
+    const user_id = String(request.params.user_id);
+    const validateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService = container.resolve(
+      ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService
+    );
+    const qrCode = await validateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService.execute(user_id);
     return response.status(200).json(qrCode);
   }
 }
