@@ -8,6 +8,8 @@ const ticketController = new TicketController();
 
 ticketRoutes.use(AuthMiddleware);
 
+ticketRoutes.get("/dashboard", ticketController.getDashboardByUser);
+
 ticketRoutes.get(
   "/dashboard/general",
   celebrate({
@@ -20,13 +22,17 @@ ticketRoutes.get(
 );
 
 ticketRoutes.get(
-  "/dashboard/:store_id",
+  "/dashboard/store/:store_id",
   celebrate({
     [Segments.PARAMS]: {
       store_id: Joi.string().uuid().required(),
     },
+    [Segments.QUERY]: {
+      start_date: Joi.date().optional(),
+      end_date: Joi.date().optional(),
+    },
   }),
-  ticketController.getDashboard
+  ticketController.getDashboardByStore
 );
 
 export default ticketRoutes;

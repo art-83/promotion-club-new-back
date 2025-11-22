@@ -2,12 +2,12 @@ import PromotionTicket from "../../entities/promotion-ticket.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import PromotionTicketQueryOptionsDTO from "../../../../dtos/promotion-ticket-query-options.dto";
 import { Repository } from "typeorm";
-import PromotionTicketRepositoryProviders from "../providers/promotion-ticket-repository.provider";
+import PromotionTicketRepositoryProvider from "../providers/promotion-ticket-repository.provider";
 import PromotionTickerDashboardDTO from "../../../../dtos/dashboards/promotion-ticket-dashboard.dto";
 import GeneralPromotionTicketDashboardDTO from "../../../../dtos/dashboards/general-promotion-ticket-dashboard.dto";
 import DefaultQueryOptions from "../../../../../../shared/infra/orm/dtos/default-query-options.dto";
 
-class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
+class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   private repository: Repository<PromotionTicket>;
 
   constructor() {
@@ -46,8 +46,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
     await this.repository.delete(id);
   }
 
-  public async getCountDashboardByStore(store_id: string): Promise<PromotionTickerDashboardDTO> {
-    const bestSellerItemsPromise = this.repository
+  public async getCountDashboardByStore(store_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO> {
+    const bestSellerItemsQuery = this.repository
       .createQueryBuilder("ticket")
       .select("ticket.product_name", "name")
       .addSelect("SUM(ticket.promotion_final_price)", "revenue")
@@ -55,16 +55,26 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
       .where("ticket.store_id = :store_id", { store_id })
       .groupBy("ticket.product_name")
       .orderBy("revenue", "DESC")
-      .limit(10)
-      .getRawMany();
+      .limit(10);
 
-    const totalRevenuePromise = this.repository
+    const totalRevenueQuery = this.repository
       .createQueryBuilder("ticket")
       .select("SUM(ticket.promotion_final_price)", "total_revenue")
-      .where("ticket.store_id = :store_id", { store_id })
-      .getRawOne();
+      .where("ticket.store_id = :store_id", { store_id });
 
-    const [bestSellerItemsRaw, totalRevenueResult] = await Promise.all([bestSellerItemsPromise, totalRevenuePromise]);
+    if (options.start_date) {
+      bestSellerItemsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
+      totalRevenueQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
+    }
+    if (options.end_date) {
+      bestSellerItemsQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
+      totalRevenueQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
+    }
+
+    const [bestSellerItemsRaw, totalRevenueResult] = await Promise.all([
+      bestSellerItemsQuery.getRawMany(),
+      totalRevenueQuery.getRawOne(),
+    ]);
 
     const total_revenue = totalRevenueResult ? Number(totalRevenueResult.total_revenue) : 0;
     const best_seller_items = bestSellerItemsRaw.map((item) => ({
@@ -78,7 +88,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
       best_seller_items,
     };
   }
-  
+
   public async getGeneralCountDashboard(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO> {
     const generalStatsQuery = this.repository
       .createQueryBuilder("ticket")
@@ -88,13 +98,15 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
     if (options.start_date) {
       generalStatsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
     }
+
     if (options.end_date) {
       generalStatsQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
     }
 
     const topSellerQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("COUNT(ticket.id)", "sell_count")
+      .select("ticket.product_name", "name")
+      .addSelect("COUNT(ticket.id)", "sell_count")
       .groupBy("ticket.product_name")
       .orderBy("sell_count", "DESC")
       .limit(1);
@@ -102,6 +114,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
     if (options.start_date) {
       topSellerQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
     }
+
     if (options.end_date) {
       topSellerQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
     }
@@ -110,7 +123,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProviders {
 
     const general_total_revenue = generalStats && generalStats.total_revenue ? Number(generalStats.total_revenue) : 0;
     const general_total_tickets_quantity = generalStats && generalStats.total_tickets ? Number(generalStats.total_tickets) : 0;
-    const general_top_seller_product = topSeller && topSeller.sell_count ? Number(topSeller.sell_count) : 0;
+    const general_top_seller_product = topSeller && topSeller.name ? topSeller.name : "";
 
     return {
       general_total_revenue,

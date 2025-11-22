@@ -7,6 +7,8 @@ const userController = new UserController();
 
 userRoutes.get("/me", userController.me);
 
+
+
 userRoutes.put(
   "/:id/permissions",
   celebrate({

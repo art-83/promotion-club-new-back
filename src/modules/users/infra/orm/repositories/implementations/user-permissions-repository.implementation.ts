@@ -22,8 +22,7 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
         user_id: options.user_id,
       });
 
-    if (options.offset) query.skip(options.offset);
-    if (options.limit) query.take(options.limit);
+    if (options.join_store) query.leftJoinAndSelect("user_permissions.store", "store");
 
     return await query.getMany();
   }

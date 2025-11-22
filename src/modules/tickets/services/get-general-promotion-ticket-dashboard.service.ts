@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 import GeneralPromotionTicketDashboardDTO from "../dtos/dashboards/general-promotion-ticket-dashboard.dto";
-import PromotionTicketRepository from "../infra/orm/repositories/implementations/promotion-ticket-repository.implementation";
 import DefaultQueryOptions from "../../../shared/infra/orm/dtos/default-query-options.dto";
+import PromotionTicketRepositoryProvider from "../infra/orm/repositories/providers/promotion-ticket-repository.provider";
 
 @injectable()
-class GetGeneralTicketDashboardService {
+class GetGeneralPromotionTicketDashboardService {
   constructor(
     @inject("PromotionTicketRepository")
-    private promotionTicketRepository: PromotionTicketRepository
+    private promotionTicketRepository: PromotionTicketRepositoryProvider
   ) {}
 
   public async execute(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO> {
@@ -15,4 +15,4 @@ class GetGeneralTicketDashboardService {
   }
 }
 
-export default GetGeneralTicketDashboardService;
+export default GetGeneralPromotionTicketDashboardService;

@@ -4,9 +4,9 @@ import GeneralPromotionTicketDashboardDTO from "../../../../dtos/dashboards/gene
 import PromotionTickerDashboardDTO from "../../../../dtos/dashboards/promotion-ticket-dashboard.dto";
 import PromotionTicket from "../../entities/promotion-ticket.entity";
 
-interface PromotionTicketRepositoryProviders extends RepositoryProvider<PromotionTicket> {
-  getCountDashboardByStore(store_id: string): Promise<PromotionTickerDashboardDTO>;
+interface PromotionTicketRepositoryProvider extends RepositoryProvider<PromotionTicket> {
+  getCountDashboardByStore(store_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO>;
   getGeneralCountDashboard(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO>;
 }
 
-export default PromotionTicketRepositoryProviders;
+export default PromotionTicketRepositoryProvider;
