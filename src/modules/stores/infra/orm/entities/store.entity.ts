@@ -36,7 +36,6 @@ class Store {
   // relations
   @OneToOne(() => Image, {
     onDelete: "CASCADE",
-    nullable: true,
   })
   @JoinColumn({ name: "image_id" })
   image: Image;

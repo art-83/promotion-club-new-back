@@ -34,7 +34,8 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
   }
 
   public async update(id: string, data: Partial<CreateOrUpdateUserPermissions>): Promise<void> {
-    await this.repository.update(id, data);
+    const createUserPermission = this.repository.create(data);
+    await this.repository.update(id, createUserPermission);
   }
 
   public async delete(id: string): Promise<void> {

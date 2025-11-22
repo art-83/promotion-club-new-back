@@ -15,7 +15,7 @@ userRoutes.put(
     },
     [Segments.BODY]: {
       permissions: Joi.array().items(Joi.string()).optional(),
-      store_id: Joi.string().uuid().optional(),
+      store_id: Joi.string().uuid().allow(null).optional(),
     },
   }),
   userController.updateUserPermissions

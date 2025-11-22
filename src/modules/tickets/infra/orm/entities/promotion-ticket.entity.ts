@@ -30,14 +30,14 @@ class PromotionTicket {
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "user_id" })
-  user: User;
+  user: User | null;
 
   @ManyToOne(() => Store, (store) => store.promotion_tickets, {
     nullable: true,
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "store_id" })
-  store: Store;
+  store: Store | null;
 }
 
 export default PromotionTicket;

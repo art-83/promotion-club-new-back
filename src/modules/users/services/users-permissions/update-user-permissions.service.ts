@@ -23,6 +23,10 @@ class UpdateUserPermissionsService {
       data.store = store;
     }
 
+    if (data.store_id == null) {
+      data.store = null;
+    }
+
     const userPermissionsQueryOptions = {
       user_id: id,
     } as UserPermissionsQueryOptionsDTO;

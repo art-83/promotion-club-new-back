@@ -29,7 +29,6 @@ class Product {
 
   @OneToOne(() => Image, (image) => image.product, {
     onDelete: "CASCADE",
-    nullable: true,
   })
   @JoinColumn({ name: "image_id" })
   image: Image;

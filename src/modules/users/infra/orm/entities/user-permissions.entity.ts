@@ -15,7 +15,7 @@ class UserPermissions {
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "store_id" })
-  store: Store;
+  store: Store | null;
 
   // relations
   @OneToOne(() => User, (user) => user.user_permissions, {

@@ -30,7 +30,10 @@ class UserRepository implements RepositoryProvider<User> {
         updated_at: options.updated_at,
       });
 
-    if (options.join_user_permissions) query.leftJoinAndSelect("users.user_permissions", "user_permissions");
+    if (options.join_user_permissions) {
+      query.leftJoinAndSelect("users.user_permissions", "user_permissions");
+      query.leftJoinAndSelect("user_permissions.store", "store");
+    }
 
     if (options.start_date)
       query.andWhere("users.create_at >= :start_date", {
