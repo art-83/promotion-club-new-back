@@ -9,7 +9,7 @@ const dataSourceOptions = {
   database: String(process.env.TYPEORM_DATABASE),
   synchronize: Boolean(process.env.TYPEORM_SYNC),
   entities: [__dirname + String(process.env.TYPEORM_ENTITIES)],
-  //dropSchema: true,
+  dropSchema: true,
 } as DataSourceOptions;
 
 export default dataSourceOptions;
