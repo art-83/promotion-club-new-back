@@ -7,8 +7,6 @@ const userController = new UserController();
 
 userRoutes.get("/me", userController.me);
 
-
-
 userRoutes.put(
   "/:id/permissions",
   celebrate({
@@ -18,7 +16,6 @@ userRoutes.put(
     [Segments.BODY]: {
       permissions: Joi.array().items(Joi.string()).optional(),
       store_id: Joi.string().uuid().optional(),
-      join_user_permissions: Joi.boolean().optional(),
     },
   }),
   userController.updateUserPermissions
