@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import User from "../../../../users/infra/orm/entities/user.entity";
-import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
+import Store from "../../../../stores/infra/orm/entities/store.entity";
 
 @Entity({ name: "promotion_tickets" })
 class PromotionTicket {
@@ -12,7 +12,7 @@ class PromotionTicket {
 
   @Column({ type: "decimal" })
   product_price: number;
-  
+
   @Column({ type: "decimal" })
   promotion_discount_percentage: number;
 
@@ -25,9 +25,19 @@ class PromotionTicket {
   @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => User, (user) => user.promotional_ticket)
+  @ManyToOne(() => User, (user) => user.promotional_ticket, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToOne(() => Store, (store) => store.promotion_tickets, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "store_id" })
+  store: Store;
 }
 
 export default PromotionTicket;

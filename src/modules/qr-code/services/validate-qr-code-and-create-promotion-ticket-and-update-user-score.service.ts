@@ -51,6 +51,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
       promotion_discount_percentage: promotion.discount_percentage,
       promotion_final_price: promotion.final_price,
       saved_money: promotion.product.price - promotion.final_price,
+      store: promotion.product.store,
       user: user,
     } as Partial<PromotionTicket>;
 

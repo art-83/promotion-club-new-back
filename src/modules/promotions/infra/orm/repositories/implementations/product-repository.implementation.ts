@@ -14,6 +14,7 @@ class ProductRepository implements RepositoryProvider<Product> {
 
   public async find(options: Partial<ProductsQueryOptionsDTO>): Promise<Product[]> {
     const query = this.repository.createQueryBuilder("products");
+    query.leftJoinAndSelect("products.store", "stores");
 
     if (options.id) query.andWhere("products.id = :id", { id: options.id });
     if (options.name) query.andWhere("products.name ILIKE :name", { name: `%${options.name}%` });
@@ -21,7 +22,6 @@ class ProductRepository implements RepositoryProvider<Product> {
 
     if (options.store_id) query.andWhere("products.store_id = :store_id", { store_id: options.store_id });
 
-    if (options.join_store) query.leftJoinAndSelect("products.store", "stores");
     if (options.join_image) query.leftJoinAndSelect("products.image", "image");
 
     if (options.start_date) query.andWhere("products.create_at >= :start_date", { start_date: options.start_date });

@@ -2,7 +2,8 @@ import DefaultQueryOptions from "../../../shared/infra/orm/dtos/default-query-op
 import PromotionTicket from "../infra/orm/entities/promotion-ticket.entity";
 
 interface PromotionTicketQueryOptionsDTO extends PromotionTicket, DefaultQueryOptions {
-  join_user?: boolean;
+  user_id: string;
+  store_id: string;
 }
 
 export default PromotionTicketQueryOptionsDTO;

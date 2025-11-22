@@ -1,5 +1,4 @@
 import { inject, injectable } from "tsyringe";
-import Promotion from "../../infra/orm/entities/promotion.entity";
 import PromotionRepositoryProviders from "../../infra/orm/repositories/providers/promotions-repository.providers";
 
 @injectable()

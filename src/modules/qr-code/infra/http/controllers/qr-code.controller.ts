@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import GenerateQrCodeService from "../../../services/generate-qr-code.service";
-import ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService from "../../../services/validate-qr-code-and-create-promotion-ticket-and-update-user-score";
+import ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService from "../../../services/validate-qr-code-and-create-promotion-ticket-and-update-user-score.service";
 
 class QrCodeController {
   public async create(request: Request, response: Response): Promise<Response> {

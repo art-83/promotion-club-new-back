@@ -76,7 +76,12 @@ class PromotionRepository implements PromotionRepositoryProviders {
 
   public async removeAllExpiredPromotions(): Promise<void> {
     const now = new Date();
-    await this.repository.createQueryBuilder("promotions").delete().where("promotions.expire_at < :now", { now }).execute();
+    const deletedPromotions = await this.repository
+      .createQueryBuilder("promotions")
+      .delete()
+      .where("promotions.expire_at < :now", { now })
+      .execute();
+    console.log(deletedPromotions);
   }
 }
 
