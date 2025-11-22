@@ -9,6 +9,17 @@ const ticketController = new TicketController();
 ticketRoutes.use(AuthMiddleware);
 
 ticketRoutes.get(
+  "/dashboard/general",
+  celebrate({
+    [Segments.QUERY]: {
+      start_date: Joi.date().optional(),
+      end_date: Joi.date().optional(),
+    },
+  }),
+  ticketController.getGeneralDashboard
+);
+
+ticketRoutes.get(
   "/dashboard/:store_id",
   celebrate({
     [Segments.PARAMS]: {
