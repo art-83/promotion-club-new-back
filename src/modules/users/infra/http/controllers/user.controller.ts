@@ -3,6 +3,7 @@ import ShowUsersServices from "../../../services/user/show-users.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import UpdateUserPermissionsService from "../../../services/users-permissions/update-user-permissions.service";
+import ShowUserPermissionsService from "../../../services/users-permissions/show-user-permissions.service";
 
 class UserController {
   public async show(request: Request<{}, {}, {}, UserQueryOptionsDTO>, response: Response) {
@@ -21,7 +22,7 @@ class UserController {
   public async me(request: Request, response: Response) {
     const userId = String(request.user_id);
     const showUsersService = container.resolve(ShowUsersServices);
-    const showUser = await showUsersService.execute({ id: userId });
+    const showUser = await showUsersService.execute({ id: userId, join_user_permissions: true });
     return response.status(200).json(showUser);
   }
 }
