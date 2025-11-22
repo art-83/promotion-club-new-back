@@ -24,7 +24,7 @@ routes.use("/qr-codes", qrCodeRoutes);
 routes.use("/tickets", ticketRoutes);
 
 routes.use("/", (req, res) => {
-  return res.status(200).json({ message: "Hello, World! 1.2" });
+  return res.status(200).json({ message: "Hello, World! 1.3" });
 });
 
 export default routes;
