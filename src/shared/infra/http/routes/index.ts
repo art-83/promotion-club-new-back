@@ -12,7 +12,7 @@ import authMiddleware from "../middlewares/auth.middleware";
 const routes = Router();
 
 routes.use("/health", (req, res) => {
-  return res.status(200).json({ message: "Hello, World! 1.5" });
+  return res.status(200).json({ message: "Hello, World! v1.0" });
 });
 routes.use("/auth", authRouter);
 

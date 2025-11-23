@@ -19,9 +19,10 @@ class UpdateProductService {
     if (data.image_id) {
       image = (await this.imageRepository.find({ id: data.image_id })).at(0);
       if (!image) throw new AppError(404, "Image not found");
+      data.image = image;
     }
-
-    await this.productRepository.update(id, { ...data, image });
+  
+    await this.productRepository.update(id, data);
   }
 }
 

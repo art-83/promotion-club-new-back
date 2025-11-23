@@ -51,6 +51,7 @@ promotionRoutes.put(
       discount_percentage: Joi.number(),
       final_price: Joi.number(),
       expire_at: Joi.date(),
+      is_approved: Joi.boolean(),
     },
   }),
   promotionController.update

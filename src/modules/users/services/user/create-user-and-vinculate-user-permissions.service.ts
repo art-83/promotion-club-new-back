@@ -4,6 +4,7 @@ import User from "../../infra/orm/entities/user.entity";
 import HashProvider from "../../../../shared/infra/hash/infra/providers/hash.provider";
 import UserPermissions from "../../infra/orm/entities/user-permissions.entity";
 import Permissions from "../../../../shared/infra/http/middlewares/utils/permissions";
+import AppError from "../../../../shared/infra/http/errors/app-error";
 
 @injectable()
 class CreateUserAndVinculateUserPermissionsService {
@@ -17,6 +18,13 @@ class CreateUserAndVinculateUserPermissionsService {
   ) {}
 
   public async execute(data: Partial<User>): Promise<{ user: User; userPermissions: UserPermissions }> {
+    const [hasUserByCPF, hasUserByEmail] = await Promise.all([
+      (await this.userRepository.find({ cpf: data.cpf })).at(0),
+      (await this.userRepository.find({ email: data.email })).at(0),
+    ]);
+
+    if (hasUserByCPF || hasUserByEmail) throw new AppError(409, "User already registered.");
+
     const passwordHash = await this.hash.encrypt(String(data.password));
     data.password = passwordHash;
     const defaultPermissions = [Permissions.GET_ME, Permissions.SHOW_PROMOTIONS, Permissions.CREATE_QR_CODE, Permissions.SHOW_STORES];

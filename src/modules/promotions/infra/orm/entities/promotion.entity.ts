@@ -9,9 +9,6 @@ class Promotion {
   @Column({ default: false })
   is_approved: boolean;
 
-  @Column({ default: false })
-  active: boolean;
-
   @Column()
   discount_percentage: number;
 
