@@ -13,7 +13,7 @@ class PromotionController {
     return response.status(201).json(createPromotion);
   }
 
-  public async show(request: Request<{}, {}, {}, PromotionQueryOptionsDTO>, response: Response) {
+  public async show(request: Request, response: Response) {
     const showPromotionsService = container.resolve(ShowPromotionsServices);
     const showPromotions = await showPromotionsService.execute(request.query);
     return response.status(200).json(showPromotions);

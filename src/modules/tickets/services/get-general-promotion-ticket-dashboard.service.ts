@@ -10,7 +10,7 @@ class GetGeneralPromotionTicketDashboardService {
     private promotionTicketRepository: PromotionTicketRepositoryProvider
   ) {}
 
-  public async execute(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO> {
+  public async execute(options: Partial<DefaultQueryOptions>): Promise<GeneralPromotionTicketDashboardDTO> {
     return this.promotionTicketRepository.getGeneralCountDashboard(options);
   }
 }

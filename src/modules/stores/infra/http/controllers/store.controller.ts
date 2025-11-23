@@ -13,7 +13,7 @@ class StoreController {
     return response.status(201).json(createStore);
   }
 
-  public async show(request: Request<{}, {}, {}, StoreQueryOptionsDTO>, response: Response) {
+  public async show(request: Request, response: Response) {
     const showStoresService = container.resolve(ShowStoresServices);
     const showStores = await showStoresService.execute(request.query);
     return response.status(200).json(showStores);

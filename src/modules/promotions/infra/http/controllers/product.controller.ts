@@ -13,7 +13,7 @@ class ProductController {
     return response.status(201).json(createProduct);
   }
 
-  public async show(request: Request<{}, {}, {}, ProductsQueryOptionsDTO>, response: Response) {
+  public async show(request: Request, response: Response) {
     const showProductsService = container.resolve(ShowProductsServices);
     const showProducts = await showProductsService.execute(request.query);
     return response.status(200).json(showProducts);

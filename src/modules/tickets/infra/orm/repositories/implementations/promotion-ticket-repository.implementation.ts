@@ -71,10 +71,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       totalRevenueQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
     }
 
-    const [bestSellerItemsRaw, totalRevenueResult] = await Promise.all([
-      bestSellerItemsQuery.getRawMany(),
-      totalRevenueQuery.getRawOne(),
-    ]);
+    const [bestSellerItemsRaw, totalRevenueResult] = await Promise.all([bestSellerItemsQuery.getRawMany(), totalRevenueQuery.getRawOne()]);
 
     const total_revenue = totalRevenueResult ? Number(totalRevenueResult.total_revenue) : 0;
     const best_seller_items = bestSellerItemsRaw.map((item) => ({

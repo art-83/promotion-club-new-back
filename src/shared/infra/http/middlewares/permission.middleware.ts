@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import ShowUserPermissionsService from "../../../../modules/users/services/users-permissions/show-user-permissions.service";
 import AppError from "../errors/app-error";
 
-const permissionMiddleware = (requiredPermission: string) => {
+function permissionMiddleware(requiredPermission: string) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
       const showUserPermissionsService = container.resolve(ShowUserPermissionsService);
@@ -19,6 +19,6 @@ const permissionMiddleware = (requiredPermission: string) => {
     }
     next();
   };
-};
+}
 
 export default permissionMiddleware;

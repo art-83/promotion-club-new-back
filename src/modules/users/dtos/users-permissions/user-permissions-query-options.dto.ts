@@ -3,7 +3,7 @@ import UserPermissions from "../../infra/orm/entities/user-permissions.entity";
 
 interface UserPermissionsQueryOptionsDTO extends UserPermissions, DefaultQueryOptions {
   user_id: string;
-  
+
   join_store: boolean;
 }
 

@@ -1,8 +1,7 @@
 enum Permissions {
-  
   // do not use this permission for now
   UPDATE_USER_PERMISSIONS = "UPDATE_USER_PERMISSIONS",
-  
+
   // public permissosn
   GET_ME = "GET_ME",
   SHOW_PROMOTIONS = "SHOW_PROMOTIONS",
@@ -16,6 +15,7 @@ enum Permissions {
   VALIDATE_QR_CODE = "VALIDATE_QR_CODE",
   UPDATE_STORE = "UPDATE_STORE",
   DELETE_STORE = "DELETE_STORE",
+  GET_DASHBOARD_BY_USER = "GET_DASHBOARD_BY_USER",
 
   // admin permissions
   UPDATE_PROMOTION = "UPDATE_PROMOTION",
@@ -25,6 +25,8 @@ enum Permissions {
   UPDATE_PRODUCT = "UPDATE_PRODUCT",
   DELETE_PRODUCT = "DELETE_PRODUCT",
   CREATE_STORE = "CREATE_STORE",
+  GET_DASHBOARD_BY_STORE = "GET_DASHBOARD_BY_STORE",
+  GET_GENERAL_DASHBOARD = "GET_GENERAL_DASHBOARD",
 }
 
 export default Permissions;

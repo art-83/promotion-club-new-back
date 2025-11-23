@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { celebrate, Segments, Joi } from "celebrate";
 import ProductController from "../controllers/product.controller";
+import permissionMiddleware from "../../../../../shared/infra/http/middlewares/permission.middleware";
+import Permissions from "../../../../../shared/infra/http/middlewares/utils/permissions";
 
 const productRoutes = Router();
 const productController = new ProductController();
 
 productRoutes.post(
   "/",
+  permissionMiddleware(Permissions.CREATE_PRODUCT),
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -20,6 +23,7 @@ productRoutes.post(
 
 productRoutes.get(
   "/",
+  permissionMiddleware(Permissions.SHOW_PRODUCTS),
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
@@ -37,6 +41,7 @@ productRoutes.get(
 
 productRoutes.put(
   "/:id",
+  permissionMiddleware(Permissions.UPDATE_PRODUCT),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -53,6 +58,7 @@ productRoutes.put(
 
 productRoutes.delete(
   "/:id",
+  permissionMiddleware(Permissions.DELETE_PRODUCT),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),

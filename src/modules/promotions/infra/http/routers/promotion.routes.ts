@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { celebrate, Segments, Joi } from "celebrate";
 import PromotionController from "../controllers/promotion.controller";
+import permissionMiddleware from "../../../../../shared/infra/http/middlewares/permission.middleware";
+import Permissions from "../../../../../shared/infra/http/middlewares/utils/permissions";
 
 const promotionRoutes = Router();
 const promotionController = new PromotionController();
 
 promotionRoutes.post(
   "/",
+  permissionMiddleware(Permissions.CREATE_PROMOTION),
   celebrate({
     [Segments.BODY]: {
       discount_percentage: Joi.number().required(),
@@ -19,6 +22,7 @@ promotionRoutes.post(
 
 promotionRoutes.get(
   "/",
+  permissionMiddleware(Permissions.SHOW_PROMOTIONS),
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
@@ -38,6 +42,7 @@ promotionRoutes.get(
 
 promotionRoutes.put(
   "/:id",
+  permissionMiddleware(Permissions.UPDATE_PROMOTION),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -53,6 +58,7 @@ promotionRoutes.put(
 
 promotionRoutes.delete(
   "/:id",
+  permissionMiddleware(Permissions.DELETE_PROMOTION),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),

@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,10 +30,10 @@ jobs:
         run: |
           # Define remote directory
           REMOTE_DIR="/home/$SSH_USER/indaiatuba-new-back"
-          
+
           # Create remote directory if it doesn't exist
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "mkdir -p $REMOTE_DIR"
-          
+
           # Sync files to VPS (excluding node_modules, dist, and other unnecessary files)
           rsync -avz --delete \
             --exclude 'node_modules' \
@@ -43,10 +43,10 @@ jobs:
             --exclude 'storage' \
             -e "ssh -p $SSH_PORT" \
             ./ $SSH_USER@$SSH_HOST:$REMOTE_DIR/
-          
+
           # Create .env file on VPS from secret
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "echo '$SSH_ENV' > $REMOTE_DIR/.env"
-          
+
           # Stop and remove existing containers, then rebuild and start
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
             docker compose down && \
@@ -71,4 +71,3 @@ jobs:
         if: always()
         run: |
           rm -f ~/.ssh/id_rsa
-

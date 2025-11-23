@@ -16,7 +16,7 @@ class GetPromotionTicketDashboardTicketByUserService {
     private promotionTicketRepository: PromotionTicketRepositoryProvider
   ) {}
 
-  public async execute(user_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO> {
+  public async execute(user_id: string, options: Partial<DefaultQueryOptions>): Promise<PromotionTickerDashboardDTO> {
     const userPermissionsQueryOptions = {
       user_id: user_id,
       join_store: true,

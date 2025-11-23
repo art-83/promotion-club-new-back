@@ -11,6 +11,9 @@ import authMiddleware from "../middlewares/auth.middleware";
 
 const routes = Router();
 
+routes.use("/health", (req, res) => {
+  return res.status(200).json({ message: "Hello, World! 1.5" });
+});
 routes.use("/auth", authRouter);
 
 routes.use(authMiddleware);
@@ -22,9 +25,5 @@ routes.use("/promotions", promotionRoutes);
 routes.use("/images", imageRoutes);
 routes.use("/qr-codes", qrCodeRoutes);
 routes.use("/tickets", ticketRoutes);
-
-routes.use("/", (req, res) => {
-  return res.status(200).json({ message: "Hello, World! 1.5" });
-});
 
 export default routes;

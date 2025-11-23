@@ -1,4 +1,3 @@
-import UserQueryOptionsDTO from "../../../dtos/users/user-query-options.dto";
 import ShowUsersServices from "../../../services/user/show-users.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
@@ -6,7 +5,7 @@ import UpdateUserPermissionsService from "../../../services/users-permissions/up
 import ShowUserPermissionsService from "../../../services/users-permissions/show-user-permissions.service";
 
 class UserController {
-  public async show(request: Request<{}, {}, {}, UserQueryOptionsDTO>, response: Response) {
+  public async show(request: Request, response: Response) {
     const showUsersService = container.resolve(ShowUsersServices);
     const showUsers = await showUsersService.execute(request.query);
     return response.status(200).json(showUsers);

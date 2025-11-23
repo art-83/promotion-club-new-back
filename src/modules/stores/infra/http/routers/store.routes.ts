@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { celebrate, Segments, Joi } from "celebrate";
 import StoreController from "../controllers/store.controller";
+import permissionMiddleware from "../../../../../shared/infra/http/middlewares/permission.middleware";
+import Permissions from "../../../../../shared/infra/http/middlewares/utils/permissions";
 
 const storeRoutes = Router();
 const storeController = new StoreController();
 
 storeRoutes.post(
   "/",
+  permissionMiddleware(Permissions.CREATE_STORE),
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -23,6 +26,7 @@ storeRoutes.post(
 
 storeRoutes.get(
   "/",
+  permissionMiddleware(Permissions.SHOW_STORES),
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
@@ -40,6 +44,7 @@ storeRoutes.get(
 
 storeRoutes.put(
   "/:id",
+  permissionMiddleware(Permissions.UPDATE_STORE),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -59,6 +64,7 @@ storeRoutes.put(
 
 storeRoutes.delete(
   "/:id",
+  permissionMiddleware(Permissions.DELETE_STORE),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
