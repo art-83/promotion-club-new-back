@@ -7,7 +7,17 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const ticketRoutes = Router();
 const ticketController = new TicketController();
 
-ticketRoutes.get("/dashboard", permissionMiddleware(Permissions.GET_DASHBOARD_BY_USER), () => ticketController.getDashboardByUser);
+ticketRoutes.get(
+  "/dashboard",
+  permissionMiddleware(Permissions.GET_DASHBOARD_BY_USER),
+  celebrate({
+    [Segments.QUERY]: {
+      start_date: Joi.date().optional(),
+      end_date: Joi.date().optional(),
+    },
+  }),
+  ticketController.getDashboardByUser
+);
 
 ticketRoutes.get(
   "/dashboard/general",
