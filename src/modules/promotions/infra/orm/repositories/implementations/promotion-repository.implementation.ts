@@ -26,6 +26,14 @@ class PromotionRepository implements PromotionRepositoryProviders {
       });
     }
 
+    if (options.is_approved == true) {
+      query.andWhere("promotions.is_approved = :is_approved", { is_approved: "t" });
+    }
+
+    if (options.is_approved == false) {
+      query.andWhere("promotions.is_approved = :is_approved", { is_approved: "f" });
+    }
+
     if (options.final_price)
       query.andWhere("promotions.final_price = :final_price", {
         final_price: options.final_price,

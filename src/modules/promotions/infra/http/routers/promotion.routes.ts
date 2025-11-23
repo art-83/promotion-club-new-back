@@ -35,6 +35,7 @@ promotionRoutes.get(
       end_date: Joi.date(),
       offset: Joi.number().integer(),
       limit: Joi.number().integer(),
+      is_approved: Joi.boolean().default(false),
     },
   }),
   promotionController.show
