@@ -18,8 +18,12 @@ class PromotionRepository implements PromotionRepositoryProviders {
     query.leftJoinAndSelect("product.image", "image");
     query.leftJoinAndSelect("product.store", "store");
 
-    if (options.id) query.andWhere("promotions.id = :id", { id: options.id });
-
+    if (options.id) {
+      console.log("#######################################");
+      console.log("ESTOU BATENDO AQUI");
+      console.log("#######################################");
+      query.andWhere("promotions.id = :id", { id: options.id });
+    }
     if (options.discount_percentage) {
       query.andWhere("promotions.discount_percentage = :discount_percentage", {
         discount_percentage: options.discount_percentage,
