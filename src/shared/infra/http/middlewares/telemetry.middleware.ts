@@ -6,6 +6,7 @@ const telemetryMiddleware = (request: Request, response: Response, next: NextFun
     from: request.user_id,
     method: request.method,
     url: request.originalUrl,
+    ip: request.ip,
   });
   next();
 };

@@ -69,6 +69,6 @@ promotionRoutes.delete(
   promotionController.delete
 );
 
-promotionRoutes.delete("/scheduled/delete-all-expired-promotions", promotionController.deleteExpiredPromotions);
+promotionRoutes.delete("1", promotionController.deleteExpiredPromotions);
 
 export default promotionRoutes;

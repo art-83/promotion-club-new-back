@@ -1,12 +1,14 @@
 import { Router } from "express";
 import AuthController from "../controllers/auth.controller";
 import { celebrate, Joi, Segments } from "celebrate";
+import telemetryMiddleware from "../../../../../shared/infra/http/middlewares/telemetry.middleware";
 
 const authRouter = Router();
 const authController = new AuthController();
 
 authRouter.post(
   "/sign-up",
+  telemetryMiddleware,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -20,6 +22,7 @@ authRouter.post(
 
 authRouter.post(
   "/sign-in",
+  telemetryMiddleware,
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),
