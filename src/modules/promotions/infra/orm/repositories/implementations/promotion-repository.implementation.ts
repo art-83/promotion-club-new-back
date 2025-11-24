@@ -22,6 +22,7 @@ class PromotionRepository implements PromotionRepositoryProviders {
       console.log("#######################################");
       console.log("ESTOU BATENDO AQUI");
       console.log("#######################################");
+      console.log(options.id);
       query.andWhere("promotions.id = :id", { id: options.id });
     }
     if (options.discount_percentage) {
