@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { isCelebrateError } from "celebrate";
 import { ErrorReply } from "redis";
 import AppError from "../errors/app-error";
+import logger from "../../../../config/winston.config";
 
 const globalErrorHandler = (error: Error, request: Request, response: Response, next: NextFunction) => {
   if (isCelebrateError(error)) {
@@ -20,7 +21,7 @@ const globalErrorHandler = (error: Error, request: Request, response: Response, 
     });
   }
 
-  console.error(error);
+  logger.error(error);
 
   return response.status(500).json({
     message: "Internal Server Error",

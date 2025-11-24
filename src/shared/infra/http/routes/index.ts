@@ -8,6 +8,7 @@ import qrCodeRoutes from "../../../../modules/qr-code/infra/http/routers/qr-code
 import ticketRoutes from "../../../../modules/tickets/infra/http/routers/ticket.routes";
 import authRouter from "../../../../modules/users/infra/http/routers/auth.routes";
 import authMiddleware from "../middlewares/auth.middleware";
+import telemetryMiddleware from "../middlewares/telemetry.middleware";
 
 const routes = Router();
 
@@ -17,6 +18,7 @@ routes.use("/health", (req, res) => {
 routes.use("/auth", authRouter);
 
 routes.use(authMiddleware);
+routes.use(telemetryMiddleware);
 
 routes.use("/users", userRoutes);
 routes.use("/stores", storeRoutes);

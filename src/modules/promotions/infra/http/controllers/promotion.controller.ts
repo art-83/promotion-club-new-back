@@ -1,5 +1,6 @@
 import PromotionQueryOptionsDTO from "../../../dtos/promotions/promotion-query-options.dto";
 import CreatePromotionService from "../../../services/promotions/create-promotion.service";
+import DeleteExpiredPromotionsService from "../../../services/promotions/delete-expired-promotions.service";
 import DeletePromotionService from "../../../services/promotions/delete-promotion.service";
 import ShowPromotionsServices from "../../../services/promotions/show-promotions.service";
 import UpdatePromotionService from "../../../services/promotions/update-promotion.service";
@@ -30,6 +31,12 @@ class PromotionController {
     const id = String(request.params.id);
     const deletePromotionService = container.resolve(DeletePromotionService);
     await deletePromotionService.execute(id);
+    return response.status(204).send();
+  }
+
+  public async deleteExpiredPromotions(request: Request, response: Response) {
+    const deletePromotionService = container.resolve(DeleteExpiredPromotionsService);
+    await deletePromotionService.execute();
     return response.status(204).send();
   }
 }

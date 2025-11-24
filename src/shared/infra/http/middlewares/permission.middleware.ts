@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
 import ShowUserPermissionsService from "../../../../modules/users/services/users-permissions/show-user-permissions.service";
 import AppError from "../errors/app-error";
+import logger from "../../../../config/winston.config";
 
-function permissionMiddleware(requiredPermission: string) {
+const permissionMiddleware = (requiredPermission: string) => {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
       const showUserPermissionsService = container.resolve(ShowUserPermissionsService);
@@ -14,11 +15,12 @@ function permissionMiddleware(requiredPermission: string) {
         return response.status(403).json({ message: "Insufficient permissions." });
       }
     } catch (error) {
+      logger.error(error);
       if (error instanceof AppError) return response.status(error.code).json({ message: error.message });
       return response.status(403).json({ message: "Insufficient permissions." });
     }
     next();
   };
-}
+};
 
 export default permissionMiddleware;
