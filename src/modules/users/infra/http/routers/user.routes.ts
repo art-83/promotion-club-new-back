@@ -11,7 +11,7 @@ userRoutes.get("/me", permissionMiddleware(Permissions.GET_ME), userController.m
 
 userRoutes.put(
   "/:id/permissions",
-  //permissionMiddleware(Permissions.UPDATE_USER_PERMISSIONS),
+  permissionMiddleware(Permissions.UPDATE_USER_PERMISSIONS),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -26,12 +26,14 @@ userRoutes.put(
 
 userRoutes.get(
   "/",
-  //permissionMiddleware(Permissions.SHOW_USERS),
+  permissionMiddleware(Permissions.SHOW_USERS),
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
       name: Joi.string(),
       join_user_permissions: Joi.boolean().optional(),
+      offset: Joi.number(),
+      limit: Joi.number(),
     },
   }),
   userController.show

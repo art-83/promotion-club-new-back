@@ -19,6 +19,8 @@ storeRoutes.post(
       state: Joi.string().required(),
       number: Joi.string().required(),
       image_id: Joi.string().uuid().optional(),
+      offset: Joi.number(),
+      limit: Joi.number(),
     },
   }),
   storeController.create
