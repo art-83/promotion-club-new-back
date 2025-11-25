@@ -60,7 +60,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     const removeQrCode = await this.cache.delete(user_id);
     if (removeQrCode == 0) throw new AppError(404, "QrCode invalid or expired.");
 
-    const newScore = Number(user.score) + Number(promotion.final_price);
+    const newScore = Number(Number(user.score) + Number(promotion.final_price));
     await this.userRepository.update(user_id, { score: newScore });
 
     return { message: "QrCode validated successfuly.", createPromotionTicket };
