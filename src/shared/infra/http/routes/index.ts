@@ -18,7 +18,7 @@ routes.use("/health", (req, res) => {
 routes.use("/auth", authRouter);
 
 routes.use(authMiddleware);
-routes.use(telemetryMiddleware);
+//routes.use(telemetryMiddleware);
 
 routes.use("/users", userRoutes);
 routes.use("/stores", storeRoutes);
