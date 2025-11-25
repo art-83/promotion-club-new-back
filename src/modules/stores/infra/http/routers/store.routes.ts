@@ -19,8 +19,6 @@ storeRoutes.post(
       state: Joi.string().required(),
       number: Joi.string().required(),
       image_id: Joi.string().uuid().optional(),
-      offset: Joi.number(),
-      limit: Joi.number(),
     },
   }),
   storeController.create
@@ -39,6 +37,8 @@ storeRoutes.get(
       state: Joi.string(),
       number: Joi.string(),
       join_image: Joi.boolean(),
+      offset: Joi.number(),
+      limit: Joi.number(),
     },
   }),
   storeController.show
