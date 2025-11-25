@@ -19,10 +19,6 @@ class PromotionRepository implements PromotionRepositoryProviders {
     query.leftJoinAndSelect("product.store", "store");
 
     if (options.id) {
-      console.log("#######################################");
-      console.log("ESTOU BATENDO AQUI");
-      console.log("#######################################");
-      console.log(options.id);
       query.andWhere("promotions.id = :id", { id: options.id });
     }
     if (options.discount_percentage) {
@@ -89,8 +85,7 @@ class PromotionRepository implements PromotionRepositoryProviders {
 
   public async removeAllExpiredPromotions(): Promise<void> {
     const now = new Date();
-    const deletedPromotions = await this.repository.createQueryBuilder("promotions").delete().where("promotions.expire_at < :now", { now }).execute();
-    console.log(deletedPromotions);
+    await this.repository.createQueryBuilder("promotions").delete().where("promotions.expire_at < :now", { now }).execute();
   }
 }
 

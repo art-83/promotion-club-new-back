@@ -24,8 +24,6 @@ async function main() {
   server.use(errors());
   server.use(globalErrorHandler);
 
-  server.set("trust proxy", 1);
-
   const port = Number(process.env.SERVER_PORT);
 
   await cacheClient.connect();

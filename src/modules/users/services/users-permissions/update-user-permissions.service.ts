@@ -18,7 +18,7 @@ class UpdateUserPermissionsService {
 
   public async execute(id: string, data: Partial<CreateOrUpdateUserPermissions>): Promise<void> {
     if (data.store_id) {
-      const store = (await this.storeRepository.find({ id: data.id })).at(0);
+      const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
       if (!store) throw new AppError(404, "Store not found.");
       data.store = store;
     }
