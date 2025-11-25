@@ -20,7 +20,7 @@ class User {
   @Column({ unique: true })
   cpf: string;
 
-  @Column({ default: 0 })
+  @Column({ type: "decimal", default: 0 })
   score: number;
 
   @CreateDateColumn()
