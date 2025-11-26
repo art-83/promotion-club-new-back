@@ -8,6 +8,23 @@ const ticketRoutes = Router();
 const ticketController = new TicketController();
 
 ticketRoutes.get(
+  "/",
+  permissionMiddleware(Permissions.SHOW_USER_PROMOTION_TICKETS),
+  celebrate({
+    [Segments.QUERY]: {
+      id: Joi.string().uuid().optional(),
+      user_id: Joi.string().uuid().optional(),
+      store_id: Joi.string().uuid().optional(),
+      start_date: Joi.date().optional(),
+      end_date: Joi.date().optional(),
+      limit: Joi.number().integer().optional(),
+      offset: Joi.number().integer().optional(),
+    },
+  }),
+  ticketController.show
+);
+
+ticketRoutes.get(
   "/dashboard",
   permissionMiddleware(Permissions.GET_DASHBOARD_BY_USER),
   celebrate({

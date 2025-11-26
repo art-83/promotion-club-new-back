@@ -4,3 +4,4 @@ storage/images
 .env
 *.md
 tests
+*.sql

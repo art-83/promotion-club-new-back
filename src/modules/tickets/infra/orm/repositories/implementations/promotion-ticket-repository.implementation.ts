@@ -29,6 +29,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
+    query.orderBy("promotion_tickets.created_at", "DESC");
+    
     return await query.getMany();
   }
 

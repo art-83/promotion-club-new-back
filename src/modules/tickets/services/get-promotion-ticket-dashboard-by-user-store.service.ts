@@ -8,7 +8,7 @@ import PromotionTicketRepositoryProvider from "../infra/orm/repositories/provide
 import DefaultQueryOptions from "../../../shared/infra/orm/dtos/default-query-options.dto";
 
 @injectable()
-class GetPromotionTicketDashboardTicketByUserService {
+class GetPromotionTicketDashboardTicketByUserStoreService {
   constructor(
     @inject("UserPermissionsRepository")
     private userPermissionsRepository: RepositoryProvider<UserPermissions>,
@@ -32,4 +32,4 @@ class GetPromotionTicketDashboardTicketByUserService {
   }
 }
 
-export default GetPromotionTicketDashboardTicketByUserService;
+export default GetPromotionTicketDashboardTicketByUserStoreService;
