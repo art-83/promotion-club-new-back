@@ -26,6 +26,7 @@ promotionRoutes.get(
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
+      name: Joi.string(),
       discount_percentage: Joi.number(),
       start_final_price: Joi.number(),
       end_final_price: Joi.number(),

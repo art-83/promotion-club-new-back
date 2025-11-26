@@ -21,6 +21,11 @@ class PromotionRepository implements PromotionRepositoryProviders {
     if (options.id) {
       query.andWhere("promotions.id = :id", { id: options.id });
     }
+
+    if (options.name) {
+      query.andWhere("product.name ILIKE :name", { name: `%${options.name}%` });
+    }
+
     if (options.discount_percentage) {
       query.andWhere("promotions.discount_percentage = :discount_percentage", {
         discount_percentage: options.discount_percentage,
