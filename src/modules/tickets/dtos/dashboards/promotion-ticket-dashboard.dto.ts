@@ -1,4 +1,4 @@
-interface PromotionTickerDashboardDTO {
+interface PromotionTicketDashboardDTO {
   total_revenue: number;
   best_seller_items: {
     name: string;
@@ -7,4 +7,4 @@ interface PromotionTickerDashboardDTO {
   }[];
 }
 
-export default PromotionTickerDashboardDTO;
+export default PromotionTicketDashboardDTO;

@@ -12,8 +12,6 @@ ticketRoutes.get(
   permissionMiddleware(Permissions.SHOW_USER_PROMOTION_TICKETS),
   celebrate({
     [Segments.QUERY]: {
-      id: Joi.string().uuid().optional(),
-      user_id: Joi.string().uuid().optional(),
       store_id: Joi.string().uuid().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
@@ -21,7 +19,7 @@ ticketRoutes.get(
       offset: Joi.number().integer().optional(),
     },
   }),
-  ticketController.show
+  ticketController.showByUser
 );
 
 ticketRoutes.get(

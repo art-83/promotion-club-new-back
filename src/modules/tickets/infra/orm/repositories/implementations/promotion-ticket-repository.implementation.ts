@@ -132,6 +132,49 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       general_top_seller_product,
     };
   }
+
+  public async getFullDashboardByUser(
+    user_id: string,
+    options: Partial<PromotionTicketQueryOptionsDTO>
+  ): Promise<{ promotionTickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
+    const ticketsQuery = this.repository
+      .createQueryBuilder("ticket")
+      .leftJoinAndSelect("ticket.user", "user")
+      .leftJoinAndSelect("ticket.store", "store")
+      .where("ticket.user_id = :user_id", { user_id })
+      .orderBy("ticket.created_at", "DESC")
+      .take(options.limit ?? 10);
+
+    const totalsQuery = this.repository
+      .createQueryBuilder("ticket")
+      .select("SUM(ticket.saved_money)", "total_money_saved")
+      .addSelect("COUNT(ticket.id)", "total_tickets")
+      .where("ticket.user_id = :user_id", { user_id });
+
+    if (options.store_id) {
+      ticketsQuery.andWhere("ticket.store_id = :store_id", { store_id: options.store_id });
+    }
+
+    if (options.start_date) {
+      ticketsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
+    }
+
+    if (options.end_date) {
+      ticketsQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
+    }
+
+    if (options.offset) {
+      ticketsQuery.skip(options.offset);
+    }
+
+    const [promotionTickets, totals] = await Promise.all([ticketsQuery.getMany(), totalsQuery.getRawOne()]);
+
+    return {
+      promotionTickets,
+      total_money_saved: totals && totals.total_money_saved ? Number(totals.total_money_saved) : 0,
+      total_tickets: totals && totals.total_tickets ? Number(totals.total_tickets) : 0,
+    };
+  }
 }
 
 export default PromotionTicketRepository;

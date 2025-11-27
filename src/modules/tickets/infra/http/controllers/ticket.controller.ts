@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import GetTicketDashboardService from "../../../services/get-promotion-ticket-dashboard-by-store.service";
 import GetGeneralTicketDashboardService from "../../../services/get-general-promotion-ticket-dashboard.service";
 import GetPromotionTicketDashboardTicketByUserStoreService from "../../../services/get-promotion-ticket-dashboard-by-user-store.service";
-import ShowPromotionTicketsService from "../../../services/show-promotion-tickets.service";
+import ShowPromotionTicketsByUserService from "../../../services/show-promotion-tickets-by-user.service";
 
 class TicketController {
   public async getDashboardByUser(request: Request, response: Response) {
@@ -21,14 +21,14 @@ class TicketController {
   }
 
   public async getGeneralDashboard(request: Request, response: Response) {
-    const getGeneralTicketDashboardService = container.resolve(GetGeneralTicketDashboardService);
-    const dashboardData = await getGeneralTicketDashboardService.execute(request.query);
+    const showPromotionTicketsByUserService = container.resolve(GetGeneralTicketDashboardService);
+    const dashboardData = await showPromotionTicketsByUserService.execute(request.query);
     return response.status(200).json(dashboardData);
   }
 
-  public async show(request: Request, response: Response) {
-    const showPromotionTicketsService = container.resolve(ShowPromotionTicketsService);
-    const promotionTickets = await showPromotionTicketsService.execute(request.query);
+  public async showByUser(request: Request, response: Response) {
+    const showPromotionTicketsService = container.resolve(ShowPromotionTicketsByUserService);
+    const promotionTickets = await showPromotionTicketsService.execute(request.user_id, request.query);
     return response.status(200).json(promotionTickets);
   }
 }
