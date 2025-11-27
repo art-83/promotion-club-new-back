@@ -136,7 +136,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async getFullDashboardByUser(
     user_id: string,
     options: Partial<PromotionTicketQueryOptionsDTO>
-  ): Promise<{ promotionTickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
+  ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
     const ticketsQuery = this.repository
       .createQueryBuilder("ticket")
       .leftJoinAndSelect("ticket.user", "user")
@@ -167,10 +167,10 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       ticketsQuery.skip(options.offset);
     }
 
-    const [promotionTickets, totals] = await Promise.all([ticketsQuery.getMany(), totalsQuery.getRawOne()]);
+    const [promotion_tickets, totals] = await Promise.all([ticketsQuery.getMany(), totalsQuery.getRawOne()]);
 
     return {
-      promotionTickets,
+      promotion_tickets,
       total_money_saved: totals && totals.total_money_saved ? Number(totals.total_money_saved) : 0,
       total_tickets: totals && totals.total_tickets ? Number(totals.total_tickets) : 0,
     };

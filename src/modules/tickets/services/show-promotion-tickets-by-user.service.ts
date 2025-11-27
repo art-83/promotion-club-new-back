@@ -15,7 +15,7 @@ class ShowPromotionTicketsByUserService {
   public async execute(
     user_id: string,
     options: Partial<PromotionTicketQueryOptionsDTO>
-  ): Promise<{ promotionTickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
+  ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
     const promotionTicketQueryOption = {
       start_date: options.start_date,
       end_date: options.end_date,

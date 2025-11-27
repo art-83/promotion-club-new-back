@@ -11,7 +11,7 @@ interface PromotionTicketRepositoryProvider extends RepositoryProvider<Promotion
   getFullDashboardByUser(
     user_id: string,
     options: Partial<PromotionTicketQueryOptionsDTO>
-  ): Promise<{ promotionTickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }>;
+  ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }>;
 }
 
 export default PromotionTicketRepositoryProvider;
