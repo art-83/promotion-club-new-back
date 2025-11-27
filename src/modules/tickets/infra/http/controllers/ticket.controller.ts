@@ -28,7 +28,7 @@ class TicketController {
 
   public async show(request: Request, response: Response) {
     const showPromotionTicketsService = container.resolve(ShowPromotionTicketsService);
-    const promotionTickets = showPromotionTicketsService.execute(request.query);
+    const promotionTickets = await showPromotionTicketsService.execute(request.query);
     return response.status(200).json(promotionTickets);
   }
 }
