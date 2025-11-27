@@ -151,6 +151,10 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .addSelect("COUNT(ticket.id)", "total_tickets")
       .where("ticket.user_id = :user_id", { user_id });
 
+    if (options.product_name) {
+      ticketsQuery.andWhere("ticket.product_name ILIKE :product_name", { product_name: `%${options.product_name}%` });
+    }
+
     if (options.store_id) {
       ticketsQuery.andWhere("ticket.store_id = :store_id", { store_id: options.store_id });
     }
