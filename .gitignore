@@ -5,3 +5,5 @@ storage/images
 *.md
 tests
 *.sql
+
+AGENTS.md

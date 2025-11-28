@@ -145,8 +145,6 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .orderBy("ticket.created_at", "DESC")
       .take(options.limit ?? 10);
     
-    console.log(options)
-
     const totalsQuery = this.repository
       .createQueryBuilder("ticket")
       .select("SUM(ticket.saved_money)", "total_money_saved")
@@ -154,9 +152,6 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .where("ticket.user_id = :user_id", { user_id });
 
     if (options.product_name) {
-      console.log("########################")
-      console.log("Estou batendo aqui 1")
-      console.log("########################")
       ticketsQuery.andWhere("ticket.product_name ILIKE :product_name", { product_name: `%${options.product_name}%` });
     }
 

@@ -17,6 +17,7 @@ class ShowPromotionTicketsByUserService {
     options: Partial<PromotionTicketQueryOptionsDTO>
   ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
     const promotionTicketQueryOption = {
+      product_name: options.product_name,
       start_date: options.start_date,
       end_date: options.end_date,
       offset: options.offset,
