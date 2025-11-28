@@ -22,6 +22,7 @@ class ShowPromotionTicketsByUserService {
       end_date: options.end_date,
       offset: options.offset,
       limit: options.limit,
+      store_id: options.store_id,
     } as PromotionTicketQueryOptionsDTO;
     const tickets = await this.promotionTicketRepository.getFullDashboardByUser(user_id, promotionTicketQueryOption);
     return tickets;
