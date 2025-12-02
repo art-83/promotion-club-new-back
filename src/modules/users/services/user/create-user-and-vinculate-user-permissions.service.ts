@@ -27,7 +27,7 @@ class CreateUserAndVinculateUserPermissionsService {
 
     const passwordHash = await this.hash.encrypt(String(data.password));
     data.password = passwordHash;
-    const defaultPermissions = [Permissions.GET_ME, Permissions.SHOW_PROMOTIONS, Permissions.CREATE_QR_CODE, Permissions.SHOW_STORES];
+    const defaultPermissions = [Permissions.GET_ME, Permissions.SHOW_PROMOTIONS, Permissions.CREATE_QR_CODE, Permissions.SHOW_STORES, Permissions.SHOW_USER_PROMOTION_TICKETS];
     const user = await this.userRepository.create(data);
     const userPermissions = await this.userPermissionsRepository.create({ user: user, permissions: defaultPermissions });
     return { user, userPermissions };
