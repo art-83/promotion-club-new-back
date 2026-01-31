@@ -16,7 +16,7 @@ class CreateUserSessionService {
     private jwt: JwtProvider
   ) {}
 
-  public async execute(email: string, password: string): Promise<{ user: User; token: string }> {
+  public async execute(email: string, password: string): Promise<{ message: string; token: string }> {
     const userByEmail = (await this.userRepository.find({ email })).at(0);
 
     if (!userByEmail) throw new AppError(404, "User not found.");
@@ -26,7 +26,7 @@ class CreateUserSessionService {
     if (!passwordMatch) throw new AppError(401, "Invalid credentials.");
 
     const token = this.jwt.generate({ user_id: userByEmail.id });
-    return { user: userByEmail, token };
+    return { message: "User logged successfully!", token };
   }
 }
 
