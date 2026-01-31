@@ -7,6 +7,18 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const userRoutes = Router();
 const userController = new UserController();
 
+userRoutes.post(
+  "/token",
+  permissionMiddleware(Permissions.CREATE_USER_PUSH_TOKEN),
+  celebrate({
+    [Segments.BODY]: {
+      token: Joi.string().required(),
+      platform: Joi.string().required(),
+    },
+  }),
+  userController.createUserPushToken
+);
+
 userRoutes.get("/me", permissionMiddleware(Permissions.GET_ME), userController.me);
 
 userRoutes.put(

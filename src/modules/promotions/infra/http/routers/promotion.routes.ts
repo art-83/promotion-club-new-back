@@ -12,9 +12,12 @@ promotionRoutes.post(
   permissionMiddleware(Permissions.CREATE_PROMOTION),
   celebrate({
     [Segments.BODY]: {
+      name: Joi.string().required(),
+      price: Joi.number().required(),
       discount_percentage: Joi.number().required(),
-      product_id: Joi.string().uuid().required(),
       expire_at: Joi.date().required(),
+      store_id: Joi.string().uuid().required(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   promotionController.create
@@ -27,6 +30,9 @@ promotionRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid(),
       name: Joi.string(),
+      price: Joi.number(),
+      start_price: Joi.number(),
+      end_price: Joi.number(),
       discount_percentage: Joi.number(),
       start_final_price: Joi.number(),
       end_final_price: Joi.number(),
@@ -37,6 +43,8 @@ promotionRoutes.get(
       offset: Joi.number().integer(),
       limit: Joi.number().integer(),
       is_approved: Joi.boolean().default(true),
+      join_store: Joi.boolean(),
+      join_image: Joi.boolean(),
     },
   }),
   promotionController.show
@@ -50,10 +58,13 @@ promotionRoutes.put(
       id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      discount_percentage: Joi.number(),
-      final_price: Joi.number(),
-      expire_at: Joi.date(),
-      is_approved: Joi.boolean(),
+      name: Joi.string().optional(),
+      price: Joi.number().optional(),
+      discount_percentage: Joi.number().optional(),
+      expire_at: Joi.date().optional(),
+      is_approved: Joi.boolean().optional(),
+      store_id: Joi.string().uuid().optional(),
+      image_id: Joi.string().uuid().optional(),
     },
   }),
   promotionController.update

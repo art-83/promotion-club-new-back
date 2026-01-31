@@ -2,8 +2,8 @@ import { Repository } from "typeorm";
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Store from "../../entities/store.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
-import StoreQueryOptionsDTO from "../../../../dtos/store-query-options.dto";
-import CreateOrUpdateStoreDTO from "../../../../dtos/create-or-update-store.dto";
+import StoreQueryOptionsDTO from "../../../../dtos/stores/store-query-options.dto";
+import CreateOrUpdateStoreDTO from "../../../../dtos/stores/create-or-update-store.dto";
 
 class StoreRepository implements RepositoryProvider<Store> {
   private repository: Repository<Store>;
@@ -45,6 +45,8 @@ class StoreRepository implements RepositoryProvider<Store> {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
+    query.andWhere("stores.deleted_at IS NULL");
+
     return await query.getMany();
   }
 
@@ -60,7 +62,7 @@ class StoreRepository implements RepositoryProvider<Store> {
   }
 
   public async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 }
 

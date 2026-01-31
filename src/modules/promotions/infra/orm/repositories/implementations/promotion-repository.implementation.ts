@@ -11,19 +11,15 @@ class PromotionRepository implements PromotionRepositoryProviders {
     this.repository = dataSource.getRepository(Promotion);
   }
 
-  public async find(options: PromotionQueryOptionsDTO): Promise<Promotion[]> {
+  public async find(options: Partial<PromotionQueryOptionsDTO>): Promise<Promotion[]> {
     const query = this.repository.createQueryBuilder("promotions");
-
-    query.leftJoinAndSelect("promotions.product", "product");
-    query.leftJoinAndSelect("product.image", "image");
-    query.leftJoinAndSelect("product.store", "store");
 
     if (options.id) {
       query.andWhere("promotions.id = :id", { id: options.id });
     }
 
     if (options.name) {
-      query.andWhere("product.name ILIKE :name", { name: `%${options.name}%` });
+      query.andWhere("promotions.name ILIKE :name", { name: `%${options.name}%` });
     }
 
     if (options.discount_percentage) {
@@ -54,9 +50,17 @@ class PromotionRepository implements PromotionRepositoryProviders {
       });
 
     if (options.store_id) {
-      query.andWhere("product.store_id = :store_id", {
+      query.andWhere("promotions.store_id = :store_id", {
         store_id: options.store_id,
       });
+    }
+
+    if (options.join_store) {
+      query.leftJoinAndSelect("promotions.store", "store");
+    }
+
+    if (options.join_image) {
+      query.leftJoinAndSelect("promotions.image", "image");
     }
 
     if (options.start_date)
@@ -71,6 +75,8 @@ class PromotionRepository implements PromotionRepositoryProviders {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
+    query.andWhere("promotions.deleted_at IS NULL");
+
     return await query.getMany();
   }
 
@@ -81,11 +87,12 @@ class PromotionRepository implements PromotionRepositoryProviders {
   }
 
   public async update(id: string, data: Partial<Promotion>): Promise<void> {
-    await this.repository.update(id, data);
+    const updatePromotion = this.repository.create(data);
+    await this.repository.update(id, updatePromotion);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 
   public async removeAllExpiredPromotions(): Promise<void> {

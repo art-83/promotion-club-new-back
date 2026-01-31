@@ -1,26 +1,34 @@
 import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Promotion from "../../infra/orm/entities/promotion.entity";
-import Product from "../../infra/orm/entities/product.entity";
-import CreateOrUpdatePromotionDTO from "../../dtos/promotions/create-promotion.dto";
+import CreateOrUpdatePromotionDTO from "../../dtos/promotions/create-or-update-promotion.dto";
 import AppError from "../../../../shared/infra/http/errors/app-error";
+import Store from "../../../stores/infra/orm/entities/store.entity";
+import Image from "../../../images/infra/orm/entities/image.entity";
 
 @injectable()
 class CreatePromotionService {
   constructor(
     @inject("PromotionRepository")
     private promotionRepository: RepositoryProvider<Promotion>,
-    @inject("ProductRepository")
-    private productRepository: RepositoryProvider<Product>
+    @inject("StoreRepository")
+    private storeRepository: RepositoryProvider<Store>,
+    @inject("ImageRepository")
+    private imageRepository: RepositoryProvider<Image>
   ) {}
 
   public async execute(data: Partial<CreateOrUpdatePromotionDTO>): Promise<Promotion> {
-    const product = (await this.productRepository.find({ id: data.product_id })).at(0);
+    const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
+    if (!store) throw new AppError(404, "Store not found.");
+    data.store = store;
 
-    if (!product) throw new AppError(404, "Product not found.");
+    if (data.image_id) {
+      const image = (await this.imageRepository.find({ id: data.image_id })).at(0);
+      if (!image) throw new AppError(404, "Image not found.");
+      data.image = image;
+    }
 
-    data.final_price = product.price - product.price * (Number(data.discount_percentage) / 100);
-    data.product = product;
+    data.final_price = Number(data.price) - Number(data.price) * (Number(data.discount_percentage) / 100);
 
     const promotion = await this.promotionRepository.create(data);
     return promotion;

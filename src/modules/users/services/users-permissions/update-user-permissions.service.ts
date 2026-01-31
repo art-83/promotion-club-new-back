@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import UserPermissions from "../../infra/orm/entities/user-permissions.entity";
-import CreateOrUpdateProductDTO from "../../../promotions/dtos/products/create-or-update-product.dto";
 import Store from "../../../stores/infra/orm/entities/store.entity";
 import AppError from "../../../../shared/infra/http/errors/app-error";
 import UserPermissionsQueryOptionsDTO from "../../dtos/users-permissions/user-permissions-query-options.dto";

@@ -12,7 +12,7 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
     this.repository = dataSource.getRepository(UserPermissions);
   }
 
-  public async find(options: UserPermissionsQueryOptionsDTO): Promise<UserPermissions[]> {
+  public async find(options: Partial<UserPermissionsQueryOptionsDTO>): Promise<UserPermissions[]> {
     const query = this.repository.createQueryBuilder("user_permissions");
     query.leftJoinAndSelect("user_permissions.user", "users");
 
@@ -24,6 +24,8 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
 
     if (options.join_store) query.leftJoinAndSelect("user_permissions.store", "store");
 
+    query.andWhere("user_permissions.deleted_at IS NULL");
+
     return await query.getMany();
   }
 
@@ -34,12 +36,12 @@ class UserPermissionsRepository implements RepositoryProvider<UserPermissions> {
   }
 
   public async update(id: string, data: Partial<CreateOrUpdateUserPermissions>): Promise<void> {
-    const createUserPermission = this.repository.create(data);
-    await this.repository.update(id, createUserPermission);
+    const updateUserPermission = this.repository.create(data);
+    await this.repository.update(id, updateUserPermission);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 }
 

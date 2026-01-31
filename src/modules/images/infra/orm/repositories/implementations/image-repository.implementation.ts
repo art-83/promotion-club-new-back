@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import Image from "../../entities/image.entity";
-import ImageRepositoryProvider from "../provider/image-repository.provider";
+import ImageRepositoryProvider from "../providers/image-repository.provider";
 
 class ImageRepository implements ImageRepositoryProvider {
   private repository: Repository<Image>;
@@ -20,6 +20,8 @@ class ImageRepository implements ImageRepositoryProvider {
     const query = this.repository.createQueryBuilder("image");
 
     query.andWhere("image.id = :id", { id: options.id });
+
+    query.andWhere("image.deleted_at IS NULL");
 
     return await query.getMany();
   }

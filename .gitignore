@@ -1,4 +1,5 @@
 dist
+scripts
 node_modules
 storage/images
 .env

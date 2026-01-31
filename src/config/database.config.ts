@@ -7,9 +7,10 @@ const dataSourceOptions = {
   username: String(process.env.TYPEORM_USERNAME),
   password: String(process.env.TYPEORM_PASSWORD),
   database: String(process.env.TYPEORM_DATABASE),
-  synchronize: Boolean(process.env.TYPEORM_SYNC),
   entities: [__dirname + String(process.env.TYPEORM_ENTITIES)],
-  // dropSchema: true,
+  synchronize: Boolean(process.env.TYPEORM_SYNC),
+  migrations: [__dirname + String(process.env.TYPEORM_MIGRATIONS)],
+  //dropSchema: true,
 } as DataSourceOptions;
 
 export default dataSourceOptions;

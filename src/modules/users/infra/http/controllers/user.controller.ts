@@ -2,7 +2,7 @@ import ShowUsersServices from "../../../services/user/show-users.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import UpdateUserPermissionsService from "../../../services/users-permissions/update-user-permissions.service";
-import ShowUserPermissionsService from "../../../services/users-permissions/show-user-permissions.service";
+import CreateUserPushTokenService from "../../../services/user-push-tokens/create-user-push-token.service";
 
 class UserController {
   public async show(request: Request, response: Response) {
@@ -23,6 +23,13 @@ class UserController {
     const showUsersService = container.resolve(ShowUsersServices);
     const showUser = await showUsersService.execute({ id: userId, join_user_permissions: true });
     return response.status(200).json(showUser);
+  }
+
+  public async createUserPushToken(request: Request, response: Response) {
+    const user_id = request.user_id;
+    const createUserPushTokenService = container.resolve(CreateUserPushTokenService);
+    const userPushToken = await createUserPushTokenService.execute(user_id, request.body);
+    return response.status(201).json(userPushToken);
   }
 }
 

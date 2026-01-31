@@ -11,7 +11,7 @@ class UserRepository implements RepositoryProvider<User> {
     this.repository = dataSource.getRepository(User);
   }
 
-  public async find(options: UserQueryOptionsDTO): Promise<User[]> {
+  public async find(options: Partial<UserQueryOptionsDTO>): Promise<User[]> {
     const query = this.repository.createQueryBuilder("users");
 
     if (options.id) query.andWhere("users.id = :id", { id: options.id });
@@ -57,7 +57,8 @@ class UserRepository implements RepositoryProvider<User> {
   }
 
   public async update(id: string, data: Partial<User>): Promise<void> {
-    await this.repository.update(id, data);
+    const updateUser = this.repository.create(data);
+    await this.repository.update(id, updateUser);
   }
 
   public async delete(id: string): Promise<void> {

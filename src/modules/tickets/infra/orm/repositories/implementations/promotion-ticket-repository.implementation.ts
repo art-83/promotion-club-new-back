@@ -14,7 +14,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     this.repository = dataSource.getRepository(PromotionTicket);
   }
 
-  public async find(options: PromotionTicketQueryOptionsDTO): Promise<PromotionTicket[]> {
+  public async find(options: Partial<PromotionTicketQueryOptionsDTO>): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
     query.leftJoinAndSelect("promotion_tickets.user", "user");
     query.leftJoinAndSelect("promotion_tickets.store", "store");
@@ -33,6 +33,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
     query.orderBy("promotion_tickets.created_at", "DESC");
 
+    query.andWhere("promotion_tickets.deleted_at IS NULL");
+
     return await query.getMany();
   }
 
@@ -47,7 +49,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   }
 
   public async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 
   public async getCountDashboardByStore(store_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO> {
@@ -57,6 +59,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .addSelect("SUM(ticket.promotion_final_price)", "revenue")
       .addSelect("COUNT(ticket.id)", "total_items_selled")
       .where("ticket.store_id = :store_id", { store_id })
+      .andWhere("ticket.deleted_at IS NULL")
       .groupBy("ticket.product_name")
       .orderBy("revenue", "DESC")
       .limit(10);
@@ -64,7 +67,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     const totalRevenueQuery = this.repository
       .createQueryBuilder("ticket")
       .select("SUM(ticket.promotion_final_price)", "total_revenue")
-      .where("ticket.store_id = :store_id", { store_id });
+      .where("ticket.store_id = :store_id", { store_id })
+      .andWhere("ticket.deleted_at IS NULL");
 
     if (options.start_date) {
       bestSellerItemsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
@@ -94,7 +98,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     const generalStatsQuery = this.repository
       .createQueryBuilder("ticket")
       .select("SUM(ticket.promotion_final_price)", "total_revenue")
-      .addSelect("COUNT(ticket.id)", "total_tickets");
+      .addSelect("COUNT(ticket.id)", "total_tickets")
+      .andWhere("ticket.deleted_at IS NULL");
 
     if (options.start_date) {
       generalStatsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
@@ -110,7 +115,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .addSelect("COUNT(ticket.id)", "sell_count")
       .groupBy("ticket.product_name")
       .orderBy("sell_count", "DESC")
-      .limit(1);
+      .limit(1)
+      .andWhere("ticket.deleted_at IS NULL");
 
     if (options.start_date) {
       topSellerQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
@@ -142,14 +148,16 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .leftJoinAndSelect("ticket.user", "user")
       .leftJoinAndSelect("ticket.store", "store")
       .where("ticket.user_id = :user_id", { user_id })
+      .andWhere("ticket.deleted_at IS NULL")
       .orderBy("ticket.created_at", "DESC")
       .take(options.limit ?? 10);
-    
+
     const totalsQuery = this.repository
       .createQueryBuilder("ticket")
       .select("SUM(ticket.saved_money)", "total_money_saved")
       .addSelect("COUNT(ticket.id)", "total_tickets")
-      .where("ticket.user_id = :user_id", { user_id });
+      .where("ticket.user_id = :user_id", { user_id })
+      .andWhere("ticket.deleted_at IS NULL");
 
     if (options.product_name) {
       ticketsQuery.andWhere("ticket.product_name ILIKE :product_name", { product_name: `%${options.product_name}%` });
@@ -170,8 +178,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     if (options.offset) {
       ticketsQuery.skip(options.offset);
     }
-    
-    console.log(ticketsQuery)
+
+    console.log(ticketsQuery);
 
     const [promotion_tickets, totals] = await Promise.all([ticketsQuery.getMany(), totalsQuery.getRawOne()]);
 

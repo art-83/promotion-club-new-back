@@ -13,28 +13,46 @@ import UserPermissions from "../../modules/users/infra/orm/entities/user-permiss
 import UserPermissionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-permissions-repository.implementation";
 import Store from "../../modules/stores/infra/orm/entities/store.entity";
 import StoreRepository from "../../modules/stores/infra/orm/repositories/implementations/store-repository.implementation";
-import Product from "../../modules/promotions/infra/orm/entities/product.entity";
-import ProductRepository from "../../modules/promotions/infra/orm/repositories/implementations/product-repository.implementation";
+import Category from "../../modules/stores/infra/orm/entities/category.entity";
+import CategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/category-repository.implementation";
+import StoreCategory from "../../modules/stores/infra/orm/entities/store-category.entity";
+import StoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/store-category-repository.implementation";
 import Promotion from "../../modules/promotions/infra/orm/entities/promotion.entity";
 import PromotionRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-repository.implementation";
-import ImageRepositoryProvider from "../../modules/images/infra/orm/repositories/provider/image-repository.provider";
+import Invoice from "../../modules/invoices/infra/orm/entities/invoice.entity";
+import InvoiceRepository from "../../modules/invoices/infra/orm/repositories/implementations/invoice-repository.implementation";
+import ImageRepositoryProvider from "../../modules/images/infra/orm/repositories/providers/image-repository.provider";
 import ImageRepository from "../../modules/images/infra/orm/repositories/implementations/image-repository.implementation";
 
-import CacheProvider from "../infra/cache/providers/cache.provider";
-import Cache from "../../modules/qr-code/infra/cache/implementation/cache.implementation";
+import CacheProvider from "../infra/cache/infra/providers/cache.provider";
+import QrCodeCache from "../../modules/qr-code/infra/cache/implementation/qr-code-cache.implementation";
 
 import PromotionTicket from "../../modules/tickets/infra/orm/entities/promotion-ticket.entity";
 import PromotionTicketRepository from "../../modules/tickets/infra/orm/repositories/implementations/promotion-ticket-repository.implementation";
+import Tags from "../../modules/promotions/infra/orm/entities/tag.entity";
+import TagRepository from "../../modules/promotions/infra/orm/repositories/implementations/tag-repository.implementation";
+import PromotionTag from "../../modules/promotions/infra/orm/entities/promotion-tag.entity";
+import PromotionTagRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-tag-repository.implementation";
+import UserPushToken from "../../modules/users/infra/orm/entities/user-push-token.entity";
+import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
 
 container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermissionsRepository", UserPermissionsRepository);
 
 container.registerSingleton<RepositoryProvider<Store>>("StoreRepository", StoreRepository);
-container.registerSingleton<RepositoryProvider<Product>>("ProductRepository", ProductRepository);
+container.registerSingleton<RepositoryProvider<Category>>("CategoryRepository", CategoryRepository);
+container.registerSingleton<RepositoryProvider<StoreCategory>>("StoreCategoryRepository", StoreCategoryRepository);
 container.registerSingleton<RepositoryProvider<Promotion>>("PromotionRepository", PromotionRepository);
+container.registerSingleton<RepositoryProvider<Invoice>>("InvoiceRepository", InvoiceRepository);
 
 container.registerSingleton<RepositoryProvider<PromotionTicket>>("PromotionTicketRepository", PromotionTicketRepository);
+
+container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagRepository);
+
+container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
+
+container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
 
 container.registerSingleton<ImageRepositoryProvider>("ImageRepository", ImageRepository);
 
@@ -42,4 +60,4 @@ container.registerSingleton<HashProvider>("Hash", Hash);
 
 container.registerSingleton<JwtProvider>("Jwt", Jwt);
 
-container.registerSingleton<CacheProvider<any>>("CacheProvider", Cache);
+container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);

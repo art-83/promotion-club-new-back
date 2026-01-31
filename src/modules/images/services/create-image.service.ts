@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import Image from "../infra/orm/entities/image.entity";
-import ImageRepositoryProvider from "../infra/orm/repositories/provider/image-repository.provider";
+import ImageRepositoryProvider from "../infra/orm/repositories/providers/image-repository.provider";
 import CreateImageDTO from "../dtos/create-image.dto";
 import AppError from "../../../shared/infra/http/errors/app-error";
 @injectable()

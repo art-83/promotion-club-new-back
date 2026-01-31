@@ -1,8 +1,8 @@
-import StoreQueryOptionsDTO from "../../../dtos/store-query-options.dto";
-import CreateStoreService from "../../../services/create-store.service";
-import DeleteStoreService from "../../../services/delete-store.service";
-import ShowStoresServices from "../../../services/show-stores.service";
-import UpdateStoreService from "../../../services/update-store.service";
+import StoreQueryOptionsDTO from "../../../dtos/stores/store-query-options.dto";
+import CreateStoreService from "../../../services/stores/create-store.service";
+import DeleteStoreService from "../../../services/stores/delete-store.service";
+import ShowStoresServices from "../../../services/stores/show-stores.service";
+import UpdateStoreService from "../../../services/stores/update-store.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 

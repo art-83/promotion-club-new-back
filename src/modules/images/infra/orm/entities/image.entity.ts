@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Store from "../../../../stores/infra/orm/entities/store.entity";
-import Product from "../../../../promotions/infra/orm/entities/product.entity";
+import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
 
 @Entity({ name: "images" })
 class Image {
@@ -19,11 +19,17 @@ class Image {
   @CreateDateColumn()
   created_at: Date;
 
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+
   @OneToOne(() => Store, (store) => store.image)
   store: Store;
 
-  @OneToOne(() => Product, (product) => product.image)
-  product: Product;
+  @OneToOne(() => Promotion, (promotion) => promotion.image)
+  promotion: Promotion;
 }
 
 export default Image;

@@ -1,16 +1,16 @@
 import { inject, injectable } from "tsyringe";
-import CacheProvider from "../../../shared/infra/cache/providers/cache.provider";
-import CreateQrCodeDTO from "../dtos/create-qr-code.dto";
+import CacheProvider from "../../../shared/infra/cache/infra/providers/cache.provider";
+import QrCodePayloadDto from "../dtos/qr-code-payload.dto";
 
 @injectable()
 class GenerateQrCodeService {
   constructor(
     @inject("CacheProvider")
-    private cacheProvider: CacheProvider<CreateQrCodeDTO>
+    private cacheProvider: CacheProvider<QrCodePayloadDto>
   ) {}
 
-  public async execute(data: CreateQrCodeDTO): Promise<CreateQrCodeDTO> {
-    return await this.cacheProvider.generate(data);
+  public async execute(data: Partial<QrCodePayloadDto>): Promise<QrCodePayloadDto> {
+    return await this.cacheProvider.create(data);
   }
 }
 

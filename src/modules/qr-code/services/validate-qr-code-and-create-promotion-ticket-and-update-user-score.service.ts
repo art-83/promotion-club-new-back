@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import CacheProvider from "../../../shared/infra/cache/providers/cache.provider";
+import CacheProvider from "../../../shared/infra/cache/infra/providers/cache.provider";
 import AppError from "../../../shared/infra/http/errors/app-error";
-import CreateQrCodeDTO from "../dtos/create-qr-code.dto";
+import QrCodePayloadDto from "../dtos/qr-code-payload.dto";
 import RepositoryProvider from "../../../shared/infra/orm/repositories/providers/repository.provider";
 import PromotionTicket from "../../tickets/infra/orm/entities/promotion-ticket.entity";
 import User from "../../users/infra/orm/entities/user.entity";
@@ -13,7 +13,7 @@ import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
 class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
   constructor(
     @inject("CacheProvider")
-    private cache: CacheProvider<CreateQrCodeDTO>,
+    private cache: CacheProvider<QrCodePayloadDto>,
     @inject("PromotionTicketRepository")
     private promotionTicketRepository: RepositoryProvider<PromotionTicket>,
     @inject("UserRepository")
@@ -35,6 +35,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
 
     const promotionsQueryOptions = {
       id: qrCodeParsed.promotion_id,
+      join_store: true,
     } as PromotionQueryOptionsDTO;
 
     const [user, promotion] = await Promise.all([
@@ -46,19 +47,19 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     if (!promotion) throw new AppError(404, "Promotion not found.");
 
     const createPromotionTicketData = {
-      product_name: promotion.product.name,
-      product_price: promotion.product.price,
+      product_name: promotion.name,
+      product_price: promotion.price,
       promotion_discount_percentage: promotion.discount_percentage,
       promotion_final_price: promotion.final_price,
-      saved_money: promotion.product.price - promotion.final_price,
-      store: promotion.product.store,
+      saved_money: Number(promotion.price) - Number(promotion.final_price),
+      store: promotion.store,
       user: user,
     } as Partial<PromotionTicket>;
 
     const createPromotionTicket = await this.promotionTicketRepository.create(createPromotionTicketData);
 
     const removeQrCode = await this.cache.delete(user_id);
-    if (removeQrCode == 0) throw new AppError(404, "QrCode invalid or expired.");
+    if (!removeQrCode) throw new AppError(404, "QrCode invalid or expired.");
 
     const newScore = Number(Number(user.score) + Number(promotion.final_price));
     await this.userRepository.update(user_id, { score: newScore });

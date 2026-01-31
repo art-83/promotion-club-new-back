@@ -1,4 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import User from "./user.entity";
 import Store from "../../../../stores/infra/orm/entities/store.entity";
 
@@ -9,6 +20,15 @@ class UserPermissions {
 
   @Column({ type: "varchar", array: true, nullable: true })
   permissions: string[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 
   @ManyToOne(() => Store, (store) => store.user_permissions, {
     nullable: true,

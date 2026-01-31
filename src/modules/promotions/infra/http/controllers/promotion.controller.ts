@@ -1,4 +1,3 @@
-import PromotionQueryOptionsDTO from "../../../dtos/promotions/promotion-query-options.dto";
 import CreatePromotionService from "../../../services/promotions/create-promotion.service";
 import DeleteExpiredPromotionsService from "../../../services/promotions/delete-expired-promotions.service";
 import DeletePromotionService from "../../../services/promotions/delete-promotion.service";
@@ -23,8 +22,8 @@ class PromotionController {
   public async update(request: Request, response: Response) {
     const id = String(request.params.id);
     const updatePromotionService = container.resolve(UpdatePromotionService);
-    const updatePromotion = await updatePromotionService.execute(id, request.body);
-    return response.status(200).json(updatePromotion);
+    await updatePromotionService.execute(id, request.body);
+    return response.status(204).send();
   }
 
   public async delete(request: Request, response: Response) {
