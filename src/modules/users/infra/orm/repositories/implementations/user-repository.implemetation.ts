@@ -14,8 +14,6 @@ class UserRepository implements RepositoryProvider<User> {
   public async find(options: Partial<UserQueryOptionsDTO>): Promise<User[]> {
     const query = this.repository.createQueryBuilder("users");
 
-    query.select(["users.id", "users.name", "users.email", "users.cpf", "users.score", "users.created_at", "users.updated_at", "users.deleted_at"]);
-
     if (options.id) query.andWhere("users.id = :id", { id: options.id });
     if (options.name) query.andWhere("users.name ILIKE :name", { name: `%${options.name}%` });
     if (options.email)
