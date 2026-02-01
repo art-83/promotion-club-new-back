@@ -53,15 +53,18 @@ class UpdatePromotionService {
     }
 
     if (data.is_approved) {
-      const title = `Promoção quente na loja ${promotion.store.id}!`;
-      const description = `Confira a promoção do item ${promotion.name}! Apenas R$ ${promotion.final_price}`;
-      const notificationPushMessage = {
-        title,
-        description,
-      } as NotificationPushMessageDTO;
       const tokens = await this.userPushTokenRepository.find({});
-      const tokenStringList = tokens.map((token) => token.token);
-      const sendNotification = this.notificationPusher.push(tokenStringList, notificationPushMessage);
+      if (tokens.length) {
+        const title = `Promoção quente na loja ${promotion.store.name}!`;
+        const description = `Confira a promoção do item ${promotion.name}! Apenas R$ ${promotion.final_price}`;
+        const notificationPushMessage = {
+          title,
+          description,
+        } as NotificationPushMessageDTO;
+        const tokenStringList = tokens.map((token) => token.token);
+        const sendNotification = await this.notificationPusher.push(tokenStringList, notificationPushMessage);
+        console.log(sendNotification)
+      }
     }
 
     await this.promotionRepository.update(id, data);
