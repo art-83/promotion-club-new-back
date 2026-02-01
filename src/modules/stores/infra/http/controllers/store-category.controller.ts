@@ -22,7 +22,7 @@ class StoreCategoryController {
   }
 
   public async update(request: Request, response: Response) {
-    const id  = String(request.params.id);
+    const id = String(request.params.id);
     const data = request.body;
     const updateStoreCategory = container.resolve(UpdateStoreCategoryService);
     await updateStoreCategory.execute(id, data);

@@ -1,13 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "./user.entity";
 
 @Entity({ name: "user_push_tokens" })
@@ -36,7 +27,7 @@ class UserPushToken {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => User, user => user.user_push_token)
+  @ManyToOne(() => User, (user) => user.user_push_token)
   @JoinColumn({ name: "user_id" })
   user: User;
 }

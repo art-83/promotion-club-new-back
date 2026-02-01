@@ -4,8 +4,8 @@ import Store from "../../../../stores/infra/orm/entities/store.entity";
 @Entity({ name: "invoices" })
 class Invoice {
   @PrimaryGeneratedColumn("uuid")
-  id: string;  
-    
+  id: string;
+
   @CreateDateColumn()
   created_at: Date;
 

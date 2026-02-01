@@ -12,6 +12,7 @@ import { errors } from "celebrate";
 import cacheClient from "../cache/cache";
 
 import cors from "cors";
+import NotificationPusher from "../push/infra/implementations/notification-pusher.implementation";
 
 async function main() {
   const server = express();
@@ -29,6 +30,7 @@ async function main() {
   await cacheClient.connect();
   await dataSource.initialize();
   //const migrations = await dataSource.runMigrations();
+  
   server.listen(port, () => console.log(`http://localhost:${port}`));
 }
 

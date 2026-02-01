@@ -47,6 +47,9 @@ jobs:
           # Create .env file on VPS from secret
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "echo '$SSH_ENV' > $REMOTE_DIR/.env"
 
+          # Create firebase credentials file on VPS from secret
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "echo '${{ secrets.FIREBASE_CREDENTIALS }}' > $REMOTE_DIR/promotion-club-pusher-firebase-credentials.json"
+
           # Stop and remove existing containers, then rebuild and start
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
             docker compose down && \

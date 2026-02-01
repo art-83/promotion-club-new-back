@@ -70,8 +70,8 @@ class Store {
 
   @OneToMany(() => StoreCategory, (storeCategory) => storeCategory.store)
   store_categories: StoreCategory[];
-  
-  @OneToMany(() => Invoice, invoice => invoice.store)
+
+  @OneToMany(() => Invoice, (invoice) => invoice.store)
   invoices: Invoice;
 }
 

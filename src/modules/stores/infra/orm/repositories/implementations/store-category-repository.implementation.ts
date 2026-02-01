@@ -16,10 +16,8 @@ class StoreCategoryRepository implements RepositoryProvider<StoreCategory> {
     const query = this.repository.createQueryBuilder("store_category");
 
     if (options.id) query.andWhere("store_category.id = :id", { id: options.id });
-    if (options.store_id)
-      query.andWhere("store_category.store_id = :store_id", { store_id: options.store_id });
-    if (options.category_id)
-      query.andWhere("store_category.category_id = :category_id", { category_id: options.category_id });
+    if (options.store_id) query.andWhere("store_category.store_id = :store_id", { store_id: options.store_id });
+    if (options.category_id) query.andWhere("store_category.category_id = :category_id", { category_id: options.category_id });
 
     query.andWhere("store_category.deleted_at IS NULL");
 
