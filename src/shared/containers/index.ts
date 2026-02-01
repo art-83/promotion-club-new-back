@@ -35,6 +35,8 @@ import PromotionTag from "../../modules/promotions/infra/orm/entities/promotion-
 import PromotionTagRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-tag-repository.implementation";
 import UserPushToken from "../../modules/users/infra/orm/entities/user-push-token.entity";
 import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
+import NotificationPusher from "../infra/push/infra/implementations/notification-pusher.implementation";
+import NotificationPusherProvider from "../infra/push/infra/providers/notification-pusher.provider";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
 
@@ -61,3 +63,5 @@ container.registerSingleton<HashProvider>("Hash", Hash);
 container.registerSingleton<JwtProvider>("Jwt", Jwt);
 
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);
+
+container.registerSingleton<NotificationPusherProvider>("NotificationPusher", NotificationPusher);
