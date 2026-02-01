@@ -12,6 +12,7 @@ class NotificationPusher implements NotificationPusherProvider {
   }
 
   public async push(tokens: string[], message: NotificationPushMessageDTO): Promise<NotificationPushResponseDTO> {
+    console.log("teste 1");
     const notificationPayload = {
       tokens: tokens,
       notification: {
@@ -23,7 +24,11 @@ class NotificationPusher implements NotificationPusherProvider {
       },
     } as admin.messaging.MulticastMessage;
 
+    console.log("teste 2");
+
     const send = await this.client.sendEachForMulticast(notificationPayload);
+    
+    console.log("teste 3");
 
     const success = send.responses
       .map((response, index) => ({ token: tokens[index], success: response.success }))
