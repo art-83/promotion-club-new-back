@@ -66,7 +66,6 @@ class UpdatePromotionService {
         console.log(sendNotification)
       }
     }
-
     await this.promotionRepository.update(id, data);
   }
 }
