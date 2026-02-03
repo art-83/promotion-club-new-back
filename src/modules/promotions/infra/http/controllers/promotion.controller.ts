@@ -2,7 +2,7 @@ import CreatePromotionService from "../../../services/promotions/create-promotio
 import DeleteExpiredPromotionsService from "../../../services/promotions/delete-expired-promotions.service";
 import DeletePromotionService from "../../../services/promotions/delete-promotion.service";
 import ShowPromotionsServices from "../../../services/promotions/show-promotions.service";
-import UpdatePromotionService from "../../../services/promotions/update-promotion.service";
+import UpdatePromotionService from "../../../services/promotions/update-promotion-and-maybe-send-notifications.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
