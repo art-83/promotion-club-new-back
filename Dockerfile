@@ -1,8 +1,7 @@
 FROM node:20-slim
-WORKDIR /
+WORKDIR /app
 COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+RUN npm ci --omit=dev
+COPY dist ./dist
 EXPOSE 3000
 CMD ["node", "dist/shared/infra/http/server.js"]

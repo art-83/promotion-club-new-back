@@ -44,7 +44,9 @@ class NotificationPusher implements NotificationPusherProvider {
   }
 
   private initializeFirebaseSDK(): admin.messaging.Messaging {
-    const firebaseCredentials = JSON.parse(String(fs.readFileSync(__dirname + "/../../../../../../promotion-club-pusher-firebase-credentials.json")));
+    const firebaseCredentials = JSON.parse(
+      String(fs.readFileSync(__dirname + "/../../../../../config/promotion-club-pusher-firebase-credentials.json"))
+    );
     console.log("firebaseCredentials:", firebaseCredentials);
     admin.initializeApp({
       credential: admin.credential.cert(firebaseCredentials),
