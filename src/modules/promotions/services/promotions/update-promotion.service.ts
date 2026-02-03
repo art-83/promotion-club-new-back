@@ -63,7 +63,7 @@ class UpdatePromotionService {
         } as NotificationPushMessageDTO;
         const tokenStringList = tokens.map((token) => token.token);
         const sendNotification = await this.notificationPusher.push(tokenStringList, notificationPushMessage);
-        console.log(sendNotification)
+        console.log("sendNotification", sendNotification)
       }
     }
     await this.promotionRepository.update(id, data);
