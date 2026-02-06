@@ -6,7 +6,7 @@ import ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService from "../
 
 class QrCodeController {
   public async show(request: Request, response: Response): Promise<Response> {
-    const user_id = String(request.params.user_id);
+    const user_id = String(request.user_id);
     const getQrCodeByUserIdService = container.resolve(GetQrCodeByUserIdService);
     const qrCode = await getQrCodeByUserIdService.execute(user_id);
     return response.status(200).json(qrCode);

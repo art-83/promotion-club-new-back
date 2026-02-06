@@ -8,12 +8,7 @@ const qrCodeRoutes = Router();
 const qrCodeController = new QrCodeController();
 
 qrCodeRoutes.get(
-  "/:user_id",
-  celebrate({
-    [Segments.PARAMS]: {
-      user_id: Joi.string().uuid().required(),
-    },
-  }),
+  "/",
   qrCodeController.show
 );
 
