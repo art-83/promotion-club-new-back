@@ -17,8 +17,6 @@ class GetQrCodeByUserIdService {
 
     const qrCode = JSON.parse(raw) as QrCodePayloadDto;
 
-    if (qrCode.deleted) throw new AppError(404, "QrCode not found.");
-
     return qrCode;
   }
 }
