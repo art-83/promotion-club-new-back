@@ -7,6 +7,16 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const qrCodeRoutes = Router();
 const qrCodeController = new QrCodeController();
 
+qrCodeRoutes.get(
+  "/:user_id",
+  celebrate({
+    [Segments.PARAMS]: {
+      user_id: Joi.string().uuid().required(),
+    },
+  }),
+  qrCodeController.show
+);
+
 qrCodeRoutes.post(
   "/",
   permissionMiddleware(Permissions.CREATE_QR_CODE),

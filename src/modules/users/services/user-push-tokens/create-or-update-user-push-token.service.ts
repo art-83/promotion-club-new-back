@@ -14,11 +14,21 @@ class CreateUserPushTokenService {
     private userRepository: RepositoryProvider<User>
   ) {}
 
-  public async execute(user_id: string, data: Partial<CreateOrUpdateUserPushTokenDTO>): Promise<UserPushToken> {
-    const user = (await this.userRepository.find({ id: user_id })).at(0);
+  public async execute(user_id: string, data: Partial<CreateOrUpdateUserPushTokenDTO>): Promise<{ message: string }> {
+    const [user, userPushToken] = await Promise.all([
+      (await this.userRepository.find({ id: user_id })).at(0),
+      (await this.userPushTokenRepository.find({ user_id })).at(0),
+    ]);
+
     if (!user) throw new AppError(404, "User not found.");
-    data.user = user;
-    return await this.userPushTokenRepository.create(data);
+
+    if (userPushToken) {
+      await this.userPushTokenRepository.update(userPushToken.id, data);
+      return { message: "User push token updated successfully." };
+    }
+    
+    await this.userPushTokenRepository.create(data);
+    return { message: "User push token created successfully." };
   }
 }
 

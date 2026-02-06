@@ -2,7 +2,7 @@ import ShowUsersServices from "../../../services/user/show-users.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import UpdateUserPermissionsService from "../../../services/users-permissions/update-user-permissions.service";
-import CreateUserPushTokenService from "../../../services/user-push-tokens/create-user-push-token.service";
+import CreateUserPushTokenService from "../../../services/user-push-tokens/create-or-update-user-push-token.service";
 
 class UserController {
   public async show(request: Request, response: Response) {
