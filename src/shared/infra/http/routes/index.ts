@@ -8,6 +8,7 @@ import imageRoutes from "../../../../modules/images/infra/http/routers/image.rou
 import qrCodeRoutes from "../../../../modules/qr-code/infra/http/routers/qr-code.routes";
 import ticketRoutes from "../../../../modules/tickets/infra/http/routers/ticket.routes";
 import invoiceRoutes from "../../../../modules/invoices/infra/http/routers/invoice.routes";
+import benefitRoutes from "../../../../modules/benefits/infra/http/routers/benefit.routes";
 import tagRoutes from "../../../../modules/promotions/infra/http/routers/tag.routes";
 import promotionTagRoutes from "../../../../modules/promotions/infra/http/routers/promotion-tag.routes";
 import authRouter from "../../../../modules/users/infra/http/routers/auth.routes";
@@ -33,6 +34,7 @@ routes.use("/images", imageRoutes);
 routes.use("/qr-codes", qrCodeRoutes);
 routes.use("/tickets", ticketRoutes);
 routes.use("/invoices", invoiceRoutes);
+routes.use("/benefits", benefitRoutes);
 routes.use("/tags", tagRoutes);
 routes.use("/promotion-tags", promotionTagRoutes);
 

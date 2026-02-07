@@ -75,4 +75,41 @@ userRoutes.delete(
   userController.deleteUserStoreOptions
 );
 
+userRoutes.get(
+  "/benefits",
+  permissionMiddleware(Permissions.SHOW_USER_BENEFITS),
+  celebrate({
+    [Segments.QUERY]: {
+      benefit_id: Joi.string().uuid().optional(),
+      start_date: Joi.date().optional(),
+      end_date: Joi.date().optional(),
+      offset: Joi.number().integer().optional(),
+      limit: Joi.number().integer().optional(),
+    },
+  }),
+  userController.showUserBenefits
+);
+
+userRoutes.post(
+  "/benefits/:benefit_id",
+  permissionMiddleware(Permissions.CREATE_USER_BENEFIT),
+  celebrate({
+    [Segments.PARAMS]: {
+      benefit_id: Joi.string().uuid().required(),
+    },
+  }),
+  userController.createUserBenefit
+);
+
+userRoutes.delete(
+  "/benefits/:benefit_id",
+  permissionMiddleware(Permissions.DELETE_USER_BENEFIT),
+  celebrate({
+    [Segments.PARAMS]: {
+      benefit_id: Joi.string().uuid().required(),
+    },
+  }),
+  userController.deleteUserBenefit
+);
+
 export default userRoutes;

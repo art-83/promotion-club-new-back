@@ -2,20 +2,28 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import Benefit from "../../entities/benefit.entity";
 import { Repository } from "typeorm";
 import dataSource from "../../../../../../shared/infra/orm/database";
+import BenefitsQueryOptionsDTO from "../../../../dtos/benefits/benefits-query-options.dto";
 
-class BenefitsRepository implements RepositoryProvider<Benefit> {
+class BenefitRepository implements RepositoryProvider<Benefit> {
   private repository: Repository<Benefit>;
 
   constructor() {
     this.repository = dataSource.getRepository(Benefit);
   }
 
-  public async find(options: Partial<Benefit>): Promise<Benefit[]> {
+  public async find(options: Partial<BenefitsQueryOptionsDTO>): Promise<Benefit[]> {
     const query = this.repository.createQueryBuilder("benefit");
     if (options.id) query.andWhere("benefit.id = :id", { id: options.id });
-
+    if (options.join_image) query.leftJoinAndSelect("benefit.image", "image");
     query.andWhere("benefit.deleted_at IS NULL");
 
+    if (options.start_date) query.andWhere("benefit.created_at >= :start_date", { start_date: options.start_date });
+    if (options.end_date) query.andWhere("benefit.created_at <= :end_date", { end_date: options.end_date });
+
+    if (options.offset) query.skip(options.offset);
+    if (options.limit) query.take(options.limit);
+
+    query.andWhere("benefit.deleted_at IS NULL");
     return await query.getMany();
   }
 
@@ -35,4 +43,4 @@ class BenefitsRepository implements RepositoryProvider<Benefit> {
   }
 }
 
-export default BenefitsRepository;
+export default BenefitRepository;
