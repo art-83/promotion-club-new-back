@@ -51,11 +51,7 @@ userRoutes.get(
   userController.show
 );
 
-userRoutes.get(
-  "/store-options",
-  permissionMiddleware(Permissions.SHOW_USER_STORE_OPTIONS),
-  userController.showUserStoreOptions
-);
+userRoutes.get("/store-options", permissionMiddleware(Permissions.SHOW_USER_STORE_OPTIONS), userController.showUserStoreOptions);
 
 userRoutes.post(
   "/store-options/:store_id",

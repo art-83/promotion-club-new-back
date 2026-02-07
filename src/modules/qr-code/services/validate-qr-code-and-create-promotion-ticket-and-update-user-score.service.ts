@@ -56,11 +56,9 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     if (!user) throw new AppError(404, "User not found.");
     if (!promotion) throw new AppError(404, "Promotion not found.");
 
-    if (promotion && promotion.store && 
-      userPermissions && userPermissions.store && 
-      promotion.store.id !== userPermissions.store.id) {
-        throw new AppError(403, "Promotion not available for this store.");
-      }
+    if (promotion && promotion.store && userPermissions && userPermissions.store && promotion.store.id !== userPermissions.store.id) {
+      throw new AppError(403, "Promotion not available for this store.");
+    }
 
     const createPromotionTicketData = {
       user,

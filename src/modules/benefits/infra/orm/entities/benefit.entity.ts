@@ -27,7 +27,6 @@ class Benefit {
   @OneToOne(() => Image, (image) => image.benefit)
   @JoinColumn({ name: "image_id" })
   image: Image;
-
 }
 
 export default Benefit;

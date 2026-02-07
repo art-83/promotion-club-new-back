@@ -24,7 +24,7 @@ class BenefitsRepository implements RepositoryProvider<Benefit> {
     const saveBenefit = await this.repository.save(createBenefit);
     return saveBenefit;
   }
-  
+
   public async update(id: string, data: Partial<Benefit>): Promise<void> {
     const updateBenefit = this.repository.create(data);
     await this.repository.update(id, updateBenefit);

@@ -26,7 +26,7 @@ class UpdatePromotionService {
     @inject("NotificationPusher")
     private notificationPusher: NotificationPusherProvider,
     @inject("UserStoreOptionsRepository")
-    private userStoreOptionsRepository: RepositoryProvider<UserStoreOptions>,
+    private userStoreOptionsRepository: RepositoryProvider<UserStoreOptions>
   ) {}
 
   public async execute(id: string, data: Partial<CreateOrUpdatePromotionDTO>): Promise<void> {
@@ -61,7 +61,9 @@ class UpdatePromotionService {
         store_id: promotion.store.id,
       } as UserStoreOptionsQueryOptionsDTO;
       const userStoreOptions = await this.userStoreOptionsRepository.find(userStoreOptionsQueryOptions);
-      const tokens = (await this.userPushTokenRepository.find({})).filter((token) => userStoreOptions.some((userStoreOption) => userStoreOption.user.id === token.user_id));
+      const tokens = (await this.userPushTokenRepository.find({})).filter((token) =>
+        userStoreOptions.some((userStoreOption) => userStoreOption.user.id === token.user_id)
+      );
       if (tokens.length) {
         const title = `Promoção quente na loja ${promotion.store.name}!`;
         const description = `Confira a promoção do item ${promotion.name}! Apenas R$ ${promotion.final_price}`;
