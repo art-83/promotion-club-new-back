@@ -9,6 +9,8 @@ import NotificationPusherProvider from "../../../../shared/infra/push/infra/prov
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 import NotificationPushMessageDTO from "../../../../shared/infra/push/dtos/notification-push-message.dto";
 import UserPushToken from "../../../users/infra/orm/entities/user-push-token.entity";
+import UserStoreOptions from "../../../users/infra/orm/entities/user-store-options.entity";
+import UserStoreOptionsQueryOptionsDTO from "../../../users/dtos/user-store-options/user-store-options-query-options.dto";
 
 @injectable()
 class UpdatePromotionService {
@@ -22,7 +24,9 @@ class UpdatePromotionService {
     @inject("UserPushTokenRepository")
     private userPushTokenRepository: RepositoryProvider<UserPushToken>,
     @inject("NotificationPusher")
-    private notificationPusher: NotificationPusherProvider
+    private notificationPusher: NotificationPusherProvider,
+    @inject("UserStoreOptionsRepository")
+    private userStoreOptionsRepository: RepositoryProvider<UserStoreOptions>,
   ) {}
 
   public async execute(id: string, data: Partial<CreateOrUpdatePromotionDTO>): Promise<void> {
@@ -53,7 +57,11 @@ class UpdatePromotionService {
     }
 
     if (data.is_approved) {
-      const tokens = await this.userPushTokenRepository.find({});
+      const userStoreOptionsQueryOptions = {
+        store_id: promotion.store.id,
+      } as UserStoreOptionsQueryOptionsDTO;
+      const userStoreOptions = await this.userStoreOptionsRepository.find(userStoreOptionsQueryOptions);
+      const tokens = (await this.userPushTokenRepository.find({})).filter((token) => userStoreOptions.some((userStoreOption) => userStoreOption.user.id === token.user_id));
       if (tokens.length) {
         const title = `Promoção quente na loja ${promotion.store.name}!`;
         const description = `Confira a promoção do item ${promotion.name}! Apenas R$ ${promotion.final_price}`;
