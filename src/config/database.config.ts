@@ -8,8 +8,8 @@ const dataSourceOptions = {
   password: String(process.env.TYPEORM_PASSWORD),
   database: String(process.env.TYPEORM_DATABASE),
   entities: [__dirname + String(process.env.TYPEORM_ENTITIES)],
-  synchronize: Boolean(process.env.TYPEORM_SYNC),
   migrations: [__dirname + String(process.env.TYPEORM_MIGRATIONS)],
+  synchronize: false,
   //dropSchema: true, // pelo amor de jesus cristo nao descomenta essa porra
 } as DataSourceOptions;
 

@@ -15,6 +15,7 @@ benefitRoutes.get(
       id: Joi.string().uuid().optional(),
       store_id: Joi.string().uuid().optional(),
       join_image: Joi.boolean().optional(),
+      join_store: Joi.boolean().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
       offset: Joi.number().integer().optional(),
