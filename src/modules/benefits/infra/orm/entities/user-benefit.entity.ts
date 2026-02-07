@@ -16,7 +16,7 @@ class UserBenefit {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => User, (user) => user.benefits)
+  @ManyToOne(() => User, (user) => user.user_benefits)
   @JoinColumn({ name: "user_id" })
   user: User;
 
