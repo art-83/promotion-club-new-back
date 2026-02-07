@@ -22,6 +22,8 @@ class CreateUserPushTokenService {
 
     if (!user) throw new AppError(404, "User not found.");
 
+    data.user = user;
+
     if (userPushToken) {
       await this.userPushTokenRepository.update(userPushToken.id, data);
       return { message: "User push token updated successfully." };
