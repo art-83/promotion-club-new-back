@@ -21,7 +21,8 @@ const globalErrorHandler = (error: Error, request: Request, response: Response, 
     });
   }
 
-  logger.error(error);
+  console.log(error);
+  //logger.error(error);
 
   return response.status(500).json({
     message: "Internal Server Error",

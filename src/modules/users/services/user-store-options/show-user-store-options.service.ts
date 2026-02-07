@@ -1,8 +1,9 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import UserStoreOptions from "../../infra/orm/entities/user-store-options.entity";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import UserStoreOptionsQueryOptionsDTO from "../../dtos/user-store-options/user-store-options-query-options.dto";
 
+@injectable()
 class ShowUserStoreOptionsService {
   constructor(
     @inject("UserStoreOptionsRepository")

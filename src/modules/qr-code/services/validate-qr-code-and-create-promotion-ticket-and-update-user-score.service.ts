@@ -8,6 +8,8 @@ import User from "../../users/infra/orm/entities/user.entity";
 import Promotion from "../../promotions/infra/orm/entities/promotion.entity";
 import PromotionQueryOptionsDTO from "../../promotions/dtos/promotions/promotion-query-options.dto";
 import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
+import UserPermissionsQueryOptionsDTO from "../../users/dtos/users-permissions/user-permissions-query-options.dto";
+import UserPermissions from "../../users/infra/orm/entities/user-permissions.entity";
 
 @injectable()
 class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
@@ -19,7 +21,9 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     @inject("UserRepository")
     private userRepository: RepositoryProvider<User>,
     @inject("PromotionRepository")
-    private promotionRepository: RepositoryProvider<Promotion>
+    private promotionRepository: RepositoryProvider<Promotion>,
+    @inject("UserPermissionsRepository")
+    private userPermissionsRepository: RepositoryProvider<UserPermissions>
   ) {}
 
   public async execute(user_id: string): Promise<{ message: string; createPromotionTicket: Partial<PromotionTicket> }> {
@@ -38,13 +42,25 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
       join_store: true,
     } as PromotionQueryOptionsDTO;
 
-    const [user, promotion] = await Promise.all([
+    const userPermissionsQueryOptions = {
+      user_id,
+      join_store: true,
+    } as UserPermissionsQueryOptionsDTO;
+
+    const [user, promotion, userPermissions] = await Promise.all([
       (await this.userRepository.find(userQueryOptions)).at(0),
       (await this.promotionRepository.find(promotionsQueryOptions)).at(0),
+      (await this.userPermissionsRepository.find(userPermissionsQueryOptions)).at(0),
     ]);
 
     if (!user) throw new AppError(404, "User not found.");
     if (!promotion) throw new AppError(404, "Promotion not found.");
+
+    if (promotion && promotion.store && 
+      userPermissions && userPermissions.store && 
+      promotion.store.id !== userPermissions.store.id) {
+        throw new AppError(403, "Promotion not available for this store.");
+      }
 
     const createPromotionTicketData = {
       user,
