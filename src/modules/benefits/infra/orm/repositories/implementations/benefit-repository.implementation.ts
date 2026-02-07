@@ -14,6 +14,7 @@ class BenefitRepository implements RepositoryProvider<Benefit> {
   public async find(options: Partial<BenefitsQueryOptionsDTO>): Promise<Benefit[]> {
     const query = this.repository.createQueryBuilder("benefit");
     if (options.id) query.andWhere("benefit.id = :id", { id: options.id });
+    if (options.store_id) query.andWhere("benefit.store_id = :store_id", { store_id: options.store_id });
     if (options.join_image) query.leftJoinAndSelect("benefit.image", "image");
     query.andWhere("benefit.deleted_at IS NULL");
 
@@ -23,7 +24,7 @@ class BenefitRepository implements RepositoryProvider<Benefit> {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
-    query.andWhere("benefit.deleted_at IS NULL");
+    query.orderBy("benefit.created_at", "DESC");
     return await query.getMany();
   }
 

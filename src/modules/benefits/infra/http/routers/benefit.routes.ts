@@ -13,6 +13,7 @@ benefitRoutes.get(
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
+      store_id: Joi.string().uuid().optional(),
       join_image: Joi.boolean().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
@@ -31,6 +32,7 @@ benefitRoutes.post(
       name: Joi.string().required(),
       description: Joi.string().required(),
       score_required: Joi.number().required(),
+      store_id: Joi.string().uuid().required(),
       image_id: Joi.string().uuid().optional(),
     },
   }),
@@ -48,6 +50,7 @@ benefitRoutes.put(
       name: Joi.string().optional(),
       description: Joi.string().optional(),
       score_required: Joi.number().optional(),
+      store_id: Joi.string().uuid().optional(),
       image_id: Joi.string().uuid().optional(),
     },
   }),

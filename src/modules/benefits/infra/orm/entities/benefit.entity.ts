@@ -1,5 +1,17 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import Image from "../../../../images/infra/orm/entities/image.entity";
+import Store from "../../../../stores/infra/orm/entities/store.entity";
 import UserBenefit from "./user-benefit.entity";
 
 @Entity({ name: "benefits" })
@@ -25,7 +37,11 @@ class Benefit {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @OneToOne(() => Image, (image) => image.benefit)
+  @ManyToOne(() => Store, (store) => store.benefits)
+  @JoinColumn({ name: "store_id" })
+  store: Store;
+
+  @OneToOne(() => Image, (image) => image.benefit, { nullable: true })
   @JoinColumn({ name: "image_id" })
   image: Image;
 
