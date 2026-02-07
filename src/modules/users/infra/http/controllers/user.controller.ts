@@ -54,7 +54,7 @@ class UserController {
     const user_id = request.user_id;
     const store_id = String(request.params.store_id);
     const deleteUserStoreOptionsService = container.resolve(DeleteUserStoreOptionsService);
-    await deleteUserStoreOptionsService.execute(store_id);
+    await deleteUserStoreOptionsService.execute(user_id, store_id);
     return response.status(204).send();
   }
 }
