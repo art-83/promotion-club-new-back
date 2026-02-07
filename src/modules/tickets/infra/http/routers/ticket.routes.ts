@@ -12,7 +12,7 @@ ticketRoutes.get(
   permissionMiddleware(Permissions.SHOW_USER_PROMOTION_TICKETS),
   celebrate({
     [Segments.QUERY]: {
-      product_name: Joi.string().optional(),
+      promotion_name: Joi.string().optional(),
       store_id: Joi.string().uuid().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),

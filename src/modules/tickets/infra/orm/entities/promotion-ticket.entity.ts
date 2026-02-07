@@ -1,26 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "../../../../users/infra/orm/entities/user.entity";
-import Store from "../../../../stores/infra/orm/entities/store.entity";
+import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
 
 @Entity({ name: "promotion_tickets" })
 class PromotionTicket {
   @PrimaryGeneratedColumn("uuid")
   id: string;
-
-  @Column()
-  product_name: string;
-
-  @Column({ type: "decimal" })
-  product_price: number;
-
-  @Column({ type: "decimal" })
-  promotion_discount_percentage: number;
-
-  @Column({ type: "decimal" })
-  promotion_final_price: number;
-
-  @Column({ type: "decimal" })
-  saved_money: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -33,17 +18,13 @@ class PromotionTicket {
 
   @ManyToOne(() => User, (user) => user.promotional_ticket, {
     nullable: true,
-    onDelete: "SET NULL",
   })
   @JoinColumn({ name: "user_id" })
-  user: User | null;
+  user: User;
 
-  @ManyToOne(() => Store, (store) => store.promotion_tickets, {
-    nullable: true,
-    onDelete: "SET NULL",
-  })
-  @JoinColumn({ name: "store_id" })
-  store: Store | null;
+  @ManyToOne(() => Promotion, (promotion) => promotion.promotion_tickets)
+  @JoinColumn({ name: "promotion_id" })
+  promotion: Promotion;
 }
 
 export default PromotionTicket;

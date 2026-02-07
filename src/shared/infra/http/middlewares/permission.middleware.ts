@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
-import ShowUserPermissionsService from "../../../../modules/users/services/users-permissions/show-user-permissions.service";
+import ShowUserPermissionsService from "../../../../modules/users/services/user-permissions/show-user-permissions.service";
 import AppError from "../errors/app-error";
 import logger from "../../../../config/winston.config";
 

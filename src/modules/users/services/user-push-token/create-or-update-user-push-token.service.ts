@@ -26,7 +26,7 @@ class CreateUserPushTokenService {
       await this.userPushTokenRepository.update(userPushToken.id, data);
       return { message: "User push token updated successfully." };
     }
-    
+
     await this.userPushTokenRepository.create(data);
     return { message: "User push token created successfully." };
   }

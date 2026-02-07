@@ -13,6 +13,7 @@ import {
 import Store from "../../../../stores/infra/orm/entities/store.entity";
 import Image from "../../../../images/infra/orm/entities/image.entity";
 import PromotionTag from "./promotion-tag.entity";
+import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ticket.entity";
 
 @Entity({ name: "promotions" })
 class Promotion {
@@ -46,20 +47,19 @@ class Promotion {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => Store, (store) => store.promotions, {
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => Store, (store) => store.promotions)
   @JoinColumn({ name: "store_id" })
   store: Store;
 
-  @OneToOne(() => Image, (image) => image.promotion, {
-    onDelete: "CASCADE",
-  })
+  @OneToOne(() => Image, (image) => image.promotion)
   @JoinColumn({ name: "image_id" })
   image: Image;
 
   @OneToMany(() => PromotionTag, (promotionTag) => promotionTag.promotion)
   promotion_tags: PromotionTag[];
+
+  @OneToMany(() => PromotionTicket, (promotionTicket) => promotionTicket.promotion)
+  promotion_tickets: PromotionTicket[];
 }
 
 export default Promotion;

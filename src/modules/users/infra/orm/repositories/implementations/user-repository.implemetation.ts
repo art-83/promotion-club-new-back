@@ -62,7 +62,7 @@ class UserRepository implements RepositoryProvider<User> {
   }
 
   public async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 }
 

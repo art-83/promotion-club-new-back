@@ -7,11 +7,11 @@ class StoreCategory {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Store, (store) => store.store_categories, { onDelete: "CASCADE" })
+  @ManyToOne(() => Store, (store) => store.store_categories)
   @JoinColumn({ name: "store_id" })
   store: Store;
 
-  @ManyToOne(() => Category, (category) => category.store_categories, { onDelete: "CASCADE" })
+  @ManyToOne(() => Category, (category) => category.store_categories)
   @JoinColumn({ name: "category_id" })
   category: Category;
 

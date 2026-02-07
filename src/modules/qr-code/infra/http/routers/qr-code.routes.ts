@@ -7,10 +7,7 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const qrCodeRoutes = Router();
 const qrCodeController = new QrCodeController();
 
-qrCodeRoutes.get(
-  "/",
-  qrCodeController.show
-);
+qrCodeRoutes.get("/", permissionMiddleware(Permissions.SHOW_QR_CODES), qrCodeController.show);
 
 qrCodeRoutes.post(
   "/",

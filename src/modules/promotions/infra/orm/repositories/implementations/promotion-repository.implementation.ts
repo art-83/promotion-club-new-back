@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 import Promotion from "../../entities/promotion.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import PromotionQueryOptionsDTO from "../../../../dtos/promotions/promotion-query-options.dto";
@@ -97,7 +97,7 @@ class PromotionRepository implements PromotionRepositoryProviders {
 
   public async removeAllExpiredPromotions(): Promise<void> {
     const now = new Date();
-    await this.repository.createQueryBuilder("promotions").delete().where("promotions.expire_at < :now", { now }).execute();
+    await this.repository.softDelete({ expire_at: LessThan(now) });
   }
 }
 

@@ -1,8 +1,11 @@
 import ShowUsersServices from "../../../services/user/show-users.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import UpdateUserPermissionsService from "../../../services/users-permissions/update-user-permissions.service";
-import CreateUserPushTokenService from "../../../services/user-push-tokens/create-or-update-user-push-token.service";
+import UpdateUserPermissionsService from "../../../services/user-permissions/update-user-permissions.service";
+import CreateUserPushTokenService from "../../../services/user-push-token/create-or-update-user-push-token.service";
+import CreateUserStoreOptionsService from "../../../services/user-store-options/create-user-store-options.service";
+import DeleteUserStoreOptionsService from "../../../services/user-store-options/delete-user-store-options.service";
+import ShowUserStoreOptionsService from "../../../services/user-store-options/show-user-store-options.service";
 
 class UserController {
   public async show(request: Request, response: Response) {
@@ -30,6 +33,29 @@ class UserController {
     const createUserPushTokenService = container.resolve(CreateUserPushTokenService);
     const userPushToken = await createUserPushTokenService.execute(user_id, request.body);
     return response.status(201).json(userPushToken);
+  }
+
+  public async showUserStoreOptions(request: Request, response: Response) {
+    const user_id = request.user_id;
+    const showUserStoreOptionsService = container.resolve(ShowUserStoreOptionsService);
+    const userStoreOptions = await showUserStoreOptionsService.execute({ user_id });
+    return response.status(200).json(userStoreOptions);
+  }
+
+  public async createUserStoreOptions(request: Request, response: Response) {
+    const user_id = request.user_id;
+    const store_id = String(request.params.store_id);
+    const createUserStoreOptionsService = container.resolve(CreateUserStoreOptionsService);
+    const userStoreOptions = await createUserStoreOptionsService.execute({ user_id, store_id });
+    return response.status(201).json(userStoreOptions);
+  }
+
+  public async deleteUserStoreOptions(request: Request, response: Response) {
+    const user_id = request.user_id;
+    const store_id = String(request.params.store_id);
+    const deleteUserStoreOptionsService = container.resolve(DeleteUserStoreOptionsService);
+    await deleteUserStoreOptionsService.execute(store_id);
+    return response.status(204).send();
   }
 }
 

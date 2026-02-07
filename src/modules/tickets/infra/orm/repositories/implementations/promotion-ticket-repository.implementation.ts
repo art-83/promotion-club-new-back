@@ -16,12 +16,11 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
   public async find(options: Partial<PromotionTicketQueryOptionsDTO>): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
-    query.leftJoinAndSelect("promotion_tickets.user", "user");
-    query.leftJoinAndSelect("promotion_tickets.store", "store");
+    query.leftJoinAndSelect("promotion_tickets.promotion", "promotion");
+    query.leftJoinAndSelect("promotion.store", "store");
 
-    if (options.id) query.andWhere("promotion_tickets.id = :id", { id: options.id });
-    if (options.user_id) query.andWhere("user.id = :user_id", { user_id: options.user_id });
-    if (options.store_id) query.andWhere("store.id = :store_id", { store_id: options.store_id });
+    if (options.user_id) query.andWhere("promotion_tickets.user_id = :user_id", { user_id: options.user_id });
+    if (options.store_id) query.andWhere("promotion.store_id = :store_id", { store_id: options.store_id });
 
     if (options.start_date) query.andWhere("promotion_tickets.created_at >= :start_date", { start_date: options.start_date });
     if (options.end_date) query.andWhere("promotion_tickets.created_at <= :end_date", { end_date: options.end_date });
@@ -29,10 +28,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
-    console.log(query.getQuery());
-
     query.orderBy("promotion_tickets.created_at", "DESC");
-
     query.andWhere("promotion_tickets.deleted_at IS NULL");
 
     return await query.getMany();
@@ -55,19 +51,21 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async getCountDashboardByStore(store_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO> {
     const bestSellerItemsQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("ticket.product_name", "name")
-      .addSelect("SUM(ticket.promotion_final_price)", "revenue")
+      .leftJoin("ticket.promotion", "promotion")
+      .select("promotion.name", "name")
+      .addSelect("SUM(promotion.final_price)", "revenue")
       .addSelect("COUNT(ticket.id)", "total_items_selled")
-      .where("ticket.store_id = :store_id", { store_id })
+      .where("promotion.store_id = :store_id", { store_id })
       .andWhere("ticket.deleted_at IS NULL")
-      .groupBy("ticket.product_name")
+      .groupBy("promotion.name")
       .orderBy("revenue", "DESC")
       .limit(10);
 
     const totalRevenueQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("SUM(ticket.promotion_final_price)", "total_revenue")
-      .where("ticket.store_id = :store_id", { store_id })
+      .leftJoin("ticket.promotion", "promotion")
+      .select("SUM(promotion.final_price)", "total_revenue")
+      .where("promotion.store_id = :store_id", { store_id })
       .andWhere("ticket.deleted_at IS NULL");
 
     if (options.start_date) {
@@ -97,7 +95,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async getGeneralCountDashboard(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO> {
     const generalStatsQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("SUM(ticket.promotion_final_price)", "total_revenue")
+      .leftJoin("ticket.promotion", "promotion")
+      .select("SUM(promotion.final_price)", "total_revenue")
       .addSelect("COUNT(ticket.id)", "total_tickets")
       .andWhere("ticket.deleted_at IS NULL");
 
@@ -111,9 +110,10 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
     const topSellerQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("ticket.product_name", "name")
+      .leftJoin("ticket.promotion", "promotion")
+      .select("promotion.name", "name")
       .addSelect("COUNT(ticket.id)", "sell_count")
-      .groupBy("ticket.product_name")
+      .groupBy("promotion.name")
       .orderBy("sell_count", "DESC")
       .limit(1)
       .andWhere("ticket.deleted_at IS NULL");
@@ -145,8 +145,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
     const ticketsQuery = this.repository
       .createQueryBuilder("ticket")
-      .leftJoinAndSelect("ticket.user", "user")
-      .leftJoinAndSelect("ticket.store", "store")
+      .leftJoinAndSelect("ticket.promotion", "promotion")
+      .leftJoinAndSelect("promotion.store", "store")
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL")
       .orderBy("ticket.created_at", "DESC")
@@ -154,32 +154,35 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
     const totalsQuery = this.repository
       .createQueryBuilder("ticket")
-      .select("SUM(ticket.saved_money)", "total_money_saved")
+      .leftJoin("ticket.promotion", "promotion")
+      .select("SUM(promotion.price - promotion.final_price)", "total_money_saved")
       .addSelect("COUNT(ticket.id)", "total_tickets")
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL");
 
-    if (options.product_name) {
-      ticketsQuery.andWhere("ticket.product_name ILIKE :product_name", { product_name: `%${options.product_name}%` });
+    if (options.promotion_name) {
+      ticketsQuery.andWhere("promotion.name ILIKE :promotion_name", { promotion_name: `%${options.promotion_name}%` });
+      totalsQuery.andWhere("promotion.name ILIKE :promotion_name", { promotion_name: `%${options.promotion_name}%` });
     }
 
     if (options.store_id) {
-      ticketsQuery.andWhere("ticket.store_id = :store_id", { store_id: options.store_id });
+      ticketsQuery.andWhere("promotion.store_id = :store_id", { store_id: options.store_id });
+      totalsQuery.andWhere("promotion.store_id = :store_id", { store_id: options.store_id });
     }
 
     if (options.start_date) {
       ticketsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
+      totalsQuery.andWhere("ticket.created_at >= :start_date", { start_date: options.start_date });
     }
 
     if (options.end_date) {
       ticketsQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
+      totalsQuery.andWhere("ticket.created_at <= :end_date", { end_date: options.end_date });
     }
 
     if (options.offset) {
       ticketsQuery.skip(options.offset);
     }
-
-    console.log(ticketsQuery);
 
     const [promotion_tickets, totals] = await Promise.all([ticketsQuery.getMany(), totalsQuery.getRawOne()]);
 

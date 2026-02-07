@@ -29,7 +29,7 @@ async function main() {
   await cacheClient.connect();
   await dataSource.initialize();
   //const migrations = await dataSource.runMigrations();
-  
+
   server.listen(port, () => console.log(`http://localhost:${port}`));
 }
 

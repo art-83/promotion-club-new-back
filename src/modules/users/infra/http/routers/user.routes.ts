@@ -51,4 +51,28 @@ userRoutes.get(
   userController.show
 );
 
+userRoutes.get("/store-options", permissionMiddleware(Permissions.SHOW_USER_STORE_OPTIONS), userController.showUserStoreOptions);
+
+userRoutes.post(
+  "/store-options/:store_id",
+  permissionMiddleware(Permissions.CREATE_USER_STORE_OPTIONS),
+  celebrate({
+    [Segments.PARAMS]: {
+      store_id: Joi.string().uuid().required(),
+    },
+  }),
+  userController.createUserStoreOptions
+);
+
+userRoutes.delete(
+  "/store-options/:store_id",
+  permissionMiddleware(Permissions.DELETE_USER_STORE_OPTIONS),
+  celebrate({
+    [Segments.PARAMS]: {
+      store_id: Joi.string().uuid().required(),
+    },
+  }),
+  userController.deleteUserStoreOptions
+);
+
 export default userRoutes;

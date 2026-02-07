@@ -24,7 +24,7 @@ class NotificationPusher implements NotificationPusherProvider {
     } as admin.messaging.MulticastMessage;
 
     const send = await this.client.sendEachForMulticast(notificationPayload);
-    
+
     const success = send.responses
       .map((response, index) => ({ token: tokens[index], success: response.success }))
       .filter((item) => item.success)

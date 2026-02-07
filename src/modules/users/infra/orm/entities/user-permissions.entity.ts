@@ -30,17 +30,11 @@ class UserPermissions {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => Store, (store) => store.user_permissions, {
-    nullable: true,
-    onDelete: "SET NULL",
-  })
+  @ManyToOne(() => Store, (store) => store.user_permissions, { nullable: true })
   @JoinColumn({ name: "store_id" })
   store: Store | null;
 
-  // relations
-  @OneToOne(() => User, (user) => user.user_permissions, {
-    onDelete: "CASCADE",
-  })
+  @OneToOne(() => User, (user) => user.user_permissions)
   @JoinColumn({ name: "user_id" })
   user: User;
 }

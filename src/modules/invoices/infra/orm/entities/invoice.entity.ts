@@ -15,10 +15,7 @@ class Invoice {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => Store, (store) => store.invoices, {
-    onDelete: "CASCADE",
-    nullable: true,
-  })
+  @ManyToOne(() => Store, (store) => store.invoices, { nullable: true })
   @JoinColumn({ name: "store_id" })
   store: Store;
 }

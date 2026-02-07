@@ -47,13 +47,8 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     if (!promotion) throw new AppError(404, "Promotion not found.");
 
     const createPromotionTicketData = {
-      product_name: promotion.name,
-      product_price: promotion.price,
-      promotion_discount_percentage: promotion.discount_percentage,
-      promotion_final_price: promotion.final_price,
-      saved_money: Number(promotion.price) - Number(promotion.final_price),
-      store: promotion.store,
-      user: user,
+      user,
+      promotion,
     } as Partial<PromotionTicket>;
 
     const createPromotionTicket = await this.promotionTicketRepository.create(createPromotionTicketData);

@@ -27,7 +27,8 @@ class QrCodeCache implements CacheProvider<QrCodePayloadDto> {
     if (!qrCodeRawData) return false;
     const qrCodeJson = JSON.parse(qrCodeRawData);
     qrCodeJson.deleted = true;
-    const softDelete = await this.client.set(id, JSON.stringify(qrCodeJson), cacheConfig.deleteExpiration);
+    const jsonData = JSON.stringify(qrCodeJson);
+    const softDelete = await this.client.set(id, jsonData, cacheConfig.deleteExpiration);
     return true;
   }
 }

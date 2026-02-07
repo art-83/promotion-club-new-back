@@ -37,31 +37,23 @@ import UserPushToken from "../../modules/users/infra/orm/entities/user-push-toke
 import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
 import NotificationPusher from "../infra/push/infra/implementations/notification-pusher.implementation";
 import NotificationPusherProvider from "../infra/push/infra/providers/notification-pusher.provider";
+import UserStoreOptions from "../../modules/users/infra/orm/entities/user-store-options.entity";
+import UserStoreOptionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-store-options-repository.implementation";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
-
 container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermissionsRepository", UserPermissionsRepository);
-
+container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOptionsRepository", UserStoreOptionsRepository);
 container.registerSingleton<RepositoryProvider<Store>>("StoreRepository", StoreRepository);
 container.registerSingleton<RepositoryProvider<Category>>("CategoryRepository", CategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreCategory>>("StoreCategoryRepository", StoreCategoryRepository);
 container.registerSingleton<RepositoryProvider<Promotion>>("PromotionRepository", PromotionRepository);
 container.registerSingleton<RepositoryProvider<Invoice>>("InvoiceRepository", InvoiceRepository);
-
 container.registerSingleton<RepositoryProvider<PromotionTicket>>("PromotionTicketRepository", PromotionTicketRepository);
-
 container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagRepository);
-
 container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
-
 container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
-
 container.registerSingleton<ImageRepositoryProvider>("ImageRepository", ImageRepository);
-
 container.registerSingleton<HashProvider>("Hash", Hash);
-
 container.registerSingleton<JwtProvider>("Jwt", Jwt);
-
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);
-
 container.registerSingleton<NotificationPusherProvider>("NotificationPusher", NotificationPusher);

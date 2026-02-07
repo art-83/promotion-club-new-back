@@ -29,7 +29,7 @@ class Tag {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => Store, (store) => store.tags, { onDelete: "CASCADE" })
+  @ManyToOne(() => Store, (store) => store.tags)
   @JoinColumn({ name: "store_id" })
   store: Store;
 
