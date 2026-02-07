@@ -4,6 +4,7 @@ import Benefit from "../../infra/orm/entities/benefit.entity";
 interface BenefitsQueryOptionsDTO extends Benefit, DefaultQueryOptions {
   store_id: string;
   join_image: boolean;
+  join_store: boolean;
 }
 
 export default BenefitsQueryOptionsDTO;
