@@ -24,6 +24,7 @@ class StoreRatingRepository implements RepositoryProvider<StoreRating> {
     if (options.limit) query.take(options.limit);
 
     query.andWhere("store_ratings.deleted_at IS NULL");
+    query.leftJoinAndSelect("store_ratings.user", "user");
 
     return await query.getMany();
   }
