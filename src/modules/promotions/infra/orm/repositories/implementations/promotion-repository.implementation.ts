@@ -14,7 +14,7 @@ class PromotionRepository implements PromotionRepositoryProviders {
   public async find(options: Partial<PromotionQueryOptionsDTO>): Promise<Promotion[]> {
     const query = this.repository.createQueryBuilder("promotions");
 
-    query.leftJoin("promotions.promotion_tags", "promotion_tags").select(["promotion_tags.id"]);
+    query.leftJoin("promotions.promotion_tags", "promotion_tags").select(["id"]);
     query.leftJoinAndSelect("promotion_tags.tag", "tag");
     
     if (options.id) {
