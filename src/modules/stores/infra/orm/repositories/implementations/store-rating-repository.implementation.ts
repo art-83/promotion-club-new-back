@@ -16,6 +16,7 @@ class StoreRatingRepository implements RepositoryProvider<StoreRating> {
 
   public async find(options: Partial<StoreRatingQueryOptionsDto>): Promise<StoreRating[]> {
     const query = this.repository.createQueryBuilder("store_ratings");
+    query.leftJoinAndSelect("store_ratings.user", "user");
 
     if (options.id) query.andWhere("store_ratings.id = :id", { id: options.id });
     if (options.user_id) query.andWhere("store_ratings.user_id = :user_id", { user_id: options.user_id });
@@ -24,7 +25,6 @@ class StoreRatingRepository implements RepositoryProvider<StoreRating> {
     if (options.limit) query.take(options.limit);
 
     query.andWhere("store_ratings.deleted_at IS NULL");
-    query.leftJoinAndSelect("store_ratings.user", "user");
 
     return await query.getMany();
   }
