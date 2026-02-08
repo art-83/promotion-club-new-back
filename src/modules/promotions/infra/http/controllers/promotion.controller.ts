@@ -1,6 +1,7 @@
 import CreatePromotionService from "../../../services/promotions/create-promotion.service";
 import DeleteExpiredPromotionsService from "../../../services/promotions/delete-expired-promotions.service";
 import DeletePromotionService from "../../../services/promotions/delete-promotion.service";
+import ShowListOfRecommendedPromotionsByPromotionTicketService from "../../../services/promotions/show-list-of-recommended-promotions-by-promotion-ticket.service";
 import ShowPromotionsServices from "../../../services/promotions/show-promotions.service";
 import UpdatePromotionService from "../../../services/promotions/update-promotion-and-maybe-send-notifications.service";
 import { Request, Response } from "express";
@@ -37,6 +38,13 @@ class PromotionController {
     const deletePromotionService = container.resolve(DeleteExpiredPromotionsService);
     await deletePromotionService.execute();
     return response.status(204).send();
+  }
+
+  public async showListOfRecommendedPromotionsByPromotionTicket(request: Request, response: Response) {
+    const promotion_ticket_id = String(request.params.promotion_ticket_id);
+    const showListOfRecommendedPromotionsByPromotionTicketService = container.resolve(ShowListOfRecommendedPromotionsByPromotionTicketService);
+    const recommendedPromotions = await showListOfRecommendedPromotionsByPromotionTicketService.execute(promotion_ticket_id);
+    return response.status(200).json(recommendedPromotions);
   }
 }
 

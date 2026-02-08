@@ -83,4 +83,15 @@ promotionRoutes.delete(
 
 promotionRoutes.delete("/scheduled/delete-all-expired-promotions", promotionController.deleteExpiredPromotions);
 
+promotionRoutes.get(
+  "/:promotion_ticket_id/recommended",
+  permissionMiddleware(Permissions.SHOW_RECOMMENDED_PROMOTIONS_BY_PROMOTION_TICKET),
+  celebrate({
+    [Segments.PARAMS]: {
+      promotion_ticket_id: Joi.string().uuid().required(),
+    },
+  }),
+  promotionController.showListOfRecommendedPromotionsByPromotionTicket
+);
+
 export default promotionRoutes;

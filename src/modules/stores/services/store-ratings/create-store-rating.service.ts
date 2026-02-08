@@ -27,7 +27,7 @@ class CreateStoreRatingService {
 
     data.store = store;
     data.user = user;
-    
+
     return await this.storeRatingRepository.create(data);
   }
 }
