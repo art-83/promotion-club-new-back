@@ -5,7 +5,6 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import CreateOrUpdateUserBenefitsDTO from "../../../../dtos/user-benefits/create-or-update-user-benefits.dto";
 import UserBenefitsQueryOptionsDTO from "../../../../dtos/user-benefits/user-benefits-query-options.dto";
 
-
 class UserBenefitRepository implements RepositoryProvider<UserBenefit> {
   private repository: Repository<UserBenefit>;
 
@@ -26,7 +25,6 @@ class UserBenefitRepository implements RepositoryProvider<UserBenefit> {
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
-    
     query.andWhere("user_benefit.deleted_at IS NULL");
     return await query.getMany();
   }
@@ -36,7 +34,7 @@ class UserBenefitRepository implements RepositoryProvider<UserBenefit> {
     const saveUserBenefit = await this.repository.save(createUserBenefit);
     return saveUserBenefit;
   }
-  
+
   public async update(id: string, data: Partial<CreateOrUpdateUserBenefitsDTO>): Promise<void> {
     const updateUserBenefit = this.repository.create(data);
     await this.repository.update(id, updateUserBenefit);

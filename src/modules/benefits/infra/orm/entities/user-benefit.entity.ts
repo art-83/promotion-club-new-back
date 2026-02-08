@@ -25,4 +25,4 @@ class UserBenefit {
   benefit: Benefit;
 }
 
-export default UserBenefit; 
+export default UserBenefit;

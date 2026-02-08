@@ -16,7 +16,7 @@ class DeleteUserBenefitService {
       user_id,
       benefit_id,
     } as UserBenefitsQueryOptionsDTO;
-    
+
     const userBenefit = (await this.userBenefitRepository.find(options)).at(0);
 
     if (!userBenefit) throw new AppError(404, "User benefit not found.");
