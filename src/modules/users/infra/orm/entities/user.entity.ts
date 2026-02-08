@@ -15,6 +15,7 @@ import Store from "../../../../stores/infra/orm/entities/store.entity";
 import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ticket.entity";
 import UserPushToken from "./user-push-token.entity";
 import UserBenefit from "../../../../benefits/infra/orm/entities/user-benefit.entity";
+import UserStoreOptions from "./user-store-options.entity";
 
 @Entity({ name: "users" })
 class User {
@@ -54,6 +55,9 @@ class User {
 
   @OneToMany(() => UserPushToken, (user_push_token) => user_push_token.user)
   user_push_token: UserPushToken[];
+
+  @OneToMany(() => UserStoreOptions, (user_store_options) => user_store_options.user)
+  user_store_options: UserStoreOptions[];
 
   @OneToMany(() => UserBenefit, (user_benefit) => user_benefit.user)
   user_benefits: UserBenefit[];
