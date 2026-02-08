@@ -17,6 +17,8 @@ import Category from "../../modules/stores/infra/orm/entities/category.entity";
 import CategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/category-repository.implementation";
 import StoreCategory from "../../modules/stores/infra/orm/entities/store-category.entity";
 import StoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/store-category-repository.implementation";
+import StoreRating from "../../modules/stores/infra/orm/entities/store-rating.entity";
+import StoreRatingRepository from "../../modules/stores/infra/orm/repositories/implementations/store-rating-repository.implementation";
 import Promotion from "../../modules/promotions/infra/orm/entities/promotion.entity";
 import PromotionRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-repository.implementation";
 import Invoice from "../../modules/invoices/infra/orm/entities/invoice.entity";
@@ -51,6 +53,7 @@ container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermission
 container.registerSingleton<RepositoryProvider<Store>>("StoreRepository", StoreRepository);
 container.registerSingleton<RepositoryProvider<Category>>("CategoryRepository", CategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreCategory>>("StoreCategoryRepository", StoreCategoryRepository);
+container.registerSingleton<RepositoryProvider<StoreRating>>("StoreRatingRepository", StoreRatingRepository);
 container.registerSingleton<RepositoryProvider<Promotion>>("PromotionRepository", PromotionRepository);
 container.registerSingleton<RepositoryProvider<Invoice>>("InvoiceRepository", InvoiceRepository);
 

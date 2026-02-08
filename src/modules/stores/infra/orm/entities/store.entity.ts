@@ -17,6 +17,7 @@ import StoreCategory from "./store-category.entity";
 import Invoice from "../../../../invoices/infra/orm/entities/invoice.entity";
 import UserStoreOptions from "../../../../users/infra/orm/entities/user-store-options.entity";
 import Benefit from "../../../../benefits/infra/orm/entities/benefit.entity";
+import StoreRating from "./store-rating.entity";
 
 @Entity({ name: "stores" })
 class Store {
@@ -64,7 +65,7 @@ class Store {
   @OneToMany(() => Tag, (tag) => tag.store)
   tags: Tag[];
 
-  @OneToMany(() => StoreCategory, (storeCategory) => storeCategory.store)
+  @OneToMany(() => StoreCategory, (store_category) => store_category.store)
   store_categories: StoreCategory[];
 
   @OneToMany(() => Invoice, (invoice) => invoice.store)
@@ -75,6 +76,9 @@ class Store {
 
   @OneToMany(() => Benefit, (benefit) => benefit.store)
   benefits: Benefit[];
+
+  @OneToMany(() => StoreRating, (store_rating) => store_rating.store)
+  store_ratings: StoreRating[];
 }
 
 export default Store;

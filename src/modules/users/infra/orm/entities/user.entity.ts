@@ -16,6 +16,7 @@ import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ti
 import UserPushToken from "./user-push-token.entity";
 import UserBenefit from "../../../../benefits/infra/orm/entities/user-benefit.entity";
 import UserStoreOptions from "./user-store-options.entity";
+import StoreRating from "../../../../stores/infra/orm/entities/store-rating.entity";
 
 @Entity({ name: "users" })
 class User {
@@ -61,6 +62,9 @@ class User {
 
   @OneToMany(() => UserBenefit, (user_benefit) => user_benefit.user)
   user_benefits: UserBenefit[];
+
+  @OneToMany(() => StoreRating, (store_rating) => store_rating.user)
+  store_ratings: StoreRating[];
 }
 
 export default User;
