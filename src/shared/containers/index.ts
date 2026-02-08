@@ -35,6 +35,8 @@ import PromotionTag from "../../modules/promotions/infra/orm/entities/promotion-
 import PromotionTagRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-tag-repository.implementation";
 import UserPushToken from "../../modules/users/infra/orm/entities/user-push-token.entity";
 import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
+import UserStoreOptions from "../../modules/users/infra/orm/entities/user-store-options.entity";
+import UserStoreOptionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-store-options-repository.implementation";
 import NotificationPusher from "../infra/push/infra/implementations/notification-pusher.implementation";
 import NotificationPusherProvider from "../infra/push/infra/providers/notification-pusher.provider";
 import Benefit from "../../modules/benefits/infra/orm/entities/benefit.entity";
@@ -59,6 +61,7 @@ container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagReposi
 container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
 
 container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
+container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOptionsRepository", UserStoreOptionsRepository);
 container.registerSingleton<RepositoryProvider<Benefit>>("BenefitRepository", BenefitRepository);
 container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitRepository", UserBenefitRepository);
 
