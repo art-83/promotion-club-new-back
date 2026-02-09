@@ -20,8 +20,8 @@ class PromotionTagRepository implements RepositoryProvider<PromotionTag> {
     if (options.tag_id) query.andWhere("promotion_tag.tag_id = :tag_id", { tag_id: options.tag_id });
     if (options.user_id) {
       query.leftJoinAndSelect("promotion_tag.promotion", "promotion");
-      query.leftJoinAndSelect("promotion.user", "user");
-      query.andWhere("user.id = :user_id", { user_id: options.user_id });
+      query.leftJoinAndSelect("promotion_tag.tag", "tag");
+      query.innerJoin("promotion.promotion_tickets", "promotion_tickets", "promotion_tickets.user_id = :user_id", { user_id: options.user_id });
     } 
       
     query.andWhere("promotion_tag.deleted_at IS NULL");
