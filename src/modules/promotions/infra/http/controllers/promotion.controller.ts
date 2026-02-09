@@ -41,9 +41,10 @@ class PromotionController {
   }
 
   public async showListOfRecommendedPromotionsByPromotionTicket(request: Request, response: Response) {
+    const user_id = String(request.user_id);
     const promotion_ticket_id = String(request.params.promotion_ticket_id);
     const showListOfRecommendedPromotionsByPromotionTicketService = container.resolve(ShowListOfRecommendedPromotionsByPromotionTicketService);
-    const recommendedPromotions = await showListOfRecommendedPromotionsByPromotionTicketService.execute(promotion_ticket_id);
+    const recommendedPromotions = await showListOfRecommendedPromotionsByPromotionTicketService.execute(user_id, promotion_ticket_id);
     return response.status(200).json(recommendedPromotions);
   }
 }

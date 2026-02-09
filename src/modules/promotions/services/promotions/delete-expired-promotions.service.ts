@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import PromotionRepositoryProviders from "../../infra/orm/repositories/providers/promotions-repository.providers";
+import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/promotions-repository.providers";
 
 @injectable()
 class DeleteExpiredPromotionsService {
   constructor(
     @inject("PromotionRepository")
-    private promotionRepository: PromotionRepositoryProviders
+    private promotionRepository: PromotionRepositoryProvider
   ) {}
 
   public async execute(): Promise<void> {

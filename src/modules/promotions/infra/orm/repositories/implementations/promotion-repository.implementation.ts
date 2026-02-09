@@ -2,9 +2,9 @@ import { LessThan, Repository } from "typeorm";
 import Promotion from "../../entities/promotion.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import PromotionQueryOptionsDTO from "../../../../dtos/promotions/promotion-query-options.dto";
-import PromotionRepositoryProviders from "../providers/promotions-repository.providers";
+import PromotionRepositoryProvider from "../providers/promotions-repository.providers";
 
-class PromotionRepository implements PromotionRepositoryProviders {
+class PromotionRepository implements PromotionRepositoryProvider {
   private repository: Repository<Promotion>;
 
   constructor() {
@@ -96,6 +96,17 @@ class PromotionRepository implements PromotionRepositoryProviders {
 
   public async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
+  }
+
+  public async findMostRelevantPromotionsByTags(tags: string[]): Promise<Promotion[]> {
+    const query = this.repository.createQueryBuilder("promotions");
+    query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
+    query.leftJoinAndSelect("promotion_tags.tag", "tag");
+    query.leftJoinAndSelect("promotions.promotion_tickets", "promotion_tickets");
+    query.andWhere("tag.id IN (:...tags)", { tags });
+    query.andWhere("promotions.deleted_at IS NULL");
+    query.orderBy("promotions.created_at", "DESC");
+    return await query.getMany();
   }
 
   public async removeAllExpiredPromotions(): Promise<void> {

@@ -4,6 +4,7 @@ import PromotionTag from "../../infra/orm/entities/promotion-tag.entity";
 interface PromotionTagQueryOptionsDTO extends PromotionTag, DefaultQueryOptions {
   promotion_id: string;
   tag_id: string;
+  user_id: string;
 }
 
 export default PromotionTagQueryOptionsDTO;
