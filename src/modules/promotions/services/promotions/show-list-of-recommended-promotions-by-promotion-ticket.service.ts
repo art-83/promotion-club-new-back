@@ -12,8 +12,8 @@ import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/
 
 @injectable()
 class ShowListOfRecommendedPromotionsByPromotionTicketService {
-  private readonly BASE_RELEVANCE_MULTIPLIER = 1.8;
-  private readonly BASE_RELEVANCE_MULTIPLIER_DECREMENT = 0.1;
+  private readonly BASE_RELEVANCE_MULTIPLIER = 2.4;
+  private readonly BASE_RELEVANCE_MULTIPLIER_DECREMENT = 0.2;
 
   constructor(
     @inject("PromotionRepository")
@@ -69,7 +69,7 @@ class ShowListOfRecommendedPromotionsByPromotionTicketService {
 
     const topRelevantTags = mostRelevantTags.sort((a, b) => b[1] - a[1]).slice(0, 3);
 
-    const mostRelevantPromotions = await this.promotionRepository.findMostRelevantPromotionsByTags(topRelevantTags.map((tag) => tag[0]));
+    const mostRelevantPromotions = await this.promotionRepository.findMostRelevantPromotionsByTags(promotion_ticket_id, topRelevantTags.map((tag) => tag[0]));
 
     if (!mostRelevantPromotions.length) throw new AppError(404, "No recommended promotions found");
 

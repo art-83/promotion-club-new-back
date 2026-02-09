@@ -2,7 +2,7 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import Promotion from "../../entities/promotion.entity";
 
 interface PromotionRepositoryProvider extends RepositoryProvider<Promotion> {
-  findMostRelevantPromotionsByTags(tags: string[]): Promise<Promotion[]>;
+  findMostRelevantPromotionsByTags(promotion_id: string, tags: string[]): Promise<Promotion[]>;
   removeAllExpiredPromotions(): Promise<void>;
 }
 

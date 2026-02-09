@@ -98,13 +98,14 @@ class PromotionRepository implements PromotionRepositoryProvider {
     await this.repository.softDelete(id);
   }
 
-  public async findMostRelevantPromotionsByTags(tags: string[]): Promise<Promotion[]> {
+  public async findMostRelevantPromotionsByTags(promotion_id: string, tags: string[]): Promise<Promotion[]> {
     const query = this.repository.createQueryBuilder("promotions");
     query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
     query.leftJoinAndSelect("promotion_tags.tag", "tag");
     query.leftJoinAndSelect("promotions.promotion_tickets", "promotion_tickets");
     query.andWhere("tag.id IN (:...tags)", { tags });
     query.andWhere("promotions.deleted_at IS NULL");
+    query.andWhere("promotions.id != :promotion_id", { promotion_id });
     query.orderBy("promotions.created_at", "DESC");
     return await query.getMany();
   }

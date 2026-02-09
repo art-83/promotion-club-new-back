@@ -1,7 +1,6 @@
 import { Repository } from "typeorm";
 import PromotionTag from "../../entities/promotion-tag.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
-import CreatePromotionTagDTO from "../../../../dtos/promotion-tag/create-or-update-promotion-tag.dto";
 import PromotionTagQueryOptionsDTO from "../../../../dtos/promotion-tag/promotion-tag-query-options.dto";
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 
