@@ -99,6 +99,7 @@ class PromotionRepository implements PromotionRepositoryProvider {
   }
 
   public async findMostRelevantPromotionsByTags(promotion_id: string, tags: string[]): Promise<Promotion[]> {
+    if (!tags.length) return [];
     const query = this.repository.createQueryBuilder("promotions");
     query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
     query.leftJoinAndSelect("promotion_tags.tag", "tag");

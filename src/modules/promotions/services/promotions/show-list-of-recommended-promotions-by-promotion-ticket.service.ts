@@ -68,13 +68,29 @@ class ShowListOfRecommendedPromotionsByPromotionTicketService {
     }
 
     const topRelevantTags = mostRelevantTags.sort((a, b) => b[1] - a[1]).slice(0, 3);
+    const tagWeightByTagId = new Map<string, number>(topRelevantTags.map(([id, weight]) => [id, weight]));
 
-    const mostRelevantPromotions = await this.promotionRepository.findMostRelevantPromotionsByTags(promotion_ticket_id, topRelevantTags.map((tag) => tag[0]));
+    const currentPromotionId = promotionTicket.promotion.id;
+    let mostRelevantPromotions = await this.promotionRepository.findMostRelevantPromotionsByTags(currentPromotionId, topRelevantTags.map((tag) => tag[0]));
+
+    const uniqueById = new Map<string, Promotion>();
+    for (const p of mostRelevantPromotions) uniqueById.set(p.id, p);
+    mostRelevantPromotions = Array.from(uniqueById.values());
 
     if (!mostRelevantPromotions.length) throw new AppError(404, "No recommended promotions found");
 
-    const topSellersMostRelevantPromotions = mostRelevantPromotions.sort((a, b) => b.promotion_tickets.length - a.promotion_tickets.length).slice(0, 3);
-    
+    const scored = mostRelevantPromotions.map((p) => {
+      const relevanceScore = (p.promotion_tags ?? [])
+        .map((pt) => pt.tag?.id)
+        .filter(Boolean)
+        .reduce((sum, tagId) => sum + (tagWeightByTagId.get(tagId as string) ?? 0), 0);
+      return { promotion: p, relevanceScore, ticketCount: p.promotion_tickets?.length ?? 0 };
+    });
+    const topSellersMostRelevantPromotions = scored
+      .sort((a, b) => b.relevanceScore - a.relevanceScore || b.ticketCount - a.ticketCount)
+      .slice(0, 3)
+      .map((s) => s.promotion);
+
     return topSellersMostRelevantPromotions;
   }
 }
