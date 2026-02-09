@@ -20,6 +20,10 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     query.leftJoinAndSelect("promotion.store", "store");
 
     if (options.join_user) query.leftJoinAndSelect("promotion_tickets.user", "user");
+    if (options.join_promotion_tags) {
+      query.leftJoinAndSelect("promotion.promotion_tags", "promotion_tags");
+      query.leftJoinAndSelect("promotion_tags.tag", "tag");
+    }
     if (options.id) query.andWhere("promotion_tickets.id = :id", { id: options.id });
     if (options.user_id) query.andWhere("promotion_tickets.user_id = :user_id", { user_id: options.user_id });
     if (options.store_id) query.andWhere("promotion.store_id = :store_id", { store_id: options.store_id });

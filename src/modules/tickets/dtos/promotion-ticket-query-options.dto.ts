@@ -7,6 +7,7 @@ interface PromotionTicketQueryOptionsDTO extends PromotionTicket, DefaultQueryOp
   user_id: string;
   store_id: string;
   join_user: boolean;
+  join_promotion_tags: boolean;
 }
 
 export default PromotionTicketQueryOptionsDTO;

@@ -47,13 +47,14 @@ class ShowListOfRecommendedPromotionsByPromotionTicketService {
 
     const promotionTicketQueryOptions = {
       id: promotion_ticket_id,
+      join_promotion_tags: true,
     } as Partial<PromotionTicketQueryOptionsDTO>;
 
     const promotionTicket = (await this.promotionTicketRepository.find(promotionTicketQueryOptions)).at(0);
 
     if (!promotionTicket) throw new AppError(404, "Promotion ticket not found");
 
-    const relevatePromotionTicketTagIds = promotionTicket.promotion.promotion_tags.map((tag) => tag.tag.id);
+    const relevatePromotionTicketTagIds = (promotionTicket.promotion.promotion_tags).map((pt) => pt.tag.id).filter(Boolean);
 
     let relevanceMultiplier = this.BASE_RELEVANCE_MULTIPLIER;
 
