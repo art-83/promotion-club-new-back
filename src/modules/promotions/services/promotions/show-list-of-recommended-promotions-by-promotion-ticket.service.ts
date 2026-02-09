@@ -1,4 +1,4 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Promotion from "../../infra/orm/entities/promotion.entity";
 import PromotionTicket from "../../../tickets/infra/orm/entities/promotion-ticket.entity";
@@ -6,6 +6,7 @@ import PromotionTicketQueryOptionsDTO from "../../../tickets/dtos/promotion-tick
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 
 // so Deus sabe oq é isso, eu sei que uma markov chain, só não me pergunte como funciona.
+@injectable()
 class ShowListOfRecommendedPromotionsByPromotionTicketService {
   constructor(
     @inject("PromotionRepository")
