@@ -104,6 +104,7 @@ class PromotionRepository implements PromotionRepositoryProvider {
     query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
     query.leftJoinAndSelect("promotion_tags.tag", "tag");
     query.leftJoinAndSelect("promotions.promotion_tickets", "promotion_tickets");
+    query.leftJoinAndSelect("promotions.store", "store");
     query.andWhere("tag.id IN (:...tags)", { tags });
     query.andWhere("promotions.deleted_at IS NULL");
     query.andWhere("promotions.id != :promotion_id", { promotion_id });
