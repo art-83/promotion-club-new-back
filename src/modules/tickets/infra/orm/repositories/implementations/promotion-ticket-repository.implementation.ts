@@ -17,7 +17,6 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async find(options: Partial<PromotionTicketQueryOptionsDTO>): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
     query.leftJoinAndSelect("promotion_tickets.promotion", "promotion");
-    query.leftJoinAndSelect("promotion.image", "image");
     query.leftJoinAndSelect("promotion.store", "store");
 
     if (options.join_user) query.leftJoinAndSelect("promotion_tickets.user", "user");
@@ -153,6 +152,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
     const ticketsQuery = this.repository
       .createQueryBuilder("ticket")
       .leftJoinAndSelect("ticket.promotion", "promotion")
+      .leftJoinAndSelect("promotion.image", "image")
       .leftJoinAndSelect("promotion.store", "store")
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL")
