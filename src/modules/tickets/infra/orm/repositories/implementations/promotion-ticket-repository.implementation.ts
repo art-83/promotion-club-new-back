@@ -17,6 +17,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async find(options: Partial<PromotionTicketQueryOptionsDTO>): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
     query.leftJoinAndSelect("promotion_tickets.promotion", "promotion");
+    query.leftJoinAndSelect("promotion.image", "image");
     query.leftJoinAndSelect("promotion.store", "store");
 
     if (options.join_user) query.leftJoinAndSelect("promotion_tickets.user", "user");
