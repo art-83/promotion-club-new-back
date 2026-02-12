@@ -157,7 +157,8 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL")
       .orderBy("ticket.created_at", "DESC")
-      .take(options.limit ?? 10);
+
+    if (options.limit) ticketsQuery.take(options.limit); 
 
     const totalsQuery = this.repository
       .createQueryBuilder("ticket")
