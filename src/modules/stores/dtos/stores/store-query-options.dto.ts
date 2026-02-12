@@ -3,6 +3,7 @@ import Store from "../../infra/orm/entities/store.entity";
 
 interface StoreQueryOptionsDTO extends Store, DefaultQueryOptions {
   join_image: boolean;
+  with_ratings_and_promotions?: boolean;
 }
 
 export default StoreQueryOptionsDTO;

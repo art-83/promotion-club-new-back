@@ -16,6 +16,8 @@ class StoreRepository implements RepositoryProvider<Store> {
     const query = this.repository.createQueryBuilder("stores");
 
     query.leftJoinAndSelect("stores.image", "image");
+    query.leftJoinAndSelect("stores.store_ratings", "store_ratings");
+    query.leftJoinAndSelect("stores.promotions", "promotions");
 
     if (options.id) query.andWhere("stores.id = :id", { id: options.id });
     if (options.name) query.andWhere("stores.name = :name", { name: options.name });
