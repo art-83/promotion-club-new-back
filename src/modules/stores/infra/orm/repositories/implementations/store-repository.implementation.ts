@@ -48,6 +48,7 @@ class StoreRepository implements RepositoryProvider<Store> {
     if (options.limit) query.take(options.limit);
 
     query.andWhere("stores.deleted_at IS NULL");
+    query.andWhere("promotions.deleted_at IS NULL");
 
     return await query.getMany();
   }
