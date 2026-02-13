@@ -17,6 +17,8 @@ class StoreRepository implements RepositoryProvider<Store> {
 
     query.leftJoinAndSelect("stores.image", "image");
     query.leftJoinAndSelect("stores.store_ratings", "store_ratings");
+    query.leftJoinAndSelect("stores.store_store_categories", "store_store_categories");
+    query.leftJoinAndSelect("store_store_categories.category", "store_category");
     query.leftJoinAndSelect("stores.promotions", "promotions");
     query.leftJoinAndSelect("promotions.image", "promotion_image");
 
