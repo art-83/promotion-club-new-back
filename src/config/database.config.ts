@@ -10,7 +10,7 @@ const dataSourceOptions = {
   entities: [__dirname + String(process.env.TYPEORM_ENTITIES)],
   migrations: [__dirname + String(process.env.TYPEORM_MIGRATIONS)],
   synchronize: true,
-  //dropSchema: true, // pelo amor de jesus cristo nao descomenta essa porra
+  dropSchema: true, // pelo amor de jesus cristo nao descomenta essa porra
 } as DataSourceOptions;
 
 export default dataSourceOptions;
