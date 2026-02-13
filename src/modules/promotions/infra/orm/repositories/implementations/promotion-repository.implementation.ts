@@ -16,6 +16,8 @@ class PromotionRepository implements PromotionRepositoryProvider {
 
     query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
     query.leftJoinAndSelect("promotion_tags.tag", "tag");
+    query.leftJoinAndSelect("promotions.promotion_promotion_categories", "promotion_promotion_categories");
+    query.leftJoinAndSelect("promotion_promotion_categories.promotion_category", "promotion_category");
 
     if (options.id) {
       query.andWhere("promotions.id = :id", { id: options.id });
