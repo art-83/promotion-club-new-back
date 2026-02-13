@@ -9,8 +9,7 @@ storeCategoryRoutes.post(
   "/",
   celebrate({
     [Segments.BODY]: {
-      store_id: Joi.string().uuid().required(),
-      category_id: Joi.string().uuid().required(),
+      name: Joi.string().required(),
     },
   }),
   storeCategoryController.create
@@ -21,25 +20,12 @@ storeCategoryRoutes.get(
   celebrate({
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
-      store_id: Joi.string().uuid().optional(),
-      category_id: Joi.string().uuid().optional(),
+      name: Joi.string().optional(),
+      offset: Joi.number().optional(),
+      limit: Joi.number().optional(),
     },
   }),
   storeCategoryController.find
-);
-
-storeCategoryRoutes.put(
-  "/:id",
-  celebrate({
-    [Segments.PARAMS]: {
-      id: Joi.string().uuid().required(),
-    },
-    [Segments.BODY]: {
-      store_id: Joi.string().uuid().optional(),
-      category_id: Joi.string().uuid().optional(),
-    },
-  }),
-  storeCategoryController.update
 );
 
 storeCategoryRoutes.delete(

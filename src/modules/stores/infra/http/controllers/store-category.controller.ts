@@ -1,38 +1,27 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import CreateStoreCategoryService from "../../../services/store-categories/create-store-category.service";
-import ShowStoreCategoriesService from "../../../services/store-categories/show-store-categories.service";
-import UpdateStoreCategoryService from "../../../services/store-categories/update-store-category.service";
-import DeleteStoreCategoryService from "../../../services/store-categories/delete-store-category.service";
-import AppError from "../../../../../shared/infra/http/errors/app-error";
+import CreateCategoryService from "../../../services/categories/create-category.service";
+import ShowCategoriesService from "../../../services/categories/show-categories.service";
+import DeleteCategoryService from "../../../services/categories/delete-category.service";
 
 class StoreCategoryController {
   public async create(request: Request, response: Response) {
-    const data = request.body;
-    const createStoreCategory = container.resolve(CreateStoreCategoryService);
-    const storeCategory = await createStoreCategory.execute(data);
+    const createStoreCategoryService = container.resolve(CreateCategoryService);
+    const storeCategory = await createStoreCategoryService.execute(request.body);
     return response.status(201).json(storeCategory);
   }
 
   public async find(request: Request, response: Response) {
     const options = request.query;
-    const showStoreCategories = container.resolve(ShowStoreCategoriesService);
-    const storeCategories = await showStoreCategories.execute(options);
+    const showStoreCategoriesService = container.resolve(ShowCategoriesService);
+    const storeCategories = await showStoreCategoriesService.execute(options);
     return response.status(200).json(storeCategories);
-  }
-
-  public async update(request: Request, response: Response) {
-    const id = String(request.params.id);
-    const data = request.body;
-    const updateStoreCategory = container.resolve(UpdateStoreCategoryService);
-    await updateStoreCategory.execute(id, data);
-    return response.status(204).send();
   }
 
   public async delete(request: Request, response: Response) {
     const id = String(request.params.id);
-    const deleteStoreCategory = container.resolve(DeleteStoreCategoryService);
-    await deleteStoreCategory.execute(id);
+    const deleteStoreCategoryService = container.resolve(DeleteCategoryService);
+    await deleteStoreCategoryService.execute(id);
     return response.status(204).send();
   }
 }
