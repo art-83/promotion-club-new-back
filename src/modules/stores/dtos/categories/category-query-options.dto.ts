@@ -1,6 +1,6 @@
 import DefaultQueryOptions from "../../../../shared/infra/orm/dtos/default-query-options.dto";
-import Category from "../../infra/orm/entities/category.entity";
+import StoreCategory from "../../infra/orm/entities/store-category.entity";
 
-interface CategoryQueryOptionsDto extends Category, DefaultQueryOptions {}
+interface CategoryQueryOptionsDto extends StoreCategory, DefaultQueryOptions {}
 
 export default CategoryQueryOptionsDto;

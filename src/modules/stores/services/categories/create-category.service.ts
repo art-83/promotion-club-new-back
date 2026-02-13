@@ -1,17 +1,17 @@
 import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
-import Category from "../../infra/orm/entities/category.entity";
+import StoreCategory from "../../infra/orm/entities/store-category.entity";
 import CreateCategoryDto from "../../dtos/categories/create-category.dto";
 
 @injectable()
 class CreateCategoryService {
   constructor(
-    @inject("CategoryRepository")
-    private categoryRepository: RepositoryProvider<Category>
+    @inject("StoreCategoryRepository")
+    private storeCategoryRepository: RepositoryProvider<StoreCategory>
   ) {}
 
-  public async execute(data: Partial<CreateCategoryDto>): Promise<Category> {
-    return await this.categoryRepository.create(data);
+  public async execute(data: Partial<CreateCategoryDto>): Promise<StoreCategory> {
+    return await this.storeCategoryRepository.create(data);
   }
 }
 

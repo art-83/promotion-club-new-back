@@ -6,6 +6,9 @@ class Invoice {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column()
+  status: string; // PENDING, PAID, FAILED
+
   @CreateDateColumn()
   created_at: Date;
 

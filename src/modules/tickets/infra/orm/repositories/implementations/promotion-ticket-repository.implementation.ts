@@ -157,9 +157,9 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .leftJoinAndSelect("promotion.store", "store")
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL")
-      .orderBy("ticket.created_at", "DESC")
+      .orderBy("ticket.created_at", "DESC");
 
-    if (options.limit) ticketsQuery.take(options.limit); 
+    if (options.limit) ticketsQuery.take(options.limit);
 
     const totalsQuery = this.repository
       .createQueryBuilder("ticket")

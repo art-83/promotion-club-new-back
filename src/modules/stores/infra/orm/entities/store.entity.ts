@@ -13,11 +13,12 @@ import Image from "../../../../images/infra/orm/entities/image.entity";
 import UserPermissions from "../../../../users/infra/orm/entities/user-permissions.entity";
 import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
 import Tag from "../../../../promotions/infra/orm/entities/tag.entity";
-import StoreCategory from "./store-category.entity";
+import StoreStoreCategory from "./store-store-category.entity";
 import Invoice from "../../../../invoices/infra/orm/entities/invoice.entity";
 import UserStoreOptions from "../../../../users/infra/orm/entities/user-store-options.entity";
 import Benefit from "../../../../benefits/infra/orm/entities/benefit.entity";
 import StoreRating from "./store-rating.entity";
+import PromotionCategory from "../../../../promotions/infra/orm/entities/promotion-category.entity";
 
 @Entity({ name: "stores" })
 class Store {
@@ -65,8 +66,8 @@ class Store {
   @OneToMany(() => Tag, (tag) => tag.store)
   tags: Tag[];
 
-  @OneToMany(() => StoreCategory, (store_category) => store_category.store)
-  store_categories: StoreCategory[];
+  @OneToMany(() => StoreStoreCategory, (storeStoreCategory) => storeStoreCategory.store)
+  store_store_categories: StoreStoreCategory[];
 
   @OneToMany(() => Invoice, (invoice) => invoice.store)
   invoices: Invoice;
@@ -79,6 +80,9 @@ class Store {
 
   @OneToMany(() => StoreRating, (store_rating) => store_rating.store)
   store_ratings: StoreRating[];
+
+  @OneToMany(() => PromotionCategory, (promotion_category) => promotion_category.store)
+  promotion_categories: PromotionCategory[];
 }
 
 export default Store;

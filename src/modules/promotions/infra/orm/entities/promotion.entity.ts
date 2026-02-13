@@ -14,6 +14,7 @@ import Store from "../../../../stores/infra/orm/entities/store.entity";
 import Image from "../../../../images/infra/orm/entities/image.entity";
 import PromotionTag from "./promotion-tag.entity";
 import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ticket.entity";
+import PromotionPromotionCategory from "./promotion-promotion-category.entity";
 
 @Entity({ name: "promotions" })
 class Promotion {
@@ -60,6 +61,9 @@ class Promotion {
 
   @OneToMany(() => PromotionTicket, (promotionTicket) => promotionTicket.promotion)
   promotion_tickets: PromotionTicket[];
+
+  @OneToMany(() => PromotionPromotionCategory, (promotionPromotionCategory) => promotionPromotionCategory.promotion)
+  promotion_promotion_categories: PromotionPromotionCategory[];
 }
 
 export default Promotion;

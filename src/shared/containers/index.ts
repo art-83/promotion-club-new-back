@@ -13,10 +13,10 @@ import UserPermissions from "../../modules/users/infra/orm/entities/user-permiss
 import UserPermissionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-permissions-repository.implementation";
 import Store from "../../modules/stores/infra/orm/entities/store.entity";
 import StoreRepository from "../../modules/stores/infra/orm/repositories/implementations/store-repository.implementation";
-import Category from "../../modules/stores/infra/orm/entities/category.entity";
-import CategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/category-repository.implementation";
 import StoreCategory from "../../modules/stores/infra/orm/entities/store-category.entity";
-import StoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/store-category-repository.implementation";
+import StoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/category-repository.implementation";
+import StoreStoreCategory from "../../modules/stores/infra/orm/entities/store-store-category.entity";
+import StoreStoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/store-category-repository.implementation";
 import StoreRating from "../../modules/stores/infra/orm/entities/store-rating.entity";
 import StoreRatingRepository from "../../modules/stores/infra/orm/repositories/implementations/store-rating-repository.implementation";
 import Promotion from "../../modules/promotions/infra/orm/entities/promotion.entity";
@@ -35,6 +35,10 @@ import Tags from "../../modules/promotions/infra/orm/entities/tag.entity";
 import TagRepository from "../../modules/promotions/infra/orm/repositories/implementations/tag-repository.implementation";
 import PromotionTag from "../../modules/promotions/infra/orm/entities/promotion-tag.entity";
 import PromotionTagRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-tag-repository.implementation";
+import PromotionCategory from "../../modules/promotions/infra/orm/entities/promotion-category.entity";
+import PromotionCategoryRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-category-repository.implementation";
+import PromotionPromotionCategory from "../../modules/promotions/infra/orm/entities/promotion-promotion-category.entity";
+import PromotionPromotionCategoryRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-promotion-category-repository.implementation";
 import UserPushToken from "../../modules/users/infra/orm/entities/user-push-token.entity";
 import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
 import UserStoreOptions from "../../modules/users/infra/orm/entities/user-store-options.entity";
@@ -51,8 +55,8 @@ container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepo
 container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermissionsRepository", UserPermissionsRepository);
 
 container.registerSingleton<RepositoryProvider<Store>>("StoreRepository", StoreRepository);
-container.registerSingleton<RepositoryProvider<Category>>("CategoryRepository", CategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreCategory>>("StoreCategoryRepository", StoreCategoryRepository);
+container.registerSingleton<RepositoryProvider<StoreStoreCategory>>("StoreStoreCategoryRepository", StoreStoreCategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreRating>>("StoreRatingRepository", StoreRatingRepository);
 container.registerSingleton<RepositoryProvider<Promotion>>("PromotionRepository", PromotionRepository);
 container.registerSingleton<RepositoryProvider<Invoice>>("InvoiceRepository", InvoiceRepository);
@@ -62,6 +66,8 @@ container.registerSingleton<RepositoryProvider<PromotionTicket>>("PromotionTicke
 container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagRepository);
 
 container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
+container.registerSingleton<RepositoryProvider<PromotionCategory>>("PromotionCategoryRepository", PromotionCategoryRepository);
+container.registerSingleton<RepositoryProvider<PromotionPromotionCategory>>("PromotionPromotionCategoryRepository", PromotionPromotionCategoryRepository);
 
 container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
 container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOptionsRepository", UserStoreOptionsRepository);

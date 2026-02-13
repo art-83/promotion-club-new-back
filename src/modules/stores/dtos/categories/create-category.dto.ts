@@ -1,6 +1,6 @@
-import Category from "../../infra/orm/entities/category.entity";
+import StoreCategory from "../../infra/orm/entities/store-category.entity";
 
-interface CreateCategoryDto extends Category {
+interface CreateCategoryDto extends StoreCategory {
   name: string;
 }
 

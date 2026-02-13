@@ -12,6 +12,8 @@ import invoiceRoutes from "../../../../modules/invoices/infra/http/routers/invoi
 import benefitRoutes from "../../../../modules/benefits/infra/http/routers/benefit.routes";
 import tagRoutes from "../../../../modules/promotions/infra/http/routers/tag.routes";
 import promotionTagRoutes from "../../../../modules/promotions/infra/http/routers/promotion-tag.routes";
+import promotionCategoryRoutes from "../../../../modules/promotions/infra/http/routers/promotion-category.routes";
+import promotionPromotionCategoryRoutes from "../../../../modules/promotions/infra/http/routers/promotion-promotion-category.routes";
 import authRouter from "../../../../modules/users/infra/http/routers/auth.routes";
 import authMiddleware from "../middlewares/auth.middleware";
 import telemetryMiddleware from "../middlewares/telemetry.middleware";
@@ -39,5 +41,7 @@ routes.use("/invoices", invoiceRoutes);
 routes.use("/benefits", benefitRoutes);
 routes.use("/tags", tagRoutes);
 routes.use("/promotion-tags", promotionTagRoutes);
+routes.use("/promotion-categories", promotionCategoryRoutes);
+routes.use("/promotion-promotion-categories", promotionPromotionCategoryRoutes);
 
 export default routes;

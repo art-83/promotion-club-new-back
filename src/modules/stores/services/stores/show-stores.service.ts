@@ -7,7 +7,7 @@ import Store from "../../infra/orm/entities/store.entity";
 class ShowStoresServices {
   constructor(
     @inject("StoreRepository")
-    private storeRepository: RepositoryProvider<Store>,
+    private storeRepository: RepositoryProvider<Store>
   ) {}
 
   public async execute(options: Partial<StoreQueryOptionsDTO>) {

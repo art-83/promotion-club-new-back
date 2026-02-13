@@ -22,7 +22,7 @@ class ShowListOfRecommendedPromotionsByUser {
     const tickets = await this.getUserTicketsWithTags(user_id);
 
     if (!tickets.length) {
-      return this.getColdStartPromotions(); 
+      return this.getColdStartPromotions();
     }
 
     const tagFrequency = this.extractTagFrequencyFromTickets(tickets);
@@ -41,7 +41,7 @@ class ShowListOfRecommendedPromotionsByUser {
 
     const userPromotionIds = new Set(tickets.map((t) => t.promotion?.id).filter(Boolean) as string[]);
     promotions = this.excludeUserPromotions(promotions, userPromotionIds);
- 
+
     if (!promotions.length) {
       return this.getColdStartPromotions();
     }
@@ -109,10 +109,7 @@ class ShowListOfRecommendedPromotionsByUser {
   }
 
   private async getPromotionsByTags(tagIds: string[]): Promise<Promotion[]> {
-    return this.promotionRepository.findMostRelevantPromotionsByTags(
-      this.EXCLUDE_PROMOTION_ID_PLACEHOLDER,
-      tagIds
-    );
+    return this.promotionRepository.findMostRelevantPromotionsByTags(this.EXCLUDE_PROMOTION_ID_PLACEHOLDER, tagIds);
   }
 
   private excludeUserPromotions(promotions: Promotion[], userPromotionIds: Set<string>): Promotion[] {
@@ -133,10 +130,7 @@ class ShowListOfRecommendedPromotionsByUser {
     });
   }
 
-  private scorePromotionsByTagOverlap(
-    promotions: Promotion[],
-    tagWeights: Map<string, number>
-  ): Map<string, number> {
+  private scorePromotionsByTagOverlap(promotions: Promotion[], tagWeights: Map<string, number>): Map<string, number> {
     const scores = new Map<string, number>();
 
     for (const promotion of promotions) {
@@ -158,14 +152,16 @@ class ShowListOfRecommendedPromotionsByUser {
   }
 
   private sortByEngagementScore(promotions: Promotion[], scores: Map<string, number>): Promotion[] {
-    return [...promotions].sort((a, b) => {
-      const scoreA = scores.get(a.id) ?? 0;
-      const scoreB = scores.get(b.id) ?? 0;
+    return [...promotions]
+      .sort((a, b) => {
+        const scoreA = scores.get(a.id) ?? 0;
+        const scoreB = scores.get(b.id) ?? 0;
 
-      if (scoreB !== scoreA) return scoreB - scoreA;
+        if (scoreB !== scoreA) return scoreB - scoreA;
 
-      return Math.random() - 0.5;
-    }).slice(0, this.RECOMMENDATION_LIMIT);
+        return Math.random() - 0.5;
+      })
+      .slice(0, this.RECOMMENDATION_LIMIT);
   }
 
   private async getColdStartPromotions(): Promise<Promotion[]> {

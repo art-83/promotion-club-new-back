@@ -1,19 +1,13 @@
-import { CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import Store from "./store.entity";
-import Category from "./category.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import StoreStoreCategory from "./store-store-category.entity";
 
 @Entity({ name: "store_categories" })
 class StoreCategory {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Store, (store) => store.store_categories)
-  @JoinColumn({ name: "store_id" })
-  store: Store;
-
-  @ManyToOne(() => Category, (category) => category.store_categories)
-  @JoinColumn({ name: "category_id" })
-  category: Category;
+  @Column()
+  name: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -23,6 +17,9 @@ class StoreCategory {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => StoreStoreCategory, (storeStoreCategory) => storeStoreCategory.category)
+  store_store_categories: StoreStoreCategory[];
 }
 
 export default StoreCategory;

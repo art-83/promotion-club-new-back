@@ -1,17 +1,17 @@
 import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
-import Category from "../../infra/orm/entities/category.entity";
+import StoreCategory from "../../infra/orm/entities/store-category.entity";
 import CategoryQueryOptionsDto from "../../dtos/categories/category-query-options.dto";
 
 @injectable()
 class ShowCategoriesService {
   constructor(
-    @inject("CategoryRepository")
-    private categoryRepository: RepositoryProvider<Category>
+    @inject("StoreCategoryRepository")
+    private storeCategoryRepository: RepositoryProvider<StoreCategory>
   ) {}
 
-  public async execute(options: Partial<CategoryQueryOptionsDto>): Promise<Category[]> {
-    return await this.categoryRepository.find(options);
+  public async execute(options: Partial<CategoryQueryOptionsDto>): Promise<StoreCategory[]> {
+    return await this.storeCategoryRepository.find(options);
   }
 }
 
