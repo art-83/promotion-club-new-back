@@ -6,6 +6,7 @@ interface PromotionQueryOptionsDTO extends Promotion, DefaultQueryOptions {
   start_final_price: number;
   end_final_price: number;
   store_id: string;
+  not_expired?: boolean;
 
   join_store: boolean;
   join_image: boolean;

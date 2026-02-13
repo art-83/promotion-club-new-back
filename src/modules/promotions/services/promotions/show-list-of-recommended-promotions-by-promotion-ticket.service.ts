@@ -5,12 +5,14 @@ import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/
 import PromotionTicketRepositoryProvider from "../../../tickets/infra/orm/repositories/providers/promotion-ticket-repository.provider";
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 
+const CANDIDATE_LIMIT = 100;
+
 @injectable()
 class ShowListOfRecommendedPromotionsByUser {
   private readonly RECOMMENDATION_LIMIT = 20;
   private readonly TICKET_FETCH_LIMIT = 200;
   private readonly WEIGHTED_TAG_SELECTION_COUNT = 5;
-  private readonly EXCLUDE_PROMOTION_ID_PLACEHOLDER = "00000000-0000-0000-0000-000000000000";
+  private readonly STORE_BOOST_WEIGHT = 1.5; // boost score for promotions from stores user already uses
   constructor(
     @inject("PromotionTicketRepository")
     private promotionTicketRepository: PromotionTicketRepositoryProvider,
@@ -37,19 +39,18 @@ class ShowListOfRecommendedPromotionsByUser {
       return this.getColdStartPromotions();
     }
 
-    let promotions = await this.getPromotionsByTags(selectedTagIds);
+    const userPromotionIds = tickets.map((t) => t.promotion?.id).filter(Boolean) as string[];
+    const storeFrequency = this.extractStoreFrequencyFromTickets(tickets);
 
-    const userPromotionIds = new Set(tickets.map((t) => t.promotion?.id).filter(Boolean) as string[]);
-    promotions = this.excludeUserPromotions(promotions, userPromotionIds);
+    let promotions = await this.getPromotionsByTags(selectedTagIds, userPromotionIds);
 
     if (!promotions.length) {
       return this.getColdStartPromotions();
     }
 
     promotions = this.deduplicatePromotions(promotions);
-    promotions = this.filterApprovedAndNotExpired(promotions);
 
-    const scores = this.scorePromotionsByTagOverlap(promotions, tagFrequency);
+    const scores = this.scorePromotionsByTagAndStore(promotions, tagFrequency, storeFrequency);
     return this.sortByEngagementScore(promotions, scores);
   }
 
@@ -75,6 +76,18 @@ class ShowListOfRecommendedPromotionsByUser {
         const tagId = String(tag.id);
         frequency.set(tagId, (frequency.get(tagId) ?? 0) + 1);
       }
+    }
+
+    return frequency;
+  }
+
+  private extractStoreFrequencyFromTickets(tickets: PromotionTicket[]): Map<string, number> {
+    const frequency = new Map<string, number>();
+
+    for (const ticket of tickets) {
+      const storeId = ticket.promotion?.store?.id;
+      if (!storeId) continue;
+      frequency.set(storeId, (frequency.get(storeId) ?? 0) + 1);
     }
 
     return frequency;
@@ -108,17 +121,13 @@ class ShowListOfRecommendedPromotionsByUser {
     return selected;
   }
 
-  private async getPromotionsByTags(tagIds: string[]): Promise<Promotion[]> {
-    return this.promotionRepository.findMostRelevantPromotionsByTags(this.EXCLUDE_PROMOTION_ID_PLACEHOLDER, tagIds);
-  }
-
-  private excludeUserPromotions(promotions: Promotion[], userPromotionIds: Set<string>): Promotion[] {
-    return promotions.filter((p) => !userPromotionIds.has(p.id));
-  }
-
-  private filterApprovedAndNotExpired(promotions: Promotion[]): Promotion[] {
-    const now = new Date();
-    return promotions.filter((p) => p.is_approved === true && new Date(p.expire_at) > now);
+  private async getPromotionsByTags(tagIds: string[], excludePromotionIds: string[]): Promise<Promotion[]> {
+    return this.promotionRepository.findRecommendedCandidates({
+      tagIds,
+      excludePromotionIds,
+      limit: CANDIDATE_LIMIT,
+      join_image: true,
+    });
   }
 
   private deduplicatePromotions(promotions: Promotion[]): Promotion[] {
@@ -130,7 +139,11 @@ class ShowListOfRecommendedPromotionsByUser {
     });
   }
 
-  private scorePromotionsByTagOverlap(promotions: Promotion[], tagWeights: Map<string, number>): Map<string, number> {
+  private scorePromotionsByTagAndStore(
+    promotions: Promotion[],
+    tagWeights: Map<string, number>,
+    storeWeights: Map<string, number>
+  ): Map<string, number> {
     const scores = new Map<string, number>();
 
     for (const promotion of promotions) {
@@ -144,6 +157,9 @@ class ShowListOfRecommendedPromotionsByUser {
           }
         }
       }
+
+      const storeWeight = promotion.store?.id ? (storeWeights.get(promotion.store.id) ?? 0) * this.STORE_BOOST_WEIGHT : 0;
+      score += storeWeight;
 
       scores.set(promotion.id, score);
     }
@@ -167,13 +183,12 @@ class ShowListOfRecommendedPromotionsByUser {
   private async getColdStartPromotions(): Promise<Promotion[]> {
     const options: Partial<PromotionQueryOptionsDTO> = {
       is_approved: true,
+      not_expired: true,
       limit: this.RECOMMENDATION_LIMIT,
       join_store: true,
       join_image: true,
     };
-    const promotions = await this.promotionRepository.find(options);
-
-    return this.filterApprovedAndNotExpired(promotions);
+    return this.promotionRepository.find(options);
   }
 }
 

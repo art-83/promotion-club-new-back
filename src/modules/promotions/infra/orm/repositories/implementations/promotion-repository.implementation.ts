@@ -2,6 +2,7 @@ import { LessThan, Repository } from "typeorm";
 import Promotion from "../../entities/promotion.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import PromotionQueryOptionsDTO from "../../../../dtos/promotions/promotion-query-options.dto";
+import FindRecommendedOptionsDTO from "../../../../dtos/promotions/find-recommended-options.dto";
 import PromotionRepositoryProvider from "../providers/promotions-repository.providers";
 
 class PromotionRepository implements PromotionRepositoryProvider {
@@ -53,6 +54,9 @@ class PromotionRepository implements PromotionRepositoryProvider {
       query.andWhere("promotions.expire_at = :expire_at", {
         expire_at: options.expire_at,
       });
+    if (options.not_expired === true) {
+      query.andWhere("promotions.expire_at > :now", { now: new Date() });
+    }
 
     if (options.store_id) {
       query.andWhere("promotions.store_id = :store_id", {
@@ -107,10 +111,42 @@ class PromotionRepository implements PromotionRepositoryProvider {
     query.leftJoinAndSelect("promotion_tags.tag", "tag");
     query.leftJoinAndSelect("promotions.promotion_tickets", "promotion_tickets");
     query.leftJoinAndSelect("promotions.store", "store");
+    query.leftJoinAndSelect("promotions.promotion_promotion_categories", "promotion_promotion_categories");
+    query.leftJoinAndSelect("promotion_promotion_categories.promotion_category", "promotion_category");
     query.andWhere("tag.id IN (:...tags)", { tags });
     query.andWhere("promotions.deleted_at IS NULL");
     query.andWhere("promotions.id != :promotion_id", { promotion_id });
     query.orderBy("promotions.created_at", "DESC");
+    return await query.getMany();
+  }
+
+  public async findRecommendedCandidates(options: FindRecommendedOptionsDTO): Promise<Promotion[]> {
+    const { tagIds, excludePromotionIds, limit = 100, join_image = true } = options;
+    if (!tagIds.length) return [];
+
+    const query = this.repository.createQueryBuilder("promotions");
+    query.leftJoinAndSelect("promotions.promotion_tags", "promotion_tags");
+    query.leftJoinAndSelect("promotion_tags.tag", "tag");
+    query.leftJoinAndSelect("promotions.store", "store");
+    query.leftJoinAndSelect("promotions.promotion_promotion_categories", "promotion_promotion_categories");
+    query.leftJoinAndSelect("promotion_promotion_categories.promotion_category", "promotion_category");
+
+    query.andWhere("tag.id IN (:...tagIds)", { tagIds });
+    query.andWhere("promotions.deleted_at IS NULL");
+    query.andWhere("promotions.is_approved = :is_approved", { is_approved: "t" });
+    query.andWhere("promotions.expire_at > :now", { now: new Date() });
+
+    if (excludePromotionIds.length > 0) {
+      query.andWhere("promotions.id NOT IN (:...excludePromotionIds)", { excludePromotionIds });
+    }
+
+    if (join_image) {
+      query.leftJoinAndSelect("promotions.image", "image");
+    }
+
+    query.orderBy("promotions.created_at", "DESC");
+    query.take(limit);
+
     return await query.getMany();
   }
 
