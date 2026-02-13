@@ -1,150 +1,184 @@
 import { inject, injectable } from "tsyringe";
-import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Promotion from "../../infra/orm/entities/promotion.entity";
 import PromotionTicket from "../../../tickets/infra/orm/entities/promotion-ticket.entity";
-import PromotionTicketQueryOptionsDTO from "../../../tickets/dtos/promotion-ticket-query-options.dto";
-import AppError from "../../../../shared/infra/http/errors/app-error";
-import PromotionTagQueryOptionsDTO from "../../dtos/promotion-tag/promotion-tag-query-options.dto";
-import PromotionTag from "../../infra/orm/entities/promotion-tag.entity";
 import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/promotions-repository.providers";
+import PromotionTicketRepositoryProvider from "../../../tickets/infra/orm/repositories/providers/promotion-ticket-repository.provider";
+import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 
 @injectable()
-class ShowListOfRecommendedPromotionsByPromotionTicketService {
-  private readonly RECOMMENDATION_COUNT = 3;
-  private readonly MARKOV_TEMPERATURE = 1.8;
-  private readonly EXPLORATION_RATE = 0.25;
-  private readonly MAX_TAGS_FOR_CANDIDATES = 15;
+class ShowListOfRecommendedPromotionsByUser {
+  private readonly RECOMMENDATION_LIMIT = 20;
+  private readonly TICKET_FETCH_LIMIT = 200;
+  private readonly WEIGHTED_TAG_SELECTION_COUNT = 5;
+  private readonly EXCLUDE_PROMOTION_ID_PLACEHOLDER = "00000000-0000-0000-0000-000000000000";
   constructor(
-    @inject("PromotionRepository")
-    private promotionRepository: PromotionRepositoryProvider,
     @inject("PromotionTicketRepository")
-    private promotionTicketRepository: RepositoryProvider<PromotionTicket>,
-    @inject("PromotionTagRepository")
-    private promotionTagRepository: RepositoryProvider<PromotionTag>
+    private promotionTicketRepository: PromotionTicketRepositoryProvider,
+    @inject("PromotionRepository")
+    private promotionRepository: PromotionRepositoryProvider
   ) {}
 
-  public async execute(user_id: string, promotion_ticket_id: string): Promise<Promotion[]> {
-    const promotionTagsQueryOptions = {
+  public async execute(user_id: string): Promise<Promotion[]> {
+    const tickets = await this.getUserTicketsWithTags(user_id);
+
+    if (!tickets.length) {
+      return this.getColdStartPromotions(); 
+    }
+
+    const tagFrequency = this.extractTagFrequencyFromTickets(tickets);
+
+    if (!tagFrequency.size) {
+      return this.getColdStartPromotions();
+    }
+
+    const selectedTagIds = this.weightedRandomTagSelection(tagFrequency, this.WEIGHTED_TAG_SELECTION_COUNT);
+
+    if (!selectedTagIds.length) {
+      return this.getColdStartPromotions();
+    }
+
+    let promotions = await this.getPromotionsByTags(selectedTagIds);
+
+    const userPromotionIds = new Set(tickets.map((t) => t.promotion?.id).filter(Boolean) as string[]);
+    promotions = this.excludeUserPromotions(promotions, userPromotionIds);
+ 
+    if (!promotions.length) {
+      return this.getColdStartPromotions();
+    }
+
+    promotions = this.deduplicatePromotions(promotions);
+    promotions = this.filterApprovedAndNotExpired(promotions);
+
+    const scores = this.scorePromotionsByTagOverlap(promotions, tagFrequency);
+    return this.sortByEngagementScore(promotions, scores);
+  }
+
+  private async getUserTicketsWithTags(user_id: string): Promise<PromotionTicket[]> {
+    return this.promotionTicketRepository.find({
       user_id,
-    } as Partial<PromotionTagQueryOptionsDTO>;
-
-    const userPromotionTags = await this.promotionTagRepository.find(promotionTagsQueryOptions);
-
-    if (!userPromotionTags.length) throw new AppError(404, "User promotion tags not found");
-
-    const userTagWeights = new Map<string, number>();
-    for (const promotionTag of userPromotionTags) {
-      const tagId = promotionTag.tag?.id;
-      if (!tagId) continue;
-      userTagWeights.set(tagId, (userTagWeights.get(tagId) ?? 0) + 1);
-    }
-
-    const sortedTagIds = Array.from(userTagWeights.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([id]) => id)
-      .slice(0, this.MAX_TAGS_FOR_CANDIDATES);
-
-    if (!sortedTagIds.length) throw new AppError(404, "No tag distribution for user");
-
-    const promotionTicketQueryOptions = {
-      id: promotion_ticket_id,
       join_promotion_tags: true,
-    } as Partial<PromotionTicketQueryOptionsDTO>;
+      limit: this.TICKET_FETCH_LIMIT,
+    });
+  }
 
-    const promotionTicket = (
-      await this.promotionTicketRepository.find(promotionTicketQueryOptions)
-    ).at(0);
+  private extractTagFrequencyFromTickets(tickets: PromotionTicket[]): Map<string, number> {
+    const frequency = new Map<string, number>();
 
-    if (!promotionTicket) throw new AppError(404, "Promotion ticket not found");
+    for (const ticket of tickets) {
+      const promotion = ticket.promotion;
+      if (!promotion?.promotion_tags) continue;
 
-    const currentPromotionId = promotionTicket.promotion.id;
+      for (const pt of promotion.promotion_tags) {
+        const tag = pt.tag;
+        if (!tag?.id) continue;
 
-    const candidatePromotions = await this.promotionRepository.findMostRelevantPromotionsByTags(
-      currentPromotionId,
-      sortedTagIds
-    );
-
-    const uniqueById = new Map<string, Promotion>();
-    for (const p of candidatePromotions) uniqueById.set(p.id, p);
-    const candidates = Array.from(uniqueById.values());
-
-    if (!candidates.length) throw new AppError(404, "No recommended promotions found");
-
-    const totalTagWeight = Array.from(userTagWeights.values()).reduce((a, b) => a + b, 0);
-    const tagProbability = new Map<string, number>();
-    for (const [tagId, w] of userTagWeights) {
-      tagProbability.set(tagId, w / totalTagWeight);
+        const tagId = String(tag.id);
+        frequency.set(tagId, (frequency.get(tagId) ?? 0) + 1);
+      }
     }
 
-    const getRawWeight = (p: Promotion): number => {
-      const tagIds = (p.promotion_tags ?? [])
-        .map((pt) => pt.tag?.id)
-        .filter((id): id is string => Boolean(id));
-      return tagIds.reduce((sum, tagId) => sum + (tagProbability.get(tagId) ?? 0), 0);
-    };
+    return frequency;
+  }
 
-    const applyTemperature = (weight: number, temperature: number): number => {
-      if (temperature <= 0) return weight;
-      return Math.pow(Math.max(weight, 1e-10), 1 / temperature);
-    };
+  private weightedRandomTagSelection(tagFrequency: Map<string, number>, count: number): string[] {
+    const entries = Array.from(tagFrequency.entries());
+    if (!entries.length) return [];
 
-    const mixWithUniform = (
-      weight: number,
-      exploration: number,
-      totalItems: number
-    ): number => {
-      const uniform = 1 / Math.max(totalItems, 1);
-      return (1 - exploration) * weight + exploration * uniform;
-    };
+    const totalWeight = entries.reduce((sum, [, w]) => sum + w, 0);
+    if (totalWeight <= 0) return [];
 
-    const getWeight = (p: Promotion): number => {
-      const raw = getRawWeight(p);
-      const withTemp = applyTemperature(raw, this.MARKOV_TEMPERATURE);
-      return mixWithUniform(withTemp, this.EXPLORATION_RATE, candidates.length);
-    };
+    const selected: string[] = [];
+    const remaining = [...entries];
 
-    const weightedSampleWithoutReplacement = (
-      items: Promotion[],
-      getItemWeight: (p: Promotion) => number,
-      k: number
-    ): Promotion[] => {
-      if (items.length === 0 || k <= 0) return [];
-      const n = Math.min(k, items.length);
-      const remaining = items.map((item) => ({ item, weight: getItemWeight(item) }));
-      const result: Promotion[] = [];
+    for (let i = 0; i < count && remaining.length > 0; i++) {
+      let r = Math.random() * remaining.reduce((s, [, w]) => s + w, 0);
 
-      for (let i = 0; i < n; i++) {
-        const total = remaining.reduce((sum, { weight }) => sum + weight, 0);
-        if (total <= 0) break;
-        let r = Math.random() * total;
-        let idx = 0;
-        for (let j = 0; j < remaining.length; j++) {
-          const entry = remaining[j];
-          if (entry) r -= entry.weight;
-          if (r <= 0) {
-            idx = j;
-            break;
-          }
-          idx = j;
+      for (let j = 0; j < remaining.length; j++) {
+        const entry = remaining[j];
+        if (!entry) continue;
+        r -= entry[1];
+        if (r <= 0) {
+          selected.push(entry[0]);
+          remaining.splice(j, 1);
+          break;
         }
-        const chosen = remaining[idx];
-        if (chosen) {
-          result.push(chosen.item);
-          remaining.splice(idx, 1);
+      }
+    }
+
+    return selected;
+  }
+
+  private async getPromotionsByTags(tagIds: string[]): Promise<Promotion[]> {
+    return this.promotionRepository.findMostRelevantPromotionsByTags(
+      this.EXCLUDE_PROMOTION_ID_PLACEHOLDER,
+      tagIds
+    );
+  }
+
+  private excludeUserPromotions(promotions: Promotion[], userPromotionIds: Set<string>): Promotion[] {
+    return promotions.filter((p) => !userPromotionIds.has(p.id));
+  }
+
+  private filterApprovedAndNotExpired(promotions: Promotion[]): Promotion[] {
+    const now = new Date();
+    return promotions.filter((p) => p.is_approved === true && new Date(p.expire_at) > now);
+  }
+
+  private deduplicatePromotions(promotions: Promotion[]): Promotion[] {
+    const seen = new Set<string>();
+    return promotions.filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
+  }
+
+  private scorePromotionsByTagOverlap(
+    promotions: Promotion[],
+    tagWeights: Map<string, number>
+  ): Map<string, number> {
+    const scores = new Map<string, number>();
+
+    for (const promotion of promotions) {
+      let score = 0;
+
+      if (promotion.promotion_tags) {
+        for (const pt of promotion.promotion_tags) {
+          const tag = pt.tag;
+          if (tag?.id) {
+            score += tagWeights.get(String(tag.id)) ?? 0;
+          }
         }
       }
 
-      return result;
+      scores.set(promotion.id, score);
+    }
+
+    return scores;
+  }
+
+  private sortByEngagementScore(promotions: Promotion[], scores: Map<string, number>): Promotion[] {
+    return [...promotions].sort((a, b) => {
+      const scoreA = scores.get(a.id) ?? 0;
+      const scoreB = scores.get(b.id) ?? 0;
+
+      if (scoreB !== scoreA) return scoreB - scoreA;
+
+      return Math.random() - 0.5;
+    }).slice(0, this.RECOMMENDATION_LIMIT);
+  }
+
+  private async getColdStartPromotions(): Promise<Promotion[]> {
+    const options: Partial<PromotionQueryOptionsDTO> = {
+      is_approved: true,
+      limit: this.RECOMMENDATION_LIMIT,
+      join_store: true,
+      join_image: true,
     };
+    const promotions = await this.promotionRepository.find(options);
 
-    const recommended = weightedSampleWithoutReplacement(
-      candidates,
-      getWeight,
-      this.RECOMMENDATION_COUNT
-    );
-
-    return recommended;
+    return this.filterApprovedAndNotExpired(promotions);
   }
 }
 
-export default ShowListOfRecommendedPromotionsByPromotionTicketService;
+export default ShowListOfRecommendedPromotionsByUser;

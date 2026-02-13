@@ -1,7 +1,7 @@
 import CreatePromotionService from "../../../services/promotions/create-promotion.service";
 import DeleteExpiredPromotionsService from "../../../services/promotions/delete-expired-promotions.service";
 import DeletePromotionService from "../../../services/promotions/delete-promotion.service";
-import ShowListOfRecommendedPromotionsByPromotionTicketService from "../../../services/promotions/show-list-of-recommended-promotions-by-promotion-ticket.service";
+import ShowListOfRecommendedPromotionsByUser from "../../../services/promotions/show-list-of-recommended-promotions-by-promotion-ticket.service";
 import ShowPromotionsServices from "../../../services/promotions/show-promotions.service";
 import UpdatePromotionService from "../../../services/promotions/update-promotion-and-maybe-send-notifications.service";
 import { Request, Response } from "express";
@@ -40,11 +40,10 @@ class PromotionController {
     return response.status(204).send();
   }
 
-  public async showListOfRecommendedPromotionsByPromotionTicket(request: Request, response: Response) {
+  public async showListOfRecommendedPromotionsByUser(request: Request, response: Response) {
     const user_id = String(request.user_id);
-    const promotion_ticket_id = String(request.params.promotion_ticket_id);
-    const showListOfRecommendedPromotionsByPromotionTicketService = container.resolve(ShowListOfRecommendedPromotionsByPromotionTicketService);
-    const recommendedPromotions = await showListOfRecommendedPromotionsByPromotionTicketService.execute(user_id, promotion_ticket_id);
+    const showListOfRecommendedPromotionsByUserService = container.resolve(ShowListOfRecommendedPromotionsByUser);
+    const recommendedPromotions = await showListOfRecommendedPromotionsByUserService.execute(user_id);
     return response.status(200).json(recommendedPromotions);
   }
 }
