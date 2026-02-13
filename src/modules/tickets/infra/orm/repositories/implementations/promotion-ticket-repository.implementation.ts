@@ -151,6 +151,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   ): Promise<{ promotion_tickets: PromotionTicket[]; total_money_saved: number; total_tickets: number }> {
     const ticketsQuery = this.repository
       .createQueryBuilder("ticket")
+      .withDeleted()
       .leftJoinAndSelect("ticket.promotion", "promotion")
       .leftJoinAndSelect("promotion.image", "image")
       .leftJoinAndSelect("promotion.store", "store")
