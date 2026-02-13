@@ -5,11 +5,11 @@ import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/
 import PromotionTicketRepositoryProvider from "../../../tickets/infra/orm/repositories/providers/promotion-ticket-repository.provider";
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 
-const CANDIDATE_LIMIT = 100;
 
 @injectable()
 class ShowListOfRecommendedPromotionsByUser {
-  private readonly RECOMMENDATION_LIMIT = 20;
+  private readonly CANDIDATE_LIMIT = 100;
+  private readonly RECOMMENDATION_LIMIT = 3;
   private readonly TICKET_FETCH_LIMIT = 200;
   private readonly WEIGHTED_TAG_SELECTION_COUNT = 5;
   private readonly STORE_BOOST_WEIGHT = 1.5; // boost score for promotions from stores user already uses
@@ -24,19 +24,19 @@ class ShowListOfRecommendedPromotionsByUser {
     const tickets = await this.getUserTicketsWithTags(user_id);
 
     if (!tickets.length) {
-      return this.getColdStartPromotions();
+      return this.capResult(await this.getColdStartPromotions());
     }
 
     const tagFrequency = this.extractTagFrequencyFromTickets(tickets);
 
     if (!tagFrequency.size) {
-      return this.getColdStartPromotions();
+      return this.capResult(await this.getColdStartPromotions());
     }
 
     const selectedTagIds = this.weightedRandomTagSelection(tagFrequency, this.WEIGHTED_TAG_SELECTION_COUNT);
 
     if (!selectedTagIds.length) {
-      return this.getColdStartPromotions();
+      return this.capResult(await this.getColdStartPromotions());
     }
 
     const userPromotionIds = tickets.map((t) => t.promotion?.id).filter(Boolean) as string[];
@@ -45,13 +45,18 @@ class ShowListOfRecommendedPromotionsByUser {
     let promotions = await this.getPromotionsByTags(selectedTagIds, userPromotionIds);
 
     if (!promotions.length) {
-      return this.getColdStartPromotions();
+      return this.capResult(await this.getColdStartPromotions());
     }
 
     promotions = this.deduplicatePromotions(promotions);
 
     const scores = this.scorePromotionsByTagAndStore(promotions, tagFrequency, storeFrequency);
-    return this.sortByEngagementScore(promotions, scores);
+    return this.capResult(this.sortByEngagementScore(promotions, scores));
+  }
+
+  /** Ensures we never return more than RECOMMENDATION_LIMIT (e.g. TypeORM joins can duplicate root entities). */
+  private capResult(promotions: Promotion[]): Promotion[] {
+    return promotions.slice(0, this.RECOMMENDATION_LIMIT);
   }
 
   private async getUserTicketsWithTags(user_id: string): Promise<PromotionTicket[]> {
@@ -125,7 +130,7 @@ class ShowListOfRecommendedPromotionsByUser {
     return this.promotionRepository.findRecommendedCandidates({
       tagIds,
       excludePromotionIds,
-      limit: CANDIDATE_LIMIT,
+      limit: this.CANDIDATE_LIMIT,
       join_image: true,
     });
   }
