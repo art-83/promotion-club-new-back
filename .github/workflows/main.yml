@@ -31,6 +31,13 @@ jobs:
           echo '${{ secrets.FIREBASE_CREDENTIALS }}' > src/config/promotion-club-pusher-firebase-credentials.json
           cp src/config/promotion-club-pusher-firebase-credentials.json dist/config/promotion-club-pusher-firebase-credentials.json
 
+      - name: Write SSL certificate
+        env:
+          SSL_CERTIFICATE: ${{ secrets.SSL_CERTIFICATE }}
+        run: |
+          mkdir -p dist/config
+          echo "$SSL_CERTIFICATE" > dist/config/sa-east-1-bundle.pem
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -65,11 +72,11 @@ jobs:
 
           # Stop and remove existing containers, then rebuild and start
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
-            docker compose down && \
-            docker compose build --no-cache && \
-            docker compose up -d && \
-            docker compose ps && \
-            docker compose logs --tail=50"
+            docker compose -f docker-compose.prod.yml down && \
+            docker compose -f docker-compose.prod.yml build --no-cache && \
+            docker compose -f docker-compose.prod.yml up -d && \
+            docker compose -f docker-compose.prod.yml ps && \
+            docker compose -f docker-compose.prod.yml logs --tail=50"
 
       - name: Verify Deployment
         env:
@@ -80,7 +87,7 @@ jobs:
           REMOTE_DIR="/home/$SSH_USER/indaiatuba-new-back"
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
             echo 'Checking container health...' && \
-            docker compose ps && \
+            docker compose -f docker-compose.prod.yml ps && \
             echo 'Application deployed successfully!'"
 
       - name: Cleanup SSH key
