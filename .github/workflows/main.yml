@@ -27,9 +27,8 @@ jobs:
 
       - name: Write firebase credentials
         run: |
-          mkdir -p src/config dist/config
-          echo '${{ secrets.FIREBASE_CREDENTIALS }}' > src/config/promotion-club-pusher-firebase-credentials.json
-          cp src/config/promotion-club-pusher-firebase-credentials.json dist/config/promotion-club-pusher-firebase-credentials.json
+          mkdir -p dist/config
+          echo '${{ secrets.FIREBASE_CREDENTIALS }}' > dist/config/promotion-club-pusher-firebase-credentials.json
 
       - name: Write SSL certificate
         env:
@@ -51,30 +50,56 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_ENV: ${{ secrets.SSH_ENV }}
+          CERTBOT_EMAIL: ${{ secrets.CERTBOT_EMAIL }}
         run: |
           # Define remote directory
           REMOTE_DIR="/home/$SSH_USER/indaiatuba-new-back"
+          CERT_PATH="/etc/letsencrypt/live/api.appclubededescontos.com.br/fullchain.pem"
 
           # Create remote directory if it doesn't exist
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "mkdir -p $REMOTE_DIR"
 
-          # Sync files to VPS (excluding node_modules and other unnecessary files)
+          # Sync files to VPS (only prod compose; exclude node_modules, src, other compose files)
           rsync -avz --delete \
             --exclude 'node_modules' \
+            --exclude 'src' \
             --exclude '.git' \
             --exclude '.github' \
             --exclude 'storage' \
+            --exclude 'docker-compose.yml' \
+            --exclude 'docker-compose.dev.yml' \
             -e "ssh -p $SSH_PORT" \
             ./ $SSH_USER@$SSH_HOST:$REMOTE_DIR/
 
           # Create .env file on VPS from secret
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "echo '$SSH_ENV' > $REMOTE_DIR/.env"
 
-          # Stop and remove existing containers, then rebuild and start
+          # Stop containers, rebuild, then start app and redis only (nginx needs certs first)
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
             docker compose -f docker-compose.prod.yml down && \
             docker compose -f docker-compose.prod.yml build --no-cache && \
-            docker compose -f docker-compose.prod.yml up -d && \
+            docker compose -f docker-compose.prod.yml up -d app redis"
+
+          # Ensure cert dirs exist; if cert missing and CERTBOT_EMAIL set, obtain cert (port 80 free while nginx is down)
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "sudo mkdir -p /etc/letsencrypt /var/www/certbot" || true
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
+            if [ ! -f $CERT_PATH ]; then \
+              if [ -n \"$CERTBOT_EMAIL\" ]; then \
+                docker compose -f docker-compose.prod.yml run --no-deps --rm -p 80:80 certbot certonly \
+                  --standalone \
+                  -d api.appclubededescontos.com.br \
+                  --email \"$CERTBOT_EMAIL\" \
+                  --agree-tos \
+                  --non-interactive; \
+              else \
+                echo 'Certificate not found. Set CERTBOT_EMAIL secret for first-time issuance, or create cert manually.'; \
+                exit 1; \
+              fi; \
+            fi"
+
+          # Start nginx (cert exists or was just obtained)
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
+            docker compose -f docker-compose.prod.yml up -d nginx && \
             docker compose -f docker-compose.prod.yml ps && \
             docker compose -f docker-compose.prod.yml logs --tail=50"
 
