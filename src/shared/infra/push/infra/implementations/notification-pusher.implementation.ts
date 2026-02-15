@@ -11,16 +11,17 @@ class NotificationPusher implements NotificationPusherProvider {
     this.client = this.initializeFirebaseSDK();
   }
 
-  public async push(tokens: string[], message: NotificationPushMessageDTO): Promise<NotificationPushResponseDTO> {
+  public async push(tokens: string[], data: Partial<NotificationPushMessageDTO>): Promise<NotificationPushResponseDTO> {
     const notificationPayload = {
       tokens: tokens,
       notification: {
-        title: message.title,
-        body: message.description,
+        title: data.title,
+        body: data.description,
       },
       android: {
         priority: "high",
       },
+      data: data.data,
     } as admin.messaging.MulticastMessage;
 
     const send = await this.client.sendEachForMulticast(notificationPayload);

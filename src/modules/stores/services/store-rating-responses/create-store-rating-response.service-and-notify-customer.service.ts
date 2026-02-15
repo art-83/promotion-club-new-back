@@ -40,6 +40,9 @@ class CreateStoreRatingAndNotifyCustomerService {
       const notificationPushMessage = {
         title,
         description,
+        data: {
+          store_id: storeRating.store.id,
+        },
       } as NotificationPushMessageDTO;
       await this.notificationPusher.push(tokens, notificationPushMessage);
     }
