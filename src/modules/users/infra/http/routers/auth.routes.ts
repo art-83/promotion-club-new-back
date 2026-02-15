@@ -15,6 +15,7 @@ authRouter.post(
       email: Joi.string().email().required(),
       password: Joi.string().required(),
       cpf: Joi.string().required(),
+      phone: Joi.string().required(),
     },
   }),
   authController.signUp
