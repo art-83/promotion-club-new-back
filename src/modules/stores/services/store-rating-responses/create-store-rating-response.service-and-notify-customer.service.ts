@@ -10,7 +10,7 @@ import UserPushToken from "../../../users/infra/orm/entities/user-push-token.ent
 import NotificationPushMessageDTO from "../../../../shared/infra/push/dtos/notification-push-message.dto";
 
 @injectable()
-class CreateStoreRatingResponseService {
+class CreateStoreRatingAndNotifyCustomerService {
   constructor(
     @inject("StoreRatingResponseRepository")
     private storeRatingResponseRepository: RepositoryProvider<StoreRatingResponse>,
@@ -51,4 +51,4 @@ class CreateStoreRatingResponseService {
   }
 }
 
-export default CreateStoreRatingResponseService;
+export default CreateStoreRatingAndNotifyCustomerService;
