@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "../../../../users/infra/orm/entities/user.entity";
 import Store from "./store.entity";
+import StoreRatingResponse from "./store-rating-response.entity";
 
 @Entity({ name: "store_ratings" })
 class StoreRating {
@@ -29,6 +30,9 @@ class StoreRating {
   @ManyToOne(() => Store, (store) => store.store_ratings)
   @JoinColumn({ name: "store_id" })
   store: Store;
+
+  @OneToMany(() => StoreRatingResponse, (store_rating_response) => store_rating_response.store_rating)
+  store_rating_responses: StoreRatingResponse[];
 }
 
 export default StoreRating;

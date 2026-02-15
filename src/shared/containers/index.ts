@@ -8,7 +8,6 @@ import HashProvider from "../infra/hash/infra/providers/hash.provider";
 import Hash from "../infra/hash/infra/implementations/hash.implementation";
 import JwtProvider from "../infra/jwt/infra/provider/jwt.provider";
 import Jwt from "../infra/jwt/infra/implementation/jwt.implementation";
-
 import UserPermissions from "../../modules/users/infra/orm/entities/user-permissions.entity";
 import UserPermissionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-permissions-repository.implementation";
 import Store from "../../modules/stores/infra/orm/entities/store.entity";
@@ -19,16 +18,16 @@ import StoreStoreCategory from "../../modules/stores/infra/orm/entities/store-st
 import StoreStoreCategoryRepository from "../../modules/stores/infra/orm/repositories/implementations/store-category-repository.implementation";
 import StoreRating from "../../modules/stores/infra/orm/entities/store-rating.entity";
 import StoreRatingRepository from "../../modules/stores/infra/orm/repositories/implementations/store-rating-repository.implementation";
+import StoreRatingResponse from "../../modules/stores/infra/orm/entities/store-rating-response.entity";
+import StoreRatingResponseRepository from "../../modules/stores/infra/orm/repositories/implementations/store-rating-response-repository.implementation";
 import Promotion from "../../modules/promotions/infra/orm/entities/promotion.entity";
 import PromotionRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-repository.implementation";
 import Invoice from "../../modules/invoices/infra/orm/entities/invoice.entity";
 import InvoiceRepository from "../../modules/invoices/infra/orm/repositories/implementations/invoice-repository.implementation";
 import ImageRepositoryProvider from "../../modules/images/infra/orm/repositories/providers/image-repository.provider";
 import ImageRepository from "../../modules/images/infra/orm/repositories/implementations/image-repository.implementation";
-
 import CacheProvider from "../infra/cache/infra/providers/cache.provider";
 import QrCodeCache from "../../modules/qr-code/infra/cache/implementation/qr-code-cache.implementation";
-
 import PromotionTicket from "../../modules/tickets/infra/orm/entities/promotion-ticket.entity";
 import PromotionTicketRepository from "../../modules/tickets/infra/orm/repositories/implementations/promotion-ticket-repository.implementation";
 import Tags from "../../modules/promotions/infra/orm/entities/tag.entity";
@@ -51,35 +50,25 @@ import UserBenefit from "../../modules/benefits/infra/orm/entities/user-benefit.
 import UserBenefitRepository from "../../modules/benefits/infra/orm/repositories/implementations/user-benefit-repository.implementation";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
-
 container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermissionsRepository", UserPermissionsRepository);
-
 container.registerSingleton<RepositoryProvider<Store>>("StoreRepository", StoreRepository);
 container.registerSingleton<RepositoryProvider<StoreCategory>>("StoreCategoryRepository", StoreCategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreStoreCategory>>("StoreStoreCategoryRepository", StoreStoreCategoryRepository);
 container.registerSingleton<RepositoryProvider<StoreRating>>("StoreRatingRepository", StoreRatingRepository);
+container.registerSingleton<RepositoryProvider<StoreRatingResponse>>("StoreRatingResponseRepository", StoreRatingResponseRepository);
 container.registerSingleton<RepositoryProvider<Promotion>>("PromotionRepository", PromotionRepository);
 container.registerSingleton<RepositoryProvider<Invoice>>("InvoiceRepository", InvoiceRepository);
-
 container.registerSingleton<RepositoryProvider<PromotionTicket>>("PromotionTicketRepository", PromotionTicketRepository);
-
 container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagRepository);
-
 container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
 container.registerSingleton<RepositoryProvider<PromotionCategory>>("PromotionCategoryRepository", PromotionCategoryRepository);
 container.registerSingleton<RepositoryProvider<PromotionPromotionCategory>>("PromotionPromotionCategoryRepository", PromotionPromotionCategoryRepository);
-
 container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
 container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOptionsRepository", UserStoreOptionsRepository);
 container.registerSingleton<RepositoryProvider<Benefit>>("BenefitRepository", BenefitRepository);
 container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitRepository", UserBenefitRepository);
-
 container.registerSingleton<ImageRepositoryProvider>("ImageRepository", ImageRepository);
-
 container.registerSingleton<HashProvider>("Hash", Hash);
-
 container.registerSingleton<JwtProvider>("Jwt", Jwt);
-
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);
-
 container.registerSingleton<NotificationPusherProvider>("NotificationPusher", NotificationPusher);

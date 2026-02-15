@@ -11,12 +11,12 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import UserPermissions from "./user-permissions.entity";
-import Store from "../../../../stores/infra/orm/entities/store.entity";
 import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ticket.entity";
 import UserPushToken from "./user-push-token.entity";
 import UserBenefit from "../../../../benefits/infra/orm/entities/user-benefit.entity";
 import UserStoreOptions from "./user-store-options.entity";
 import StoreRating from "../../../../stores/infra/orm/entities/store-rating.entity";
+import StoreRatingResponse from "../../../../stores/infra/orm/entities/store-rating-response.entity";
 
 @Entity({ name: "users" })
 class User {
@@ -31,6 +31,9 @@ class User {
 
   @Column({ unique: true })
   email: string;
+
+  @Column()
+  phone: string;
 
   @Column({ unique: true })
   cpf: string;
@@ -65,6 +68,9 @@ class User {
 
   @OneToMany(() => StoreRating, (store_rating) => store_rating.user)
   store_ratings: StoreRating[];
+
+  @OneToMany(() => StoreRatingResponse, (store_rating_response) => store_rating_response.user)
+  store_rating_responses: StoreRatingResponse[];
 }
 
 export default User;

@@ -2,10 +2,10 @@ import { Repository } from "typeorm";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import CreateInvoiceDTO from "../../../../dtos/invoices/create-invoice.dto";
 import InvoiceQueryOptionsDTO from "../../../../dtos/invoices/invoice-query-options.dto";
-import InvoiceRepositoryProvider from "../providers/invoice-repository.provider";
 import Invoice from "../../entities/invoice.entity";
+import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
 
-class InvoiceRepository implements InvoiceRepositoryProvider {
+class InvoiceRepository implements RepositoryProvider<Invoice> {
   private repository: Repository<Invoice>;
 
   constructor() {
@@ -19,7 +19,8 @@ class InvoiceRepository implements InvoiceRepositoryProvider {
     if (options.store_id) query.andWhere("invoices.store_id = :store_id", { store_id: options.store_id });
     if (options.created_at) query.andWhere("invoices.created_at = :created_at", { created_at: options.created_at });
     if (options.updated_at) query.andWhere("invoices.updated_at = :updated_at", { updated_at: options.updated_at });
-
+    if (options.status) query.andWhere("invoices.status ILIKE :status", { status: `%${options.status}%` }); 
+    
     if (options.join_store) {
       query.leftJoinAndSelect("invoices.store", "store");
     }

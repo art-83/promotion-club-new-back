@@ -17,6 +17,7 @@ class StoreRatingRepository implements RepositoryProvider<StoreRating> {
   public async find(options: Partial<StoreRatingQueryOptionsDto>): Promise<StoreRating[]> {
     const query = this.repository.createQueryBuilder("store_ratings");
     query.leftJoinAndSelect("store_ratings.user", "user");
+    query.leftJoinAndSelect("store_ratings.store_rating_responses", "store_rating_responses");
 
     if (options.id) query.andWhere("store_ratings.id = :id", { id: options.id });
     if (options.user_id) query.andWhere("store_ratings.user_id = :user_id", { user_id: options.user_id });

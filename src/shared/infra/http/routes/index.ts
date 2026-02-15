@@ -4,6 +4,7 @@ import storeRoutes from "../../../../modules/stores/infra/http/routers/store.rou
 import storeCategoryRoutes from "../../../../modules/stores/infra/http/routers/store-category.routes";
 import storeStoreCategoryRoutes from "../../../../modules/stores/infra/http/routers/store-store-category.routes";
 import storeRatingRoutes from "../../../../modules/stores/infra/http/routers/store-rating.routes";
+import storeRatingResponseRoutes from "../../../../modules/stores/infra/http/routers/store-rating-response.routes";
 import promotionRoutes from "../../../../modules/promotions/infra/http/routers/promotion.routes";
 import imageRoutes from "../../../../modules/images/infra/http/routers/image.routes";
 import qrCodeRoutes from "../../../../modules/qr-code/infra/http/routers/qr-code.routes";
@@ -33,6 +34,7 @@ routes.use("/stores", storeRoutes);
 routes.use("/store-categories", storeCategoryRoutes);
 routes.use("/store-store-categories", storeStoreCategoryRoutes);
 routes.use("/store-ratings", storeRatingRoutes);
+routes.use("/store-rating-responses", storeRatingResponseRoutes);
 routes.use("/promotions", promotionRoutes);
 routes.use("/images", imageRoutes);
 routes.use("/qr-codes", qrCodeRoutes);
