@@ -17,7 +17,10 @@ class PromotionPromotionCategoryRepository implements RepositoryProvider<Promoti
 
     if (options.id) query.andWhere("promotions_promotion_categories.id = :id", { id: options.id });
     if (options.promotion_id) query.andWhere("promotions_promotion_categories.promotion_id = :promotion_id", { promotion_id: options.promotion_id });
-    if (options.promotion_category_id) query.andWhere("promotions_promotion_categories.promotion_category_id = :promotion_category_id", { promotion_category_id: options.promotion_category_id });
+    if (options.promotion_category_id)
+      query.andWhere("promotions_promotion_categories.promotion_category_id = :promotion_category_id", {
+        promotion_category_id: options.promotion_category_id,
+      });
 
     query.andWhere("promotions_promotion_categories.deleted_at IS NULL");
 

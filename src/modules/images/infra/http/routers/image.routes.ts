@@ -7,11 +7,6 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const imageRoutes = Router();
 const imageController = new ImageController();
 
-imageRoutes.post(
-    "/",
-    permissionMiddleware(Permissions.CREATE_IMAGE),
-    imageUploader.single("image"),
-    imageController.create
-);
+imageRoutes.post("/", permissionMiddleware(Permissions.CREATE_IMAGE), imageUploader.single("image"), imageController.create);
 
 export default imageRoutes;

@@ -4,7 +4,7 @@ interface NotificationPushMessageDTO {
   data: {
     promotion_id: string;
     store_id: string;
-  }
+  };
 }
 
 export default NotificationPushMessageDTO;

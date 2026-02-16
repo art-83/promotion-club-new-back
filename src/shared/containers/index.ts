@@ -46,6 +46,8 @@ import NotificationPusher from "../infra/push/infra/implementations/notification
 import NotificationPusherProvider from "../infra/push/infra/providers/notification-pusher.provider";
 import Benefit from "../../modules/benefits/infra/orm/entities/benefit.entity";
 import BenefitRepository from "../../modules/benefits/infra/orm/repositories/implementations/benefit-repository.implementation";
+import BenefitTier from "../../modules/benefits/infra/orm/entities/benefit-tier.entity";
+import BenefitTierRepository from "../../modules/benefits/infra/orm/repositories/implementations/benefit-tier-repository.implementation";
 import UserBenefit from "../../modules/benefits/infra/orm/entities/user-benefit.entity";
 import UserBenefitRepository from "../../modules/benefits/infra/orm/repositories/implementations/user-benefit-repository.implementation";
 
@@ -62,10 +64,14 @@ container.registerSingleton<RepositoryProvider<PromotionTicket>>("PromotionTicke
 container.registerSingleton<RepositoryProvider<Tags>>("TagRepository", TagRepository);
 container.registerSingleton<RepositoryProvider<PromotionTag>>("PromotionTagRepository", PromotionTagRepository);
 container.registerSingleton<RepositoryProvider<PromotionCategory>>("PromotionCategoryRepository", PromotionCategoryRepository);
-container.registerSingleton<RepositoryProvider<PromotionPromotionCategory>>("PromotionPromotionCategoryRepository", PromotionPromotionCategoryRepository);
+container.registerSingleton<RepositoryProvider<PromotionPromotionCategory>>(
+  "PromotionPromotionCategoryRepository",
+  PromotionPromotionCategoryRepository
+);
 container.registerSingleton<RepositoryProvider<UserPushToken>>("UserPushTokenRepository", UserPushTokenRepository);
 container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOptionsRepository", UserStoreOptionsRepository);
 container.registerSingleton<RepositoryProvider<Benefit>>("BenefitRepository", BenefitRepository);
+container.registerSingleton<RepositoryProvider<BenefitTier>>("BenefitTierRepository", BenefitTierRepository);
 container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitRepository", UserBenefitRepository);
 container.registerSingleton<ImageRepositoryProvider>("ImageRepository", ImageRepository);
 container.registerSingleton<HashProvider>("Hash", Hash);

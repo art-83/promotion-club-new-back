@@ -1,4 +1,14 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import User from "../../../../users/infra/orm/entities/user.entity";
 import Store from "./store.entity";
 import StoreRatingResponse from "./store-rating-response.entity";

@@ -21,7 +21,8 @@ class StoreRatingResponseRepository implements RepositoryProvider<StoreRatingRes
 
     if (options.id) query.andWhere("store_rating_responses.id = :id", { id: options.id });
     if (options.user_id) query.andWhere("store_rating_responses.user_id = :user_id", { user_id: options.user_id });
-    if (options.store_rating_id) query.andWhere("store_rating_responses.store_rating_id = :store_rating_id", { store_rating_id: options.store_rating_id });
+    if (options.store_rating_id)
+      query.andWhere("store_rating_responses.store_rating_id = :store_rating_id", { store_rating_id: options.store_rating_id });
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 

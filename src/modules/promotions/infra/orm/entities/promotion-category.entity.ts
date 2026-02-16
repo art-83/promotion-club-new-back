@@ -1,4 +1,14 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import PromotionPromotionCategory from "./promotion-promotion-category.entity";
 import Store from "../../../../stores/infra/orm/entities/store.entity";
 

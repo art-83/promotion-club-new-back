@@ -5,7 +5,6 @@ import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/
 import PromotionTicketRepositoryProvider from "../../../tickets/infra/orm/repositories/providers/promotion-ticket-repository.provider";
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 
-
 @injectable()
 class ShowListOfRecommendedPromotionsByUser {
   private readonly CANDIDATE_LIMIT = 100;

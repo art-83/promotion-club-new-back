@@ -1,4 +1,3 @@
-
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,4 +11,4 @@ const imageStorage = multer.diskStorage({
 
 const imageUploader = multer({ storage: imageStorage });
 
-export default imageUploader;  
+export default imageUploader;
