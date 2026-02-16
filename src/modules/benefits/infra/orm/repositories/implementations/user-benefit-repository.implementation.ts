@@ -15,7 +15,7 @@ class UserBenefitRepository implements RepositoryProvider<UserBenefit> {
   public async find(options: Partial<UserBenefitsQueryOptionsDTO>): Promise<UserBenefit[]> {
     const query = this.repository.createQueryBuilder("user_benefit");
     query.leftJoinAndSelect("user_benefit.benefit", "benefit");
-    query.leftJoinAndSelect("user_benefit.user", "user");
+    
     if (options.id) query.andWhere("user_benefit.id = :id", { id: options.id });
     if (options.user_id) query.andWhere("user_benefit.user_id = :user_id", { user_id: options.user_id });
     if (options.benefit_id) query.andWhere("user_benefit.benefit_id = :benefit_id", { benefit_id: options.benefit_id });
