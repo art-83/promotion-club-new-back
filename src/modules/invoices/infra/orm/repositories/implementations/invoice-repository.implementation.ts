@@ -1,9 +1,9 @@
 import { Repository } from "typeorm";
 import dataSource from "../../../../../../shared/infra/orm/database";
-import CreateInvoiceDTO from "../../../../dtos/invoices/create-invoice.dto";
 import InvoiceQueryOptionsDTO from "../../../../dtos/invoices/invoice-query-options.dto";
 import Invoice from "../../entities/invoice.entity";
 import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/providers/repository.provider";
+import CreateOrUpdateInvoiceDTO from "../../../../dtos/invoices/create-or-update-invoice.dto";
 
 class InvoiceRepository implements RepositoryProvider<Invoice> {
   private repository: Repository<Invoice>;
@@ -36,7 +36,7 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     return await query.getMany();
   }
 
-  public async create(data: Partial<CreateInvoiceDTO>): Promise<Invoice> {
+  public async create(data: Partial<CreateOrUpdateInvoiceDTO>): Promise<Invoice> {
     const createInvoice = this.repository.create(data);
     const saveInvoice = await this.repository.save(createInvoice);
     return saveInvoice;

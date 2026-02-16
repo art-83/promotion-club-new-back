@@ -1,18 +1,18 @@
-import { inject, injectable } from "tsyringe";
+import { inject } from "tsyringe";
+import RepositoryProvider from "../../../shared/infra/orm/repositories/providers/repository.provider";
 import Invoice from "../infra/orm/entities/invoice.entity";
 import InvoiceQueryOptionsDTO from "../dtos/invoices/invoice-query-options.dto";
-import RepositoryProvider from "../../../shared/infra/orm/repositories/providers/repository.provider";
 
-@injectable()
-class ShowInvoicesServices {
+class ShowInvoiceService {
   constructor(
     @inject("InvoiceRepository")
     private invoiceRepository: RepositoryProvider<Invoice>
   ) {}
 
   public async execute(options: Partial<InvoiceQueryOptionsDTO>): Promise<Invoice[]> {
-    return await this.invoiceRepository.find(options);
+    const invoices = await this.invoiceRepository.find(options);
+    return invoices;
   }
 }
 
-export default ShowInvoicesServices;
+export default ShowInvoiceService;

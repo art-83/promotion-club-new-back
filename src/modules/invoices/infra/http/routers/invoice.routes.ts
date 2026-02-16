@@ -8,14 +8,19 @@ const invoiceRoutes = Router();
 const invoiceController = new InvoiceController();
 
 invoiceRoutes.post(
-  "/",
-  permissionMiddleware(Permissions.CREATE_INVOICE),
+  "/pay",
+  permissionMiddleware(Permissions.PAY_INVOICE),
+  invoiceController.pay
+);
+
+invoiceRoutes.post(
+  "/:id/approve",
   celebrate({
-    [Segments.BODY]: {
-      store_id: Joi.string().uuid().required(),
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
     },
   }),
-  invoiceController.create
+  invoiceController.approve
 );
 
 invoiceRoutes.get(
@@ -23,27 +28,15 @@ invoiceRoutes.get(
   permissionMiddleware(Permissions.SHOW_INVOICES),
   celebrate({
     [Segments.QUERY]: {
-      id: Joi.string().uuid(),
-      store_id: Joi.string().uuid(),
+      id: Joi.string().uuid().optional(),
+      store_id: Joi.string().uuid().optional(),
+      status: Joi.string().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
-      offset: Joi.number().integer(),
-      limit: Joi.number().integer(),
-      join_store: Joi.boolean(),
     },
   }),
   invoiceController.show
 );
 
-invoiceRoutes.delete(
-  "/:id",
-  permissionMiddleware(Permissions.DELETE_INVOICE),
-  celebrate({
-    [Segments.PARAMS]: {
-      id: Joi.string().uuid().required(),
-    },
-  }),
-  invoiceController.delete
-);
 
 export default invoiceRoutes;
