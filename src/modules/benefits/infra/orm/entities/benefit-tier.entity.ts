@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import Benefit from "./benefit.entity";
 
 @Entity({ name: "benefit_tiers" })
 class BenefitTier {
@@ -28,6 +29,9 @@ class BenefitTier {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Benefit, (benefit) => benefit.benefit_tier)
+  benefits: Benefit[];
 }
 
 export default BenefitTier;

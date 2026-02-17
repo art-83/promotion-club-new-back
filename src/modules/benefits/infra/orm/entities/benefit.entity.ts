@@ -11,8 +11,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import Image from "../../../../images/infra/orm/entities/image.entity";
-import Store from "../../../../stores/infra/orm/entities/store.entity";
 import UserBenefit from "./user-benefit.entity";
+import BenefitTier from "./benefit-tier.entity";
 
 @Entity({ name: "benefits" })
 class Benefit {
@@ -37,9 +37,9 @@ class Benefit {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => Store, (store) => store.benefits)
-  @JoinColumn({ name: "store_id" })
-  store: Store;
+  @ManyToOne(() => BenefitTier, (benefitTier) => benefitTier.benefits)
+  @JoinColumn({ name: "benefit_tier_id" })
+  benefit_tier: BenefitTier;
 
   @OneToOne(() => Image, (image) => image.benefit, { nullable: true })
   @JoinColumn({ name: "image_id" })
