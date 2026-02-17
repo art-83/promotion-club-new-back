@@ -12,9 +12,12 @@ class ShowUsersServices {
   public async execute(options: Partial<UserQueryOptionsDTO>) {
     // to /users/me
     if (options.id) {
-      const totalSpentByUser = await this.userRepository.totalSpentByUser(options.id);
+      const [user, totalSpentByUser] = await Promise.all([
+        this.userRepository.find({ id: options.id }),
+        this.userRepository.totalSpentByUser(options.id),
+      ]);
       return {
-        ...options,
+        ...user,
         total_spent: totalSpentByUser,
       };
     }
