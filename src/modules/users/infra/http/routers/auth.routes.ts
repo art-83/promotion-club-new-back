@@ -8,13 +8,13 @@ const authController = new AuthController();
 
 authRouter.post(
   "/sign-up",
-  telemetryMiddleware,
+  //telemetryMiddleware,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().required(),
-      cpf: Joi.string().required(),
+      password: Joi.string().min(8).max(32).required(),
+      cpf: Joi.string().min(11).max(11).required(),
       phone: Joi.string().required(),
     },
   }),
