@@ -1,4 +1,4 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../shared/infra/orm/repositories/providers/repository.provider";
 import Invoice from "../infra/orm/entities/invoice.entity";
 import CreateInvoiceDTO from "../dtos/invoices/create-or-update-invoice.dto";
@@ -6,6 +6,7 @@ import AppError from "../../../shared/infra/http/errors/app-error";
 import UserPermissions from "../../users/infra/orm/entities/user-permissions.entity";
 import UserPermissionsQueryOptionsDTO from "../../users/dtos/users-permissions/user-permissions-query-options.dto";
 
+@injectable()
 class RequestInvoicePaymentService {
   constructor(
     @inject("InvoiceRepository")

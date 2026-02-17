@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import RequestInvoicePaymentService from "../../../services/request-invoice-payment.service";
-import ConfirmInvoiceService from "../../../services/confirm-invoice.service";
 import ShowInvoiceService from "../../../services/show-invoice.service";
+import UpdateInvoiceService from "../../../services/update-invoice.service";
 
 class InvoiceController {
   public async pay(request: Request, response: Response) {
@@ -11,10 +11,10 @@ class InvoiceController {
     return response.status(201).json(invoice);
   }
 
-  public async approve(request: Request, response: Response) {
+  public async update(request: Request, response: Response) {
     const id = String(request.params.id);
-    const confirmInvoiceService = container.resolve(ConfirmInvoiceService);
-    await confirmInvoiceService.execute(id);
+    const updateInvoiceService = container.resolve(UpdateInvoiceService);
+    await updateInvoiceService.execute(id, request.body);
     return response.status(204).send();
   }
 

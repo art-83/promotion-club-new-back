@@ -13,14 +13,17 @@ invoiceRoutes.post(
   invoiceController.pay
 );
 
-invoiceRoutes.post(
-  "/:id/approve",
+invoiceRoutes.put(
+  "/:id",
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
     },
+    [Segments.BODY]: {
+      status: Joi.string().required().valid("PAID", "PENDING"),
+    },
   }),
-  invoiceController.approve
+  invoiceController.update
 );
 
 invoiceRoutes.get(
