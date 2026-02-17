@@ -24,6 +24,8 @@ services:
       - app_storage:/storage:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
+      - nginx_logs:/var/log/nginx
+    command: [nginx, '-g', 'daemon off;', '-g', 'error_log /var/log/nginx/error.log;']
     depends_on:
       - app
 
@@ -48,3 +50,4 @@ services:
 volumes:
   redis_data:
   app_storage:
+  nginx_logs:
