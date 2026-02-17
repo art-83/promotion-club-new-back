@@ -1,6 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import UserQueryOptionsDTO from "../../dtos/users/user-query-options.dto";
 import UserRepositoryProvider from "../../infra/orm/repositories/providers/user-repository.provider";
+import AppError from "../../../../shared/infra/http/errors/app-error";
+import User from "../../infra/orm/entities/user.entity";
 
 @injectable()
 class ShowUsersServices {
@@ -9,7 +11,7 @@ class ShowUsersServices {
     private userRepository: UserRepositoryProvider
   ) {}
 
-  public async execute(options: Partial<UserQueryOptionsDTO>) {
+  public async execute(options: Partial<UserQueryOptionsDTO>): Promise<User[]> {
     // to /users/me
     if (options.id) {
       const userQueryOptions = {
@@ -17,13 +19,17 @@ class ShowUsersServices {
         join_user_permissions: true,
       } as UserQueryOptionsDTO;
       const [user, totalSpentByUser] = await Promise.all([
-        this.userRepository.find(userQueryOptions),
+        (await this.userRepository.find(userQueryOptions)).at(0),
         this.userRepository.totalSpentByUser(options.id),
       ]);
-      return {
+      
+      if (!user) throw new AppError(404, "User not found");
+
+      const userWithTotalSpent = {
         ...user,
         total_spent: totalSpentByUser,
       };
+      return [userWithTotalSpent];
     }
     // to /users
     return await this.userRepository.find(options);
