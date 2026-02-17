@@ -12,7 +12,7 @@ import UserPermissionsQueryOptionsDTO from "../../users/dtos/users-permissions/u
 import UserPermissions from "../../users/infra/orm/entities/user-permissions.entity";
 
 @injectable()
-class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
+class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
   constructor(
     @inject("CacheProvider")
     private cache: CacheProvider<QrCodePayloadDto>,
@@ -70,11 +70,11 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService {
     const removeQrCode = await this.cache.delete(user_id);
     if (!removeQrCode) throw new AppError(404, "QrCode invalid or expired.");
 
-    const newScore = Number(Number(user.score) + Number(promotion.final_price));
-    await this.userRepository.update(user_id, { score: newScore });
+    const newPoints = Number(Number(user.points) + Number(promotion.final_price));
+    await this.userRepository.update(user_id, { points: newPoints });
 
     return { message: "QrCode validated successfuly.", createPromotionTicket };
   }
 }
 
-export default ValidateQrCodeAndCreatePromotionTicketAndUpdateUserScoreService;
+export default ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService;

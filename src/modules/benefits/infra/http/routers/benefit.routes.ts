@@ -32,7 +32,7 @@ benefitRoutes.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       description: Joi.string().required(),
-      score_required: Joi.number().required(),
+      points_required: Joi.number().required(),
       store_id: Joi.string().uuid().required(),
       image_id: Joi.string().uuid().optional(),
     },
@@ -50,7 +50,7 @@ benefitRoutes.put(
     [Segments.BODY]: {
       name: Joi.string().optional(),
       description: Joi.string().optional(),
-      score_required: Joi.number().optional(),
+      points_required: Joi.number().optional(),
       store_id: Joi.string().uuid().optional(),
       image_id: Joi.string().uuid().optional(),
     },

@@ -39,7 +39,7 @@ class User {
   cpf: string;
 
   @Column({ type: "decimal", default: 0 })
-  score: number;
+  points: number;
 
   @CreateDateColumn()
   created_at: Date;

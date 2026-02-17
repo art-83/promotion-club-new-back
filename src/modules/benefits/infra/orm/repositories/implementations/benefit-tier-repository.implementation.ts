@@ -14,8 +14,8 @@ class BenefitTierRepository implements RepositoryProvider<BenefitTier> {
     const query = this.repository.createQueryBuilder("benefit_tier");
     if (options.id) query.andWhere("benefit_tier.id = :id", { id: options.id });
     if (options.name) query.andWhere("benefit_tier.name = :name", { name: options.name });
-    if (options.minimum_score) query.andWhere("benefit_tier.minimum_score = :minimum_score", { minimum_score: options.minimum_score });
-    if (options.maximum_score) query.andWhere("benefit_tier.maximum_score = :maximum_score", { maximum_score: options.maximum_score });
+    if (options.minimum_points) query.andWhere("benefit_tier.minimum_points = :minimum_points", { minimum_points: options.minimum_points });
+    if (options.maximum_points) query.andWhere("benefit_tier.maximum_points = :maximum_points", { maximum_points: options.maximum_points });
     if (options.description) query.andWhere("benefit_tier.description = :description", { description: options.description });
     query.andWhere("benefit_tier.deleted_at IS NULL");
     return await query.getMany();

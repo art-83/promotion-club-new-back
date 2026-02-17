@@ -9,10 +9,10 @@ class BenefitTier {
   name: string;
 
   @Column()
-  minimum_score: number;
+  minimum_points: number;
 
   @Column()
-  maximum_score: number;
+  maximum_points: number;
 
   @Column()
   color_hex: string;

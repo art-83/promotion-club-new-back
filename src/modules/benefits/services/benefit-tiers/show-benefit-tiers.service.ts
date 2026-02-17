@@ -9,12 +9,7 @@ class ShowBenefitTiersService {
     private benefitTierRepository: RepositoryProvider<BenefitTier>
   ) {}
 
-  public async execute(query: Record<string, unknown>): Promise<BenefitTier[]> {
-    const options: Partial<BenefitTier> = {};
-    if (query.id) options.id = String(query.id);
-    if (query.name) options.name = String(query.name);
-    if (query.minimum_score !== undefined) options.minimum_score = Number(query.minimum_score);
-    if (query.maximum_score !== undefined) options.maximum_score = Number(query.maximum_score);
+  public async execute(options: Partial<BenefitTier>): Promise<BenefitTier[]> {
     return await this.benefitTierRepository.find(options);
   }
 }

@@ -14,8 +14,8 @@ benefitTierRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
       name: Joi.string().optional(),
-      minimum_score: Joi.number().optional(),
-      maximum_score: Joi.number().optional(),
+      minimum_points: Joi.number().optional(),
+      maximum_points: Joi.number().optional(),
     },
   }),
   benefitTierController.show
@@ -30,8 +30,8 @@ benefitTierRoutes.put(
     },
     [Segments.BODY]: {
       name: Joi.string().optional(),
-      minimum_score: Joi.number().optional(),
-      maximum_score: Joi.number().optional(),
+      minimum_points: Joi.number().optional(),
+      maximum_points: Joi.number().optional(),
       color_hex: Joi.string()
         .pattern(/^#[0-9A-Fa-f]{6}$/)
         .optional(),

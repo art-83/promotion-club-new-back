@@ -6,7 +6,7 @@ import UpdateBenefitTierService from "../../../services/benefit-tiers/update-ben
 class BenefitTierController {
   public async show(request: Request, response: Response) {
     const showBenefitTiersService = container.resolve(ShowBenefitTiersService);
-    const tiers = await showBenefitTiersService.execute(request.query as Record<string, unknown>);
+    const tiers = await showBenefitTiersService.execute(request.query);
     return response.status(200).json(tiers);
   }
 

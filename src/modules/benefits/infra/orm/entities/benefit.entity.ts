@@ -26,7 +26,7 @@ class Benefit {
   description: string;
 
   @Column()
-  score_required: number;
+  points_required: number;
 
   @CreateDateColumn()
   created_at: Date;
