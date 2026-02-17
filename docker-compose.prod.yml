@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   app:
     build:
@@ -14,7 +16,6 @@ services:
   nginx:
     image: nginx:alpine
     container_name: indaiatuba-new-back-nginx
-    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -23,8 +24,7 @@ services:
       - app_storage:/storage:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
-      - nginx_logs:/var/log/nginx
-    command: ["sh", "-c", "touch /var/log/nginx/access.log /var/log/nginx/error.log && chown -R nginx:nginx /var/log/nginx && exec nginx -g 'daemon off;' -g 'error_log /var/log/nginx/error.log;'"]
+    command: [nginx, '-g', 'daemon off; error_log /dev/null;']
     depends_on:
       - app
 
@@ -49,4 +49,3 @@ services:
 volumes:
   redis_data:
   app_storage:
-  nginx_logs:
