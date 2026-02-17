@@ -27,11 +27,18 @@ class CreateUserBenefitService {
     if (!benefit) throw new AppError(404, "Benefit not found.");
 
     if (user.score < benefit.score_required) throw new AppError(400, "User does not have enough score to claim this benefit.");
-
+      
     data.user = user;
     data.benefit = benefit;
 
-    return await this.userBenefitRepository.create(data);
+    const newScore = Number(Number(user.score) - Number(benefit.score_required));
+
+    const [updateUser, createUserBenefit] = await Promise.all([
+      this.userRepository.update(user.id, { score: newScore }),
+      this.userBenefitRepository.create(data),
+    ]);
+
+    return createUserBenefit;
   }
 }
 

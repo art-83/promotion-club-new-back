@@ -3,8 +3,9 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import User from "../../entities/user.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import UserQueryOptionsDTO from "../../../../dtos/users/user-query-options.dto";
+import UserRepositoryProvider from "../providers/user-repository.provider";
 
-class UserRepository implements RepositoryProvider<User> {
+class UserRepository implements UserRepositoryProvider {
   private repository: Repository<User>;
 
   constructor() {
@@ -63,6 +64,18 @@ class UserRepository implements RepositoryProvider<User> {
 
   public async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
+  }
+
+  public async totalSpentByUser(id: string): Promise<number> {
+    const query = await this.repository.createQueryBuilder("users");
+
+    query.leftJoinAndSelect("users.promotion_ticket", "promotion_ticket");
+    query.leftJoinAndSelect("promotion_ticket.promotion", "promotion");
+    query.select("SUM(promotion.final_price)", "total_spent");
+
+    const result = await query.getRawOne();
+
+    return result.total_spent;
   }
 }
 

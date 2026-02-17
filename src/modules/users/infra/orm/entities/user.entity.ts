@@ -54,8 +54,8 @@ class User {
   @OneToOne(() => UserPermissions, (user_permissions) => user_permissions.user)
   user_permissions: UserPermissions;
 
-  @OneToMany(() => PromotionTicket, (promotional_ticket) => promotional_ticket.user)
-  promotional_ticket: PromotionTicket[];
+  @OneToMany(() => PromotionTicket, (promotion_ticket) => promotion_ticket.user)
+  promotion_ticket: PromotionTicket[];
 
   @OneToMany(() => UserPushToken, (user_push_token) => user_push_token.user)
   user_push_token: UserPushToken[];

@@ -1,16 +1,24 @@
 import { inject, injectable } from "tsyringe";
 import UserQueryOptionsDTO from "../../dtos/users/user-query-options.dto";
-import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
-import User from "../../infra/orm/entities/user.entity";
+import UserRepositoryProvider from "../../infra/orm/repositories/providers/user-repository.provider";
 
 @injectable()
 class ShowUsersServices {
   constructor(
     @inject("UserRepository")
-    private userRepository: RepositoryProvider<User>
+    private userRepository: UserRepositoryProvider
   ) {}
 
-  public async execute(options: Partial<UserQueryOptionsDTO>): Promise<User[]> {
+  public async execute(options: Partial<UserQueryOptionsDTO>) {
+    // to /users/me
+    if (options.id) {
+      const totalSpentByUser = await this.userRepository.totalSpentByUser(options.id);
+      return {
+        ...options,
+        total_spent: totalSpentByUser,
+      };
+    }
+    // to /users
     return await this.userRepository.find(options);
   }
 }

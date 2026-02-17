@@ -16,7 +16,7 @@ class PromotionTicket {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToOne(() => User, (user) => user.promotional_ticket, {
+  @ManyToOne(() => User, (user) => user.promotion_ticket, {
     nullable: true,
   })
   @JoinColumn({ name: "user_id" })
