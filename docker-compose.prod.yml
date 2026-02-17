@@ -25,7 +25,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
       - nginx_logs:/var/log/nginx
-    command: [nginx, '-g', 'daemon off;', '-g', 'error_log /var/log/nginx/error.log;']
+    command: ["sh", "-c", "touch /var/log/nginx/access.log /var/log/nginx/error.log && chown -R nginx:nginx /var/log/nginx && exec nginx -g 'daemon off;' -g 'error_log /var/log/nginx/error.log;'"]
     depends_on:
       - app
 
