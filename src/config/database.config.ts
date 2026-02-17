@@ -11,7 +11,7 @@ const dataSourceOptions = {
   entities: [__dirname + String(process.env.TYPEORM_ENTITIES)],
   migrations: [__dirname + String(process.env.TYPEORM_MIGRATIONS)],
   synchronize: true,
-  dropSchema: true, // pelo amor de jesus cristo nao descomenta essa porra
+  //dropSchema: true, // pelo amor de jesus cristo nao descomenta essa porra
   ssl: {
     ca: fs.readFileSync(__dirname + "/sa-east-1-bundle.pem"),
   },

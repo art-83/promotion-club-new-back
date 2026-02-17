@@ -14,9 +14,9 @@ class BenefitRepository implements RepositoryProvider<Benefit> {
   public async find(options: Partial<BenefitsQueryOptionsDTO>): Promise<Benefit[]> {
     const query = this.repository.createQueryBuilder("benefit");
     if (options.id) query.andWhere("benefit.id = :id", { id: options.id });
-    if (options.store_id) query.andWhere("benefit.store_id = :store_id", { store_id: options.store_id });
+    if (options.benefit_tier_id) query.andWhere("benefit.benefit_tier_id = :benefit_tier_id", { benefit_tier_id: options.benefit_tier_id });
     if (options.join_image) query.leftJoinAndSelect("benefit.image", "image");
-    if (options.join_store) query.leftJoinAndSelect("benefit.store", "store");
+    if (options.join_benefit_tier) query.leftJoinAndSelect("benefit.benefit_tier", "benefit_tier");
     query.andWhere("benefit.deleted_at IS NULL");
 
     if (options.start_date) query.andWhere("benefit.created_at >= :start_date", { start_date: options.start_date });

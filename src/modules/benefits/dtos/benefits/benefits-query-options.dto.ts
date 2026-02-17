@@ -2,9 +2,9 @@ import DefaultQueryOptions from "../../../../shared/infra/orm/dtos/default-query
 import Benefit from "../../infra/orm/entities/benefit.entity";
 
 interface BenefitsQueryOptionsDTO extends Benefit, DefaultQueryOptions {
-  store_id: string;
+  benefit_tier_id: string;
   join_image: boolean;
-  join_store: boolean;
+  join_benefit_tier: boolean;
 }
 
 export default BenefitsQueryOptionsDTO;

@@ -16,7 +16,6 @@ import Tag from "../../../../promotions/infra/orm/entities/tag.entity";
 import StoreStoreCategory from "./store-store-category.entity";
 import Invoice from "../../../../invoices/infra/orm/entities/invoice.entity";
 import UserStoreOptions from "../../../../users/infra/orm/entities/user-store-options.entity";
-import Benefit from "../../../../benefits/infra/orm/entities/benefit.entity";
 import StoreRating from "./store-rating.entity";
 import PromotionCategory from "../../../../promotions/infra/orm/entities/promotion-category.entity";
 
@@ -74,9 +73,6 @@ class Store {
 
   @OneToMany(() => UserStoreOptions, (user_store_options) => user_store_options.store)
   user_store_options: UserStoreOptions[];
-
-  @OneToMany(() => Benefit, (benefit) => benefit.store)
-  benefits: Benefit[];
 
   @OneToMany(() => StoreRating, (store_rating) => store_rating.store)
   store_ratings: StoreRating[];
