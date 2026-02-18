@@ -36,7 +36,8 @@ invoiceRoutes.get(
       was_paid: Joi.boolean().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
-      join_store: Joi.boolean(),
+      join_store: Joi.boolean().optional(),
+      join_file: Joi.boolean().optional(),
     },
   }),
   invoiceController.show
