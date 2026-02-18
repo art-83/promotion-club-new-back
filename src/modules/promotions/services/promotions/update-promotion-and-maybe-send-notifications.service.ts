@@ -4,7 +4,7 @@ import Promotion from "../../infra/orm/entities/promotion.entity";
 import CreateOrUpdatePromotionDTO from "../../dtos/promotions/create-or-update-promotion.dto";
 import AppError from "../../../../shared/infra/http/errors/app-error";
 import Store from "../../../stores/infra/orm/entities/store.entity";
-import Image from "../../../images/infra/orm/entities/image.entity";
+import File from "../../../files/infra/orm/entities/file.entity";
 import NotificationPusherProvider from "../../../../shared/infra/push/infra/providers/notification-pusher.provider";
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
 import NotificationPushMessageDTO from "../../../../shared/infra/push/dtos/notification-push-message.dto";
@@ -19,8 +19,8 @@ class UpdatePromotionService {
     private promotionRepository: RepositoryProvider<Promotion>,
     @inject("StoreRepository")
     private storeRepository: RepositoryProvider<Store>,
-    @inject("ImageRepository")
-    private imageRepository: RepositoryProvider<Image>,
+    @inject("FileRepository")
+    private fileRepository: RepositoryProvider<File>,
     @inject("UserPushTokenRepository")
     private userPushTokenRepository: RepositoryProvider<UserPushToken>,
     @inject("NotificationPusher")
@@ -44,10 +44,10 @@ class UpdatePromotionService {
       data.store = store;
     }
 
-    if (data.image_id) {
-      const image = (await this.imageRepository.find({ id: data.image_id })).at(0);
-      if (!image) throw new AppError(404, "Image not found.");
-      data.image = image;
+    if (data.file_id) {
+      const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
+      if (!file) throw new AppError(404, "File not found.");
+      data.file = file;
     }
 
     if (data.price || data.discount_percentage) {

@@ -130,7 +130,7 @@ class ShowListOfRecommendedPromotionsByUser {
       tagIds,
       excludePromotionIds,
       limit: this.CANDIDATE_LIMIT,
-      join_image: true,
+      join_file: true,
     });
   }
 
@@ -190,7 +190,7 @@ class ShowListOfRecommendedPromotionsByUser {
       not_expired: true,
       limit: this.RECOMMENDATION_LIMIT,
       join_store: true,
-      join_image: true,
+      join_file: true,
     };
     return this.promotionRepository.find(options);
   }

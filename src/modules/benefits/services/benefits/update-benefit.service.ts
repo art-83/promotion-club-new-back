@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Benefit from "../../infra/orm/entities/benefit.entity";
 import BenefitTier from "../../infra/orm/entities/benefit-tier.entity";
-import ImageRepositoryProvider from "../../../images/infra/orm/repositories/providers/image-repository.provider";
+import FileRepositoryProvider from "../../../files/infra/orm/repositories/providers/file-repository.provider";
 import AppError from "../../../../shared/infra/http/errors/app-error";
 import CreateOrUpdateBenefitsDTO from "../../dtos/benefits/create-or-update-benefits.dto";
 
@@ -13,8 +13,8 @@ class UpdateBenefitService {
     private benefitRepository: RepositoryProvider<Benefit>,
     @inject("BenefitTierRepository")
     private benefitTierRepository: RepositoryProvider<BenefitTier>,
-    @inject("ImageRepository")
-    private imageRepository: ImageRepositoryProvider
+    @inject("FileRepository")
+    private fileRepository: FileRepositoryProvider
   ) {}
 
   public async execute(id: string, data: Partial<CreateOrUpdateBenefitsDTO>): Promise<void> {
@@ -27,10 +27,10 @@ class UpdateBenefitService {
       data.benefit_tier = benefitTier;
     }
 
-    if (data.image_id) {
-      const image = (await this.imageRepository.find({ id: data.image_id })).at(0);
-      if (!image) throw new AppError(404, "Image not found.");
-      data.image = image;
+    if (data.file_id) {
+      const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
+      if (!file) throw new AppError(404, "File not found.");
+      data.file = file;
     }
 
     await this.benefitRepository.update(id, data);

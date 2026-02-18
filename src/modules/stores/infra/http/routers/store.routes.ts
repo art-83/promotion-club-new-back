@@ -18,7 +18,7 @@ storeRoutes.post(
       city: Joi.string().required(),
       state: Joi.string().required(),
       number: Joi.string().required(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   storeController.create
@@ -36,7 +36,7 @@ storeRoutes.get(
       city: Joi.string(),
       state: Joi.string(),
       number: Joi.string(),
-      join_image: Joi.boolean(),
+      join_file: Joi.boolean(),
       offset: Joi.number(),
       limit: Joi.number(),
     },
@@ -58,7 +58,7 @@ storeRoutes.put(
       city: Joi.string().optional(),
       state: Joi.string().optional(),
       number: Joi.string().optional(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   storeController.update

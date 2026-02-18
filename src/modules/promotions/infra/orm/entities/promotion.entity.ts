@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import Store from "../../../../stores/infra/orm/entities/store.entity";
-import Image from "../../../../images/infra/orm/entities/image.entity";
+import File from "../../../../files/infra/orm/entities/file.entity";
 import PromotionTag from "./promotion-tag.entity";
 import PromotionTicket from "../../../../tickets/infra/orm/entities/promotion-ticket.entity";
 import PromotionPromotionCategory from "./promotion-promotion-category.entity";
@@ -52,9 +52,9 @@ class Promotion {
   @JoinColumn({ name: "store_id" })
   store: Store;
 
-  @OneToOne(() => Image, (image) => image.promotion)
-  @JoinColumn({ name: "image_id" })
-  image: Image;
+  @OneToOne(() => File, (file) => file.promotion)
+  @JoinColumn({ name: "file_id" })
+  file: File;
 
   @OneToMany(() => PromotionTag, (promotionTag) => promotionTag.promotion)
   promotion_tags: PromotionTag[];

@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import Image from "../../../../images/infra/orm/entities/image.entity";
+import File from "../../../../files/infra/orm/entities/file.entity";
 import UserPermissions from "../../../../users/infra/orm/entities/user-permissions.entity";
 import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
 import Tag from "../../../../promotions/infra/orm/entities/tag.entity";
@@ -26,6 +26,9 @@ class Store {
 
   @Column()
   name: string;
+
+  @Column()
+  invoice_taxes_percentage: number;
 
   @Column()
   street: string;
@@ -52,9 +55,9 @@ class Store {
   deleted_at: Date;
 
   // relations
-  @OneToOne(() => Image)
-  @JoinColumn({ name: "image_id" })
-  image: Image;
+  @OneToOne(() => File)
+  @JoinColumn({ name: "file_id" })
+  file: File;
 
   @OneToMany(() => Promotion, (promotion) => promotion.store)
   promotions: Promotion[];

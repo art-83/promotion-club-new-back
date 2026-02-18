@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import Store from "../../../../stores/infra/orm/entities/store.entity";
+import File from "../../../../files/infra/orm/entities/file.entity";
 
 @Entity({ name: "invoices" })
 class Invoice {
@@ -21,6 +22,10 @@ class Invoice {
   @ManyToOne(() => Store, (store) => store.invoices, { nullable: true })
   @JoinColumn({ name: "store_id" })
   store: Store;
+
+  @OneToOne(() => File, (file) => file.invoice)
+  @JoinColumn({ name: "file_id" })
+  file: File;
 }
 
 export default Invoice;

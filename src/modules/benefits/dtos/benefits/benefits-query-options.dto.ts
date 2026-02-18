@@ -3,7 +3,7 @@ import Benefit from "../../infra/orm/entities/benefit.entity";
 
 interface BenefitsQueryOptionsDTO extends Benefit, DefaultQueryOptions {
   benefit_tier_id: string;
-  join_image: boolean;
+  join_file: boolean;
   join_benefit_tier: boolean;
 }
 

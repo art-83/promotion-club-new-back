@@ -1,9 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import RepositoryProvider from "../../../../shared/infra/orm/repositories/providers/repository.provider";
 import Store from "../../infra/orm/entities/store.entity";
-import Image from "../../../images/infra/orm/entities/image.entity";
 import AppError from "../../../../shared/infra/http/errors/app-error";
-import ImageRepositoryProvider from "../../../images/infra/orm/repositories/providers/image-repository.provider";
+import FileRepositoryProvider from "../../../files/infra/orm/repositories/providers/file-repository.provider";
 import CreateStoreDTO from "../../dtos/stores/create-or-update-store.dto";
 
 @injectable()
@@ -11,15 +10,15 @@ class CreateStoreService {
   constructor(
     @inject("StoreRepository")
     private storeRepository: RepositoryProvider<Store>,
-    @inject("ImageRepository")
-    private imageRepository: ImageRepositoryProvider
+    @inject("FileRepository")
+    private fileRepository: FileRepositoryProvider
   ) {}
 
   public async execute(data: CreateStoreDTO): Promise<Store> {
-    if (data.image_id) {
-      const image = (await this.imageRepository.find({ id: data.image_id })).at(0);
-      if (!image) throw new AppError(404, "Image not found");
-      data.image = image;
+    if (data.file_id) {
+      const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
+      if (!file) throw new AppError(404, "File not found");
+      data.file = file;
     }
 
     const store = await this.storeRepository.create(data);

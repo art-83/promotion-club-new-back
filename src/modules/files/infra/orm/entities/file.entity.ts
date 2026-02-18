@@ -2,9 +2,10 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOn
 import Store from "../../../../stores/infra/orm/entities/store.entity";
 import Promotion from "../../../../promotions/infra/orm/entities/promotion.entity";
 import Benefit from "../../../../benefits/infra/orm/entities/benefit.entity";
+import Invoice from "../../../../invoices/infra/orm/entities/invoice.entity";
 
-@Entity({ name: "images" })
-class Image {
+@Entity({ name: "files" })
+class File {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -26,14 +27,17 @@ class Image {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @OneToOne(() => Store, (store) => store.image)
+  @OneToOne(() => Store, (store) => store.file)
   store: Store;
 
-  @OneToOne(() => Promotion, (promotion) => promotion.image)
+  @OneToOne(() => Promotion, (promotion) => promotion.file)
   promotion: Promotion;
 
-  @OneToOne(() => Benefit, (benefit) => benefit.image)
+  @OneToOne(() => Benefit, (benefit) => benefit.file)
   benefit: Benefit;
+
+  @OneToOne(() => Invoice, (invoice) => invoice.file)
+  invoice: Invoice;
 }
 
-export default Image;
+export default File;

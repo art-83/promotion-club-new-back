@@ -9,7 +9,7 @@ interface PromotionQueryOptionsDTO extends Promotion, DefaultQueryOptions {
   not_expired?: boolean;
 
   join_store: boolean;
-  join_image: boolean;
+  join_file: boolean;
 }
 
 export default PromotionQueryOptionsDTO;

@@ -14,7 +14,7 @@ benefitRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
       benefit_tier_id: Joi.string().uuid().optional(),
-      join_image: Joi.boolean().optional(),
+      join_file: Joi.boolean().optional(),
       join_benefit_tier: Joi.boolean().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
@@ -34,7 +34,7 @@ benefitRoutes.post(
       description: Joi.string().required(),
       points_required: Joi.number().required(),
       benefit_tier_id: Joi.string().uuid().required(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   benefitController.create
@@ -52,7 +52,7 @@ benefitRoutes.put(
       description: Joi.string().optional(),
       points_required: Joi.number().optional(),
       benefit_tier_id: Joi.string().uuid().optional(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   benefitController.update

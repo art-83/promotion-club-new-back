@@ -6,7 +6,7 @@ import storeStoreCategoryRoutes from "../../../../modules/stores/infra/http/rout
 import storeRatingRoutes from "../../../../modules/stores/infra/http/routers/store-rating.routes";
 import storeRatingResponseRoutes from "../../../../modules/stores/infra/http/routers/store-rating-response.routes";
 import promotionRoutes from "../../../../modules/promotions/infra/http/routers/promotion.routes";
-import imageRoutes from "../../../../modules/images/infra/http/routers/image.routes";
+import fileRoutes from "../../../../modules/files/infra/http/routers/file.routes";
 import qrCodeRoutes from "../../../../modules/qr-code/infra/http/routers/qr-code.routes";
 import ticketRoutes from "../../../../modules/tickets/infra/http/routers/ticket.routes";
 import invoiceRoutes from "../../../../modules/invoices/infra/http/routers/invoice.routes";
@@ -37,7 +37,7 @@ routes.use("/store-store-categories", storeStoreCategoryRoutes);
 routes.use("/store-ratings", storeRatingRoutes);
 routes.use("/store-rating-responses", storeRatingResponseRoutes);
 routes.use("/promotions", promotionRoutes);
-routes.use("/images", imageRoutes);
+routes.use("/files", fileRoutes);
 routes.use("/qr-codes", qrCodeRoutes);
 routes.use("/tickets", ticketRoutes);
 routes.use("/invoices", invoiceRoutes);

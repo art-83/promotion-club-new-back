@@ -68,8 +68,8 @@ class PromotionRepository implements PromotionRepositoryProvider {
       query.leftJoinAndSelect("promotions.store", "store");
     }
 
-    if (options.join_image) {
-      query.leftJoinAndSelect("promotions.image", "image");
+    if (options.join_file) {
+      query.leftJoinAndSelect("promotions.file", "file");
     }
 
     if (options.start_date)
@@ -121,7 +121,7 @@ class PromotionRepository implements PromotionRepositoryProvider {
   }
 
   public async findRecommendedCandidates(options: FindRecommendedOptionsDTO): Promise<Promotion[]> {
-    const { tagIds, excludePromotionIds, limit = 100, join_image = true } = options;
+    const { tagIds, excludePromotionIds, limit = 100, join_file = true } = options;
     if (!tagIds.length) return [];
 
     const query = this.repository.createQueryBuilder("promotions");
@@ -140,8 +140,8 @@ class PromotionRepository implements PromotionRepositoryProvider {
       query.andWhere("promotions.id NOT IN (:...excludePromotionIds)", { excludePromotionIds });
     }
 
-    if (join_image) {
-      query.leftJoinAndSelect("promotions.image", "image");
+    if (join_file) {
+      query.leftJoinAndSelect("promotions.file", "file");
     }
 
     query.orderBy("promotions.created_at", "DESC");

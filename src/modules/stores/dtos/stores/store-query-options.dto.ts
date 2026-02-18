@@ -2,7 +2,7 @@ import DefaultQueryOptions from "../../../../shared/infra/orm/dtos/default-query
 import Store from "../../infra/orm/entities/store.entity";
 
 interface StoreQueryOptionsDTO extends Store, DefaultQueryOptions {
-  join_image: boolean;
+  join_file: boolean;
   with_ratings_and_promotions?: boolean;
 }
 

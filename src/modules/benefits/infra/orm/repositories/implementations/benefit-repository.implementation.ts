@@ -15,7 +15,7 @@ class BenefitRepository implements RepositoryProvider<Benefit> {
     const query = this.repository.createQueryBuilder("benefit");
     if (options.id) query.andWhere("benefit.id = :id", { id: options.id });
     if (options.benefit_tier_id) query.andWhere("benefit.benefit_tier_id = :benefit_tier_id", { benefit_tier_id: options.benefit_tier_id });
-    if (options.join_image) query.leftJoinAndSelect("benefit.image", "image");
+    if (options.join_file) query.leftJoinAndSelect("benefit.file", "file");
     if (options.join_benefit_tier) query.leftJoinAndSelect("benefit.benefit_tier", "benefit_tier");
     query.andWhere("benefit.deleted_at IS NULL");
 

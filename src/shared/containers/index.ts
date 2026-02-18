@@ -24,8 +24,8 @@ import Promotion from "../../modules/promotions/infra/orm/entities/promotion.ent
 import PromotionRepository from "../../modules/promotions/infra/orm/repositories/implementations/promotion-repository.implementation";
 import Invoice from "../../modules/invoices/infra/orm/entities/invoice.entity";
 import InvoiceRepository from "../../modules/invoices/infra/orm/repositories/implementations/invoice-repository.implementation";
-import ImageRepositoryProvider from "../../modules/images/infra/orm/repositories/providers/image-repository.provider";
-import ImageRepository from "../../modules/images/infra/orm/repositories/implementations/image-repository.implementation";
+import FileRepositoryProvider from "../../modules/files/infra/orm/repositories/providers/file-repository.provider";
+import FileRepository from "../../modules/files/infra/orm/repositories/implementations/file-repository.implementation";
 import CacheProvider from "../infra/cache/infra/providers/cache.provider";
 import QrCodeCache from "../../modules/qr-code/infra/cache/implementation/qr-code-cache.implementation";
 import PromotionTicket from "../../modules/tickets/infra/orm/entities/promotion-ticket.entity";
@@ -73,7 +73,7 @@ container.registerSingleton<RepositoryProvider<UserStoreOptions>>("UserStoreOpti
 container.registerSingleton<RepositoryProvider<Benefit>>("BenefitRepository", BenefitRepository);
 container.registerSingleton<RepositoryProvider<BenefitTier>>("BenefitTierRepository", BenefitTierRepository);
 container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitRepository", UserBenefitRepository);
-container.registerSingleton<ImageRepositoryProvider>("ImageRepository", ImageRepository);
+container.registerSingleton<FileRepositoryProvider>("FileRepository", FileRepository);
 container.registerSingleton<HashProvider>("Hash", Hash);
 container.registerSingleton<JwtProvider>("Jwt", Jwt);
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);

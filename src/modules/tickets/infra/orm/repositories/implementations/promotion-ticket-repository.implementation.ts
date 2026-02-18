@@ -153,7 +153,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
       .createQueryBuilder("ticket")
       .withDeleted()
       .leftJoinAndSelect("ticket.promotion", "promotion")
-      .leftJoinAndSelect("promotion.image", "image")
+      .leftJoinAndSelect("promotion.file", "file")
       .leftJoinAndSelect("promotion.store", "store")
       .where("ticket.user_id = :user_id", { user_id })
       .andWhere("ticket.deleted_at IS NULL")

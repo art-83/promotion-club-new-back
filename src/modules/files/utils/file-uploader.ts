@@ -1,14 +1,14 @@
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 
-const imageStorage = multer.diskStorage({
-  destination: __dirname + "/../../../../storage/images",
+const fileStorage = multer.diskStorage({
+  destination: __dirname + "/../../../../storage/files",
   filename: (req, file, cb) => {
     const fileName = `${uuidv4()}-${file.originalname}`;
     return cb(null, fileName);
   },
 });
 
-const imageUploader = multer({ storage: imageStorage });
+const fileUploader = multer({ storage: fileStorage });
 
-export default imageUploader;
+export default fileUploader;

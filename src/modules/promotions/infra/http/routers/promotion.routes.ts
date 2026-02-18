@@ -17,7 +17,7 @@ promotionRoutes.post(
       discount_percentage: Joi.number().required(),
       expire_at: Joi.date().required(),
       store_id: Joi.string().uuid().required(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   promotionController.create
@@ -44,7 +44,7 @@ promotionRoutes.get(
       limit: Joi.number().integer(),
       is_approved: Joi.boolean().default(true),
       join_store: Joi.boolean(),
-      join_image: Joi.boolean(),
+      join_file: Joi.boolean(),
     },
   }),
   promotionController.show
@@ -64,7 +64,7 @@ promotionRoutes.put(
       expire_at: Joi.date().optional(),
       is_approved: Joi.boolean().optional(),
       store_id: Joi.string().uuid().optional(),
-      image_id: Joi.string().uuid().optional(),
+      file_id: Joi.string().uuid().optional(),
     },
   }),
   promotionController.update

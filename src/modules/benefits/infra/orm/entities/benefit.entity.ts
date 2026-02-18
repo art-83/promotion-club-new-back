@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import Image from "../../../../images/infra/orm/entities/image.entity";
+import File from "../../../../files/infra/orm/entities/file.entity";
 import UserBenefit from "./user-benefit.entity";
 import BenefitTier from "./benefit-tier.entity";
 
@@ -41,9 +41,9 @@ class Benefit {
   @JoinColumn({ name: "benefit_tier_id" })
   benefit_tier: BenefitTier;
 
-  @OneToOne(() => Image, (image) => image.benefit, { nullable: true })
-  @JoinColumn({ name: "image_id" })
-  image: Image;
+  @OneToOne(() => File, (file) => file.benefit, { nullable: true })
+  @JoinColumn({ name: "file_id" })
+  file: File;
 
   @OneToMany(() => UserBenefit, (userBenefit) => userBenefit.benefit)
   user_benefits: UserBenefit[];
