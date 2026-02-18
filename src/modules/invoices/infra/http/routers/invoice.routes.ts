@@ -43,7 +43,7 @@ invoiceRoutes.get(
 
 invoiceRoutes.delete(
   "/:id",
-  permissionMiddleware(Permissions.SHOW_INVOICES),
+  permissionMiddleware(Permissions.DELETE_INVOICE),
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
