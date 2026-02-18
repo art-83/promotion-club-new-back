@@ -24,8 +24,6 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     if (options.updated_at) query.andWhere("invoices.updated_at = :updated_at", { updated_at: options.updated_at });
     if (options.was_paid !== undefined) query.andWhere("invoices.was_paid = :was_paid", { was_paid: options.was_paid });
 
-    
-
     if (options.start_date) query.andWhere("invoices.created_at >= :start_date", { start_date: options.start_date });
     if (options.end_date) query.andWhere("invoices.created_at <= :end_date", { end_date: options.end_date });
 

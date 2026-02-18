@@ -27,6 +27,12 @@ invoiceRoutes.put(
 );
 
 invoiceRoutes.get(
+  "/by-user",
+  permissionMiddleware(Permissions.SHOW_USER_INVOICES),
+  invoiceController.showByUser
+);
+
+invoiceRoutes.get(
   "/",
   permissionMiddleware(Permissions.SHOW_INVOICES),
   celebrate({
