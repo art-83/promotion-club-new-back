@@ -16,6 +16,7 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     const query = this.repository.createQueryBuilder("invoices");
 
     query.leftJoinAndSelect("invoices.file", "file");
+    query.leftJoinAndSelect("invoices.store", "store");
     
     if (options.id) query.andWhere("invoices.id = :id", { id: options.id });
     if (options.store_id) query.andWhere("invoices.store_id = :store_id", { store_id: options.store_id });
@@ -23,9 +24,7 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     if (options.updated_at) query.andWhere("invoices.updated_at = :updated_at", { updated_at: options.updated_at });
     if (options.was_paid !== undefined) query.andWhere("invoices.was_paid = :was_paid", { was_paid: options.was_paid });
 
-    if (options.join_store) {
-      query.leftJoinAndSelect("invoices.store", "store");
-    }
+    
 
     if (options.start_date) query.andWhere("invoices.created_at >= :start_date", { start_date: options.start_date });
     if (options.end_date) query.andWhere("invoices.created_at <= :end_date", { end_date: options.end_date });
