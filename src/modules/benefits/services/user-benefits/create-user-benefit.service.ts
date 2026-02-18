@@ -5,6 +5,9 @@ import User from "../../../users/infra/orm/entities/user.entity";
 import Benefit from "../../infra/orm/entities/benefit.entity";
 import AppError from "../../../../shared/infra/http/errors/app-error";
 import CreateOrUpdateUserBenefitsDTO from "../../dtos/user-benefits/create-or-update-user-benefits.dto";
+import BenefitTier from "../../infra/orm/entities/benefit-tier.entity";
+import BenefitsQueryOptionsDTO from "../../dtos/benefits/benefits-query-options.dto";
+import UserRepositoryProvider from "../../../users/infra/orm/repositories/providers/user-repository.provider";
 
 @injectable()
 class CreateUserBenefitService {
@@ -12,22 +15,32 @@ class CreateUserBenefitService {
     @inject("UserBenefitRepository")
     private userBenefitRepository: RepositoryProvider<UserBenefit>,
     @inject("UserRepository")
-    private userRepository: RepositoryProvider<User>,
+    private userRepository: UserRepositoryProvider,
     @inject("BenefitRepository")
     private benefitRepository: RepositoryProvider<Benefit>
   ) {}
 
   public async execute(data: Partial<CreateOrUpdateUserBenefitsDTO>): Promise<UserBenefit> {
-    const [user, benefit] = await Promise.all([
-      (await this.userRepository.find({ id: data.user_id })).at(0),
-      (await this.benefitRepository.find({ id: data.benefit_id })).at(0),
+
+    const userId = String(data.user_id);
+
+    const benefitQueryOptions = {
+      id: data.benefit_id,
+      join_benefit_tier: true,
+    } as BenefitsQueryOptionsDTO;
+
+    const [user, userTotalSpent, benefit] = await Promise.all([
+      (await this.userRepository.find({ id: userId })).at(0),
+      this.userRepository.totalSpentByUser(userId),
+      (await this.benefitRepository.find(benefitQueryOptions)).at(0),
     ]);
 
     if (!user) throw new AppError(404, "User not found.");
     if (!benefit) throw new AppError(404, "Benefit not found.");
-
-    if (user.points < benefit.points_required) throw new AppError(400, "User does not have enough points to claim this benefit.");
-      
+    
+    if (Number(user.points) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough points to claim this benefit.");
+    if (Number(userTotalSpent) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough spent to claim this benefit.");
+    
     data.user = user;
     data.benefit = benefit;
 
