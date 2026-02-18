@@ -9,6 +9,7 @@ import ShowUserStoreOptionsService from "../../../services/user-store-options/sh
 import ShowUserBenefitsServiceByUser from "../../../../benefits/services/user-benefits/show-user-benefits.service";
 import CreateUserBenefitService from "../../../../benefits/services/user-benefits/create-user-benefit.service";
 import DeleteUserBenefitService from "../../../../benefits/services/user-benefits/delete-user-benefit.service";
+import ShowInvoiceByUserService from "../../../../invoices/services/show-invoice-by-user.service";
 
 class UserController {
   public async show(request: Request, response: Response) {
@@ -82,6 +83,13 @@ class UserController {
     const deleteUserBenefitService = container.resolve(DeleteUserBenefitService);
     await deleteUserBenefitService.execute(user_id, benefit_id);
     return response.status(204).send();
+  }
+
+  public async showUserInvoices(request: Request, response: Response) {
+    const user_id = request.user_id;
+    const showInvoiceByUserService = container.resolve(ShowInvoiceByUserService);
+    const userInvoices = await showInvoiceByUserService.execute(user_id);
+    return response.status(200).json(userInvoices);
   }
 }
 

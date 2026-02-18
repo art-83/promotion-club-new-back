@@ -24,13 +24,6 @@ class InvoiceController {
     const invoices = await showInvoiceService.execute(request.query);
     return response.status(200).json(invoices);
   }
-
-  public async showByUser(request: Request, response: Response) {
-    const showInvoiceByUserService = container.resolve(ShowInvoiceByUserService);
-    const invoices = await showInvoiceByUserService.execute(request.user_id);
-    return response.status(200).json(invoices);
-  }
-
 }
 
 export default InvoiceController;
