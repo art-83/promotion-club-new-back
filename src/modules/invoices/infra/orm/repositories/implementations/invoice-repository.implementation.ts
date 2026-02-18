@@ -15,7 +15,6 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
   public async find(options: Partial<InvoiceQueryOptionsDTO>): Promise<Invoice[]> {
     const query = this.repository.createQueryBuilder("invoices");
 
-    query.leftJoinAndSelect("invoices.file", "file");
     query.leftJoinAndSelect("invoices.store", "store");
     
     if (options.id) query.andWhere("invoices.id = :id", { id: options.id });
@@ -23,7 +22,8 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     if (options.created_at) query.andWhere("invoices.created_at = :created_at", { created_at: options.created_at });
     if (options.updated_at) query.andWhere("invoices.updated_at = :updated_at", { updated_at: options.updated_at });
     if (options.was_paid !== undefined) query.andWhere("invoices.was_paid = :was_paid", { was_paid: options.was_paid });
-
+    if (options.join_file) query.leftJoinAndSelect("invoices.file", "file");
+    
     if (options.start_date) query.andWhere("invoices.created_at >= :start_date", { start_date: options.start_date });
     if (options.end_date) query.andWhere("invoices.created_at <= :end_date", { end_date: options.end_date });
 
