@@ -20,7 +20,7 @@ invoiceRoutes.put(
       id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      status: Joi.string().required().valid("PAID", "PENDING"),
+      was_paid: Joi.boolean().required(),
     },
   }),
   invoiceController.update
@@ -33,7 +33,7 @@ invoiceRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
       store_id: Joi.string().uuid().optional(),
-      status: Joi.string().optional(),
+      was_paid: Joi.boolean().optional(),
       start_date: Joi.date().optional(),
       end_date: Joi.date().optional(),
     },

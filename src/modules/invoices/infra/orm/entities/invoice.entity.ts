@@ -7,8 +7,8 @@ class Invoice {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
-  status: string; // PENDING, PAID, FAILED
+  @Column({ default: false })
+  was_paid: boolean;
 
   @CreateDateColumn()
   created_at: Date;

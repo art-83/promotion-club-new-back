@@ -21,7 +21,7 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     if (options.store_id) query.andWhere("invoices.store_id = :store_id", { store_id: options.store_id });
     if (options.created_at) query.andWhere("invoices.created_at = :created_at", { created_at: options.created_at });
     if (options.updated_at) query.andWhere("invoices.updated_at = :updated_at", { updated_at: options.updated_at });
-    if (options.status) query.andWhere("invoices.status ILIKE :status", { status: `%${options.status}%` });
+    if (options.was_paid !== undefined) query.andWhere("invoices.was_paid = :was_paid", { was_paid: options.was_paid });
 
     if (options.join_store) {
       query.leftJoinAndSelect("invoices.store", "store");
