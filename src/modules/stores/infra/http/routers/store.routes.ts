@@ -13,6 +13,7 @@ storeRoutes.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
+      invoice_taxes_percentage: Joi.number().min(0).max(100).required(),
       street: Joi.string().required(),
       neighborhood: Joi.string().required(),
       city: Joi.string().required(),
@@ -53,6 +54,7 @@ storeRoutes.put(
     },
     [Segments.BODY]: {
       name: Joi.string().optional(),
+      invoice_taxes_percentage: Joi.number().min(0).max(100).optional(),
       street: Joi.string().optional(),
       neighborhood: Joi.string().optional(),
       city: Joi.string().optional(),
