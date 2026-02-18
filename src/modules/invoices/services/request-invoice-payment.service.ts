@@ -17,7 +17,7 @@ class RequestInvoicePaymentService {
     private fileRepository: RepositoryProvider<File>
   ) {}
 
-  public async execute(user_id: string, data: Partial<CreateInvoiceDTO>): Promise<Invoice> {
+  public async execute(user_id: string, data: Partial<CreateInvoiceDTO>) {
     const userPermissionsQueryOptions = {
       user_id: user_id,
       join_store: true,
@@ -38,7 +38,9 @@ class RequestInvoicePaymentService {
     data.store = userPermissions.store;
     data.file = file;
 
-    return await this.invoiceRepository.create(data);
+    await this.invoiceRepository.create(data);
+
+    return { message: "Invoice created successfully." };
   }
 }
 
