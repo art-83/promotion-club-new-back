@@ -20,7 +20,7 @@ class CreateFileService {
       mimetype: data.file.mimetype,
     });
 
-    return { message: "File created successfully." };
+    return file;
   }
 }
 
