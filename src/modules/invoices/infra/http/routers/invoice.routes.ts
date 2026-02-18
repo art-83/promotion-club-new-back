@@ -41,5 +41,15 @@ invoiceRoutes.get(
   invoiceController.show
 );
 
+invoiceRoutes.delete(
+  "/:id",
+  permissionMiddleware(Permissions.SHOW_INVOICES),
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  invoiceController.delete
+);
 
 export default invoiceRoutes;

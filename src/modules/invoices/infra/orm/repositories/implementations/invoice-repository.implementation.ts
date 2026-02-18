@@ -31,6 +31,7 @@ class InvoiceRepository implements RepositoryProvider<Invoice> {
     if (options.limit) query.take(options.limit);
 
     query.andWhere("invoices.deleted_at IS NULL");
+    query.orderBy("invoices.created_at", "DESC");
 
     return await query.getMany();
   }

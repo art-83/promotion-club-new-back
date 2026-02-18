@@ -85,6 +85,7 @@ class PromotionRepository implements PromotionRepositoryProvider {
     if (options.limit) query.take(options.limit);
 
     query.andWhere("promotions.deleted_at IS NULL");
+    query.orderBy("promotions.created_at", "DESC");
 
     return await query.getMany();
   }

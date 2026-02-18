@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import RequestInvoicePaymentService from "../../../services/request-invoice-payment.service";
 import ShowInvoiceService from "../../../services/show-invoice.service";
 import UpdateInvoiceService from "../../../services/update-invoice.service";
-import ShowInvoiceByUserService from "../../../services/show-invoice-by-user.service";
+import DeleteInvoiceService from "../../../services/delete-invoice.service";
 
 class InvoiceController {
   public async pay(request: Request, response: Response) {
@@ -23,6 +23,13 @@ class InvoiceController {
     const showInvoiceService = container.resolve(ShowInvoiceService);
     const invoices = await showInvoiceService.execute(request.query);
     return response.status(200).json(invoices);
+  }
+
+  public async delete(request: Request, response: Response) {
+    const id = String(request.params.id);
+    const deleteInvoiceService = container.resolve(DeleteInvoiceService);
+    await deleteInvoiceService.execute(id);
+    return response.status(204).send();
   }
 }
 
