@@ -36,17 +36,17 @@ class UpdatePromotionService {
     } as PromotionQueryOptionsDTO;
 
     const promotion = (await this.promotionRepository.find(options)).at(0);
-    if (!promotion) throw new AppError(404, "Promotion not found.");
+    if (!promotion) throw new AppError(404, "Promotion not found.", "Promoção não encontrada.");
 
     if (data.store_id) {
       const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
-      if (!store) throw new AppError(404, "Store not found.");
+      if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
       data.store = store;
     }
 
     if (data.file_id) {
       const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
-      if (!file) throw new AppError(404, "File not found.");
+      if (!file) throw new AppError(404, "File not found.", "Arquivo não encontrado.");
       data.file = file;
     }
 

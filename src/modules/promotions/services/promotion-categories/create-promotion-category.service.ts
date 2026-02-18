@@ -16,7 +16,7 @@ class CreatePromotionCategoryService {
 
   public async execute(data: Partial<CreatePromotionCategoryDto>): Promise<PromotionCategory> {
     const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
-    if (!store) throw new AppError(404, "Store not found.");
+    if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
     data.store = store;
     return await this.promotionCategoryRepository.create(data);
   }

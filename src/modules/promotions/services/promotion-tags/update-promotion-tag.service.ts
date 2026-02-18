@@ -13,7 +13,7 @@ class UpdatePromotionTagService {
 
   public async execute(id: string, data: CreateOrUpdatePromotionTagDTO): Promise<void> {
     const promotionTag = (await this.promotionTagRepository.find({ id })).at(0);
-    if (!promotionTag) throw new AppError(404, "PromotionTag not found.");
+    if (!promotionTag) throw new AppError(404, "PromotionTag not found.", "Tag da promoção não encontrada.");
 
     await this.promotionTagRepository.update(id, data);
   }

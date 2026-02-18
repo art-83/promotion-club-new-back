@@ -12,7 +12,7 @@ class ValidateJwtService {
 
   public execute(token: string): JwtPayloadDTO {
     const jwt = token.split(" ").at(1);
-    if (!jwt) throw new AppError(401, "Token must be provided.");
+    if (!jwt) throw new AppError(401, "Token must be provided.", "O token deve ser fornecido.");
     return this.jwt.validate(jwt);
   }
 }

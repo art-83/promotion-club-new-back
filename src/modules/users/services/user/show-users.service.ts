@@ -23,7 +23,7 @@ class ShowUsersServices {
         this.userRepository.totalSpentByUser(options.id),
       ]);
       
-      if (!user) throw new AppError(404, "User not found");
+      if (!user) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
 
       const userWithTotalSpent = {
         ...user,

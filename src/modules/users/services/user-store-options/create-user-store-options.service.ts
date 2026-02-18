@@ -24,8 +24,8 @@ class CreateUserStoreOptionsService {
       (await this.storeRepository.find({ id: data.store_id })).at(0),
     ]);
 
-    if (!user) throw new AppError(404, "User not found.");
-    if (!store) throw new AppError(404, "Store not found.");
+    if (!user) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
+    if (!store) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
 
     data.user = user;
     data.store = store;

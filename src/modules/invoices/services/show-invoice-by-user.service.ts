@@ -23,7 +23,7 @@ class ShowInvoiceByUserService {
 
     const userPermissions = (await this.userPermissionsRepository.find(userPermissionsQueryOptions)).at(0);
 
-    if (!userPermissions || !userPermissions.store) throw new AppError(404, "User permissions not found or user not associated to any store.");
+    if (!userPermissions || !userPermissions.store) throw new AppError(404, "User permissions not found or user not associated to any store.", "Permissões do usuário não encontradas ou usuário não associado a nenhuma loja.");
 
     const invoiceQueryOptions = {
       store_id: userPermissions.store.id,

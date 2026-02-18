@@ -24,7 +24,7 @@ class PromotionTagController {
   public async update(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
     const data = request.body;
-    if (!id) throw new AppError(400, "ID is required.");
+    if (!id) throw new AppError(400, "ID is required.", "ID é obrigatório.");
     const updatePromotionTag = container.resolve(UpdatePromotionTagService);
     await updatePromotionTag.execute(id, data);
     return response.status(204).send();
@@ -32,7 +32,7 @@ class PromotionTagController {
 
   public async delete(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    if (!id) throw new AppError(400, "ID is required.");
+    if (!id) throw new AppError(400, "ID is required.", "ID é obrigatório.");
     const deletePromotionTag = container.resolve(DeletePromotionTagService);
     await deletePromotionTag.execute(id);
     return response.status(204).send();

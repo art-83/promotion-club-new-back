@@ -23,7 +23,8 @@ class CreateUserAndVinculateUserPermissionsService {
       (await this.userRepository.find({ email: data.email })).at(0),
     ]);
 
-    if (hasUserByCPF || hasUserByEmail) throw new AppError(409, "Error already registered.");
+    // Generic message to avoid revealing whether email or CPF is already taken
+    if (hasUserByCPF || hasUserByEmail) throw new AppError(409, "Unable to complete registration.", "Não foi possível concluir o cadastro.");
 
     const passwordHash = await this.hash.encrypt(String(data.password));
     data.password = passwordHash;

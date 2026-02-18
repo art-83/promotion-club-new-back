@@ -13,7 +13,7 @@ class UpdateStoreRatingResponseService {
 
   public async execute(id: string, data: Partial<CreateOrUpdateStoreRatingResponseDto>): Promise<void> {
     const storeRatingResponse = (await this.storeRatingResponseRepository.find({ id })).at(0);
-    if (!storeRatingResponse) throw new AppError(404, "Store rating response not found.");
+    if (!storeRatingResponse) throw new AppError(404, "Store rating response not found.", "Resposta à avaliação da loja não encontrada.");
     await this.storeRatingResponseRepository.update(id, data);
   }
 }

@@ -19,7 +19,7 @@ class DeleteUserBenefitService {
 
     const userBenefit = (await this.userBenefitRepository.find(options)).at(0);
 
-    if (!userBenefit) throw new AppError(404, "User benefit not found.");
+    if (!userBenefit) throw new AppError(404, "User benefit not found.", "Benefício do usuário não encontrado.");
 
     await this.userBenefitRepository.delete(userBenefit.id);
   }

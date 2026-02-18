@@ -10,9 +10,7 @@ const globalErrorHandler = (error: Error, request: Request, response: Response, 
   }
 
   if (error instanceof AppError) {
-    return response.status(error.code).json({
-      message: error.message,
-    });
+    return response.status(error.code).json(error);
   }
 
   if (error instanceof ErrorReply) {

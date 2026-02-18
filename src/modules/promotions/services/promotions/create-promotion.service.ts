@@ -19,12 +19,12 @@ class CreatePromotionService {
 
   public async execute(data: Partial<CreateOrUpdatePromotionDTO>): Promise<Promotion> {
     const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
-    if (!store) throw new AppError(404, "Store not found.");
+    if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
     data.store = store;
 
     if (data.file_id) {
       const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
-      if (!file) throw new AppError(404, "File not found.");
+      if (!file) throw new AppError(404, "File not found.", "Arquivo não encontrado.");
       data.file = file;
     }
 

@@ -22,8 +22,8 @@ class CreateStoreCategoryService {
       (await this.storeRepository.find({ id: data.store_id })).at(0),
       (await this.storeCategoryRepository.find({ id: data.category_id })).at(0),
     ]);
-    if (!store) throw new AppError(404, "Store not found.");
-    if (!storeCategory) throw new AppError(404, "Store category not found.");
+    if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
+    if (!storeCategory) throw new AppError(404, "Store category not found.", "Categoria da loja não encontrada.");
     data.store = store;
     data.category = storeCategory;
     return await this.storeStoreCategoryRepository.create(data);

@@ -18,7 +18,7 @@ class UpdateUserPermissionsService {
   public async execute(id: string, data: Partial<CreateOrUpdateUserPermissions>): Promise<void> {
     if (data.store_id) {
       const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
-      if (!store) throw new AppError(404, "Store not found.");
+      if (!store) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
       data.store = store;
     }
 
@@ -32,7 +32,7 @@ class UpdateUserPermissionsService {
 
     const userPermissions = (await this.userPermissionsRepository.find(userPermissionsQueryOptions)).at(0);
 
-    if (!userPermissions) throw new AppError(404, "User permissions not found.");
+    if (!userPermissions) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
 
     await this.userPermissionsRepository.update(userPermissions.id, data);
   }

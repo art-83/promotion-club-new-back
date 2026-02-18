@@ -13,7 +13,7 @@ class UpdateStoreCategoryService {
 
   public async execute(id: string, data: Partial<CreateOrUpdateStoreCategoryDto>): Promise<void> {
     const storeStoreCategory = (await this.storeStoreCategoryRepository.find({ id })).at(0);
-    if (!storeStoreCategory) throw new AppError(404, "Store category link not found.");
+    if (!storeStoreCategory) throw new AppError(404, "Store category link not found.", "Vínculo da categoria da loja não encontrado.");
     await this.storeStoreCategoryRepository.update(id, data);
   }
 }

@@ -22,8 +22,8 @@ class CreatePromotionTagService {
       (await this.promotionRepository.find({ id: data.promotion_id })).at(0),
       (await this.tagRepository.find({ id: data.tag_id })).at(0),
     ]);
-    if (!promotion) throw new AppError(404, "Promotion not found.");
-    if (!tag) throw new AppError(404, "Tag not found.");
+    if (!promotion) throw new AppError(404, "Promotion not found.", "Promoção não encontrada.");
+    if (!tag) throw new AppError(404, "Tag not found.", "Tag não encontrada.");
     data.promotion = promotion;
     data.tag = tag;
     return await this.promotionTagRepository.create(data);

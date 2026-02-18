@@ -32,8 +32,8 @@ class RequestInvoicePaymentService {
       (await this.fileRepository.find(fileQueryOptions)).at(0)
     ]);
 
-    if (!userPermissions || !userPermissions.store) throw new AppError(404, "User permissions not found or user not associated to any store.");
-    if (!file) throw new AppError(404, "File not found.");
+    if (!userPermissions || !userPermissions.store) throw new AppError(404, "User permissions not found or user not associated to any store.", "Permissões do usuário não encontradas ou usuário não associado a nenhuma loja.");
+    if (!file) throw new AppError(404, "File not found.", "Arquivo não encontrado.");
 
     data.store = userPermissions.store;
     data.file = file;

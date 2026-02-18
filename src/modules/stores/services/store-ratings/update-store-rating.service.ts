@@ -13,7 +13,7 @@ class UpdateStoreRatingService {
 
   public async execute(id: string, data: Partial<CreateOrUpdateStoreRatingDTO>): Promise<void> {
     const storeRating = (await this.storeRatingRepository.find({ id })).at(0);
-    if (!storeRating) throw new AppError(404, "Store rating not found.");
+    if (!storeRating) throw new AppError(404, "Store rating not found.", "Avaliação da loja não encontrada.");
     await this.storeRatingRepository.update(id, data);
   }
 }

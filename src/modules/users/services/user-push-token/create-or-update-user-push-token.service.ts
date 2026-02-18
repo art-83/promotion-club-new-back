@@ -20,7 +20,7 @@ class CreateUserPushTokenService {
       (await this.userPushTokenRepository.find({ user_id })).at(0),
     ]);
 
-    if (!user) throw new AppError(404, "User not found.");
+    if (!user) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
 
     data.user = user;
 

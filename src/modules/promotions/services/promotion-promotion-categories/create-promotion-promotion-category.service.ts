@@ -22,8 +22,8 @@ class CreatePromotionPromotionCategoryService {
       (await this.promotionRepository.find({ id: data.promotion_id })).at(0),
       (await this.promotionCategoryRepository.find({ id: data.promotion_category_id })).at(0),
     ]);
-    if (!promotion) throw new AppError(404, "Promotion not found.");
-    if (!promotionCategory) throw new AppError(404, "Promotion category not found.");
+    if (!promotion) throw new AppError(404, "Promotion not found.", "Promoção não encontrada.");
+    if (!promotionCategory) throw new AppError(404, "Promotion category not found.", "Categoria da promoção não encontrada.");
     data.promotion = promotion;
     data.promotion_category = promotionCategory;
     return await this.promotionPromotionCategoryRepository.create(data);

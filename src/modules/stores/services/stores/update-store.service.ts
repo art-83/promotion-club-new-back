@@ -17,7 +17,7 @@ class UpdateStoreService {
   public async execute(id: string, data: CreateOrUpdateStoreDTO): Promise<void> {
     if (data.file_id) {
       const file = (await this.fileRepository.find({ id: data.file_id })).at(0);
-      if (!file) throw new AppError(404, "File not found");
+      if (!file) throw new AppError(404, "File not found", "Arquivo não encontrado.");
       data.file = file;
     }
 

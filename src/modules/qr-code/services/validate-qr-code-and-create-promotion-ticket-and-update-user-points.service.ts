@@ -29,7 +29,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
   public async execute(user_id: string): Promise<{ message: string; createPromotionTicket: Partial<PromotionTicket> }> {
     const qrCode = await this.cache.find(user_id);
 
-    if (!qrCode) throw new AppError(404, "QrCode not found.");
+    if (!qrCode) throw new AppError(404, "QrCode not found.", "QR Code não encontrado.");
 
     const qrCodeParsed = JSON.parse(qrCode);
 
@@ -53,11 +53,11 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
       (await this.userPermissionsRepository.find(userPermissionsQueryOptions)).at(0),
     ]);
 
-    if (!user) throw new AppError(404, "User not found.");
-    if (!promotion) throw new AppError(404, "Promotion not found.");
+    if (!user) throw new AppError(404, "User not found.", "Usuário não encontrado.");
+    if (!promotion) throw new AppError(404, "Promotion not found.", "Promoção não encontrada.");
 
     if (promotion && promotion.store && userPermissions && userPermissions.store && promotion.store.id !== userPermissions.store.id) {
-      throw new AppError(403, "Promotion not available for this store.");
+      throw new AppError(403, "Promotion not available for this store.", "Promoção não disponível para esta loja.");
     }
 
     const createPromotionTicketData = {
@@ -68,7 +68,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
     const createPromotionTicket = await this.promotionTicketRepository.create(createPromotionTicketData);
 
     const removeQrCode = await this.cache.delete(user_id);
-    if (!removeQrCode) throw new AppError(404, "QrCode invalid or expired.");
+    if (!removeQrCode) throw new AppError(404, "QrCode invalid or expired.", "QR Code inválido ou expirado.");
 
     const newPoints = Number(Number(user.points) + Number(promotion.final_price));
     await this.userRepository.update(user_id, { points: newPoints });

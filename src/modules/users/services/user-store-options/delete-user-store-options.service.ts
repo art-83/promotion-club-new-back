@@ -20,7 +20,7 @@ class DeleteUserStoreOptionsService {
     const userStoreOptions = (await this.userStoreOptionsRepository.find(userStoreOptionsQueryOptions)).at(0);
 
     if (!userStoreOptions) {
-      throw new AppError(404, "User store options not found.");
+      throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
     }
 
     await this.userStoreOptionsRepository.delete(userStoreOptions.id);

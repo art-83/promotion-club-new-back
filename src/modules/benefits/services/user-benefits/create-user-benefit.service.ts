@@ -35,11 +35,11 @@ class CreateUserBenefitService {
       (await this.benefitRepository.find(benefitQueryOptions)).at(0),
     ]);
 
-    if (!user) throw new AppError(404, "User not found.");
-    if (!benefit) throw new AppError(404, "Benefit not found.");
+    if (!user) throw new AppError(404, "User not found.", "Usuário não encontrado.");
+    if (!benefit) throw new AppError(404, "Benefit not found.", "Benefício não encontrado.");
     
-    if (Number(user.points) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough points to claim this benefit.");
-    if (Number(userTotalSpent) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough spent to claim this benefit.");
+    if (Number(user.points) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough points to claim this benefit.", "O usuário não tem pontos suficientes para resgatar este benefício.");
+    if (Number(userTotalSpent) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough spent to claim this benefit.", "O usuário não tem gasto suficiente para resgatar este benefício.");
     
     data.user = user;
     data.benefit = benefit;

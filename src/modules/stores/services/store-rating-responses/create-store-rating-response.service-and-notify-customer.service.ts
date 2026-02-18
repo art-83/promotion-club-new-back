@@ -29,8 +29,8 @@ class CreateStoreRatingAndNotifyCustomerService {
       (await this.storeRatingRepository.find({ id: data.store_rating_id })).at(0),
       (await this.userRepository.find({ id: data.user_id })).at(0),
     ]);
-    if (!storeRating) throw new AppError(404, "Store rating not found.");
-    if (!user) throw new AppError(404, "User not found.");
+    if (!storeRating) throw new AppError(404, "Store rating not found.", "Avaliação da loja não encontrada.");
+    if (!user) throw new AppError(404, "User not found.", "Usuário não encontrado.");
 
     const tokens = (await this.userPushTokenRepository.find({ user_id: storeRating.user.id })).map((token) => token.token);
 

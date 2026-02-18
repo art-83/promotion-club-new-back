@@ -13,7 +13,7 @@ class GetQrCodeByUserIdService {
   public async execute(user_id: string): Promise<QrCodePayloadDto> {
     const raw = await this.cacheProvider.find(user_id);
 
-    if (!raw) throw new AppError(404, "QrCode not found.");
+    if (!raw) throw new AppError(404, "QrCode not found.", "QR Code não encontrado.");
 
     const qrCode = JSON.parse(raw) as QrCodePayloadDto;
 

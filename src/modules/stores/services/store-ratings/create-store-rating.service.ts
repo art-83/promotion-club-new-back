@@ -22,8 +22,8 @@ class CreateStoreRatingService {
       (await this.storeRepository.find({ id: data.store_id })).at(0),
       (await this.userRepository.find({ id: data.user_id })).at(0),
     ]);
-    if (!store) throw new AppError(404, "Store not found.");
-    if (!user) throw new AppError(404, "User not found.");
+    if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
+    if (!user) throw new AppError(404, "User not found.", "Usuário não encontrado.");
 
     data.store = store;
     data.user = user;

@@ -12,7 +12,7 @@ class UpdateBenefitTierService {
 
   public async execute(id: string, data: Partial<BenefitTier>): Promise<void> {
     const benefitTier = (await this.benefitTierRepository.find({ id })).at(0);
-    if (!benefitTier) throw new AppError(404, "Benefit tier not found.");
+    if (!benefitTier) throw new AppError(404, "Benefit tier not found.", "Nível de benefício não encontrado.");
     await this.benefitTierRepository.update(id, data);
   }
 }

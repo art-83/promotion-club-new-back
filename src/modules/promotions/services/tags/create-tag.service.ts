@@ -17,7 +17,7 @@ class CreateTagService {
   public async execute(data: Partial<CreateTagDTO>): Promise<Tag> {
     if (data.store_id) {
       const store = (await this.storeRepository.find({ id: data.store_id })).at(0);
-      if (!store) throw new AppError(404, "Store not found.");
+      if (!store) throw new AppError(404, "Store not found.", "Loja não encontrada.");
       data.store = store;
     }
 
