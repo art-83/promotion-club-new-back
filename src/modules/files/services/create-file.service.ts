@@ -11,7 +11,7 @@ class CreateFileService {
     private fileRepository: FileRepositoryProvider
   ) {}
 
-  public async execute(data: CreateFileDTO): Promise<File> {
+  public async execute(data: CreateFileDTO) {
     if (!data.file) throw new AppError(400, "File not provided.");
 
     const file = await this.fileRepository.create({
@@ -20,7 +20,7 @@ class CreateFileService {
       mimetype: data.file.mimetype,
     });
 
-    return file;
+    return { message: "File created successfully." };
   }
 }
 
