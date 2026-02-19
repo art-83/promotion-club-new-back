@@ -48,6 +48,7 @@ class CreateUserAndVinculateUserPermissionsService {
       Permissions.CREATE_STORE_RATING,
       Permissions.UPDATE_STORE_RATING,
       Permissions.DELETE_STORE_RATING,
+      Permissions.SHOW_BENEFIT_TIERS,
     ];
     const user = await this.userRepository.create(data);
     const userPermissions = await this.userPermissionsRepository.create({ user: user, permissions: defaultPermissions });
