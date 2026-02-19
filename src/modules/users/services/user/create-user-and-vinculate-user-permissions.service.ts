@@ -34,7 +34,20 @@ class CreateUserAndVinculateUserPermissionsService {
       Permissions.CREATE_QR_CODE,
       Permissions.SHOW_STORES,
       Permissions.SHOW_USER_PROMOTION_TICKETS,
+      Permissions.SHOW_RECOMMENDED_PROMOTIONS_BY_PROMOTION_TICKET,
       Permissions.CREATE_USER_PUSH_TOKEN,
+      Permissions.CREATE_USER_STORE_OPTIONS,
+      Permissions.DELETE_USER_STORE_OPTIONS,
+      Permissions.SHOW_USER_STORE_OPTIONS,
+      Permissions.SHOW_QR_CODES,
+      Permissions.SHOW_BENEFITS,
+      Permissions.SHOW_USER_BENEFITS,
+      Permissions.CREATE_USER_BENEFIT,
+      Permissions.DELETE_USER_BENEFIT,
+      Permissions.SHOW_STORE_RATINGS,
+      Permissions.CREATE_STORE_RATING,
+      Permissions.UPDATE_STORE_RATING,
+      Permissions.DELETE_STORE_RATING,
     ];
     const user = await this.userRepository.create(data);
     const userPermissions = await this.userPermissionsRepository.create({ user: user, permissions: defaultPermissions });
