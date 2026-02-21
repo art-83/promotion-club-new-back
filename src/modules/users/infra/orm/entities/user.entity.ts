@@ -55,9 +55,9 @@ class User {
   user_permissions: UserPermissions;
 
   @OneToMany(() => PromotionTicket, (promotion_ticket) => promotion_ticket.user)
-  promotion_ticket: PromotionTicket[];
+  promotion_ticket: PromotionTicket[]; // TO DO: change to promotion_tickets
 
-  @OneToMany(() => UserPushToken, (user_push_token) => user_push_token.user)
+  @OneToOne(() => UserPushToken, (user_push_token) => user_push_token.user)
   user_push_token: UserPushToken[];
 
   @OneToMany(() => UserStoreOptions, (user_store_options) => user_store_options.user)

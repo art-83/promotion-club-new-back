@@ -67,15 +67,18 @@ class UserRepository implements UserRepositoryProvider {
   }
 
   public async totalSpentByUser(id: string): Promise<number> {
-    const query = await this.repository.createQueryBuilder("users");
+    const query = 
+    `
+    SELECT SUM(p.final_price) as total_spent
+    FROM users u
+    LEFT JOIN promotion_tickets pt ON u.id = pt.user_id
+    LEFT JOIN promotions p ON pt.promotion_id = p.id
+    WHERE u.id = '${id}';
+    `
 
-    query.leftJoinAndSelect("users.promotion_ticket", "promotion_ticket");
-    query.leftJoinAndSelect("promotion_ticket.promotion", "promotion");
-    query.select("SUM(promotion.final_price)", "total_spent");
+    const result = (await this.repository.query(query)).at(0);
 
-    const result = await query.getRawOne();
-
-    return result.total_spent;
+    return Number(result.total_spent);
   }
 }
 
