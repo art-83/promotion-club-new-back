@@ -7,11 +7,7 @@ import Permissions from "../../../../../shared/infra/http/middlewares/utils/perm
 const invoiceRoutes = Router();
 const invoiceController = new InvoiceController();
 
-invoiceRoutes.post(
-  "/pay",
-  permissionMiddleware(Permissions.PAY_INVOICE),
-  invoiceController.pay
-);
+invoiceRoutes.post("/pay", permissionMiddleware(Permissions.PAY_INVOICE), invoiceController.pay);
 
 invoiceRoutes.put(
   "/:id",

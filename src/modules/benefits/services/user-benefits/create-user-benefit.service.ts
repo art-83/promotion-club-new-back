@@ -21,7 +21,6 @@ class CreateUserBenefitService {
   ) {}
 
   public async execute(data: Partial<CreateOrUpdateUserBenefitsDTO>): Promise<UserBenefit> {
-
     const userId = String(data.user_id);
 
     const benefitQueryOptions = {
@@ -37,10 +36,20 @@ class CreateUserBenefitService {
 
     if (!user) throw new AppError(404, "User not found.", "Usuário não encontrado.");
     if (!benefit) throw new AppError(404, "Benefit not found.", "Benefício não encontrado.");
-    
-    if (Number(user.points) < Number(benefit.points_required)) throw new AppError(400, "User does not have enough points to claim this benefit.", "O usuário não tem pontos suficientes para resgatar este benefício.");
-    if (Number(userTotalSpent) < Number(benefit.benefit_tier.minimum_points)) throw new AppError(400, "User does not have enough spent to claim this benefit.", "O usuário não tem gasto suficiente para resgatar este benefício.");
-    
+
+    if (Number(user.points) < Number(benefit.points_required))
+      throw new AppError(
+        400,
+        "User does not have enough points to claim this benefit.",
+        "O usuário não tem pontos suficientes para resgatar este benefício."
+      );
+    if (Number(userTotalSpent) < Number(benefit.benefit_tier.minimum_points))
+      throw new AppError(
+        400,
+        "User does not have enough spent to claim this benefit.",
+        "O usuário não tem gasto suficiente para resgatar este benefício."
+      );
+
     data.user = user;
     data.benefit = benefit;
 
