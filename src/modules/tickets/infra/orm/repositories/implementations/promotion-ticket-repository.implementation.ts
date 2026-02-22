@@ -16,6 +16,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
   public async find(options: Partial<PromotionTicketQueryOptionsDTO>): Promise<PromotionTicket[]> {
     const query = this.repository.createQueryBuilder("promotion_tickets");
+    query.withDeleted();
     query.leftJoinAndSelect("promotion_tickets.promotion", "promotion");
     query.leftJoinAndSelect("promotion.store", "store");
 
@@ -57,6 +58,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async getCountDashboardByStore(store_id: string, options: DefaultQueryOptions): Promise<PromotionTickerDashboardDTO> {
     const bestSellerItemsQuery = this.repository
       .createQueryBuilder("ticket")
+      .withDeleted()
       .leftJoin("ticket.promotion", "promotion")
       .select("promotion.name", "name")
       .addSelect("SUM(promotion.final_price)", "revenue")
@@ -69,6 +71,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
     const totalRevenueQuery = this.repository
       .createQueryBuilder("ticket")
+      .withDeleted()
       .leftJoin("ticket.promotion", "promotion")
       .select("SUM(promotion.final_price)", "total_revenue")
       .where("promotion.store_id = :store_id", { store_id })
@@ -101,6 +104,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
   public async getGeneralCountDashboard(options: DefaultQueryOptions): Promise<GeneralPromotionTicketDashboardDTO> {
     const generalStatsQuery = this.repository
       .createQueryBuilder("ticket")
+      .withDeleted()
       .leftJoin("ticket.promotion", "promotion")
       .select("SUM(promotion.final_price)", "total_revenue")
       .addSelect("COUNT(ticket.id)", "total_tickets")
@@ -116,6 +120,7 @@ class PromotionTicketRepository implements PromotionTicketRepositoryProvider {
 
     const topSellerQuery = this.repository
       .createQueryBuilder("ticket")
+      .withDeleted()
       .leftJoin("ticket.promotion", "promotion")
       .select("promotion.name", "name")
       .addSelect("COUNT(ticket.id)", "sell_count")
