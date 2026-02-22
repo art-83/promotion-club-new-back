@@ -4,7 +4,6 @@ import PromotionTicket from "../../../tickets/infra/orm/entities/promotion-ticke
 import PromotionRepositoryProvider from "../../infra/orm/repositories/providers/promotions-repository.providers";
 import PromotionTicketRepositoryProvider from "../../../tickets/infra/orm/repositories/providers/promotion-ticket-repository.provider";
 import PromotionQueryOptionsDTO from "../../dtos/promotions/promotion-query-options.dto";
-import PromotionTicketQueryOptionsDTO from "../../../tickets/dtos/promotion-ticket-query-options.dto";
 
 @injectable()
 class ShowListOfRecommendedPromotionsByUser {
@@ -60,12 +59,11 @@ class ShowListOfRecommendedPromotionsByUser {
   }
 
   private async getUserTicketsWithTags(user_id: string): Promise<PromotionTicket[]> {
-    const promotionTicketQueryOptions = {
+    return this.promotionTicketRepository.find({
       user_id,
       join_promotion_tags: true,
       limit: this.TICKET_FETCH_LIMIT,
-    } as PromotionTicketQueryOptionsDTO;
-    return this.promotionTicketRepository.find(promotionTicketQueryOptions);
+    });
   }
 
   private extractTagFrequencyFromTickets(tickets: PromotionTicket[]): Map<string, number> {
