@@ -67,17 +67,18 @@ class UserRepository implements UserRepositoryProvider {
   }
 
   public async totalSpentByUser(id: string): Promise<number> {
-    const sql = `
-      SELECT SUM(p.final_price) AS total_spent
-      FROM users u
-      LEFT JOIN promotion_tickets pt ON u.id = pt.user_id
-      LEFT JOIN promotions p ON pt.promotion_id = p.id
-      WHERE u.id = $1
-    `;
+    const query = 
+    `
+    SELECT SUM(p.final_price) as total_spent
+    FROM users u
+    LEFT JOIN promotion_tickets pt ON u.id = pt.user_id
+    LEFT JOIN promotions p ON pt.promotion_id = p.id
+    WHERE u.id = '${id}';
+    `
 
-    const result = (await this.repository.query(sql, [id])).at(0);
+    const result = (await this.repository.query(query)).at(0);
 
-    return Number(result?.total_spent ?? 0);
+    return Number(result.total_spent);
   }
 }
 

@@ -13,8 +13,7 @@ class UpdatePromotionPromotionCategoryService {
 
   public async execute(id: string, data: Partial<CreateOrUpdatePromotionPromotionCategoryDto>): Promise<void> {
     const promotionPromotionCategory = (await this.promotionPromotionCategoryRepository.find({ id })).at(0);
-    if (!promotionPromotionCategory)
-      throw new AppError(404, "Promotion category link not found.", "Vínculo da categoria da promoção não encontrado.");
+    if (!promotionPromotionCategory) throw new AppError(404, "Promotion category link not found.", "Vínculo da categoria da promoção não encontrado.");
     await this.promotionPromotionCategoryRepository.update(id, data);
   }
 }

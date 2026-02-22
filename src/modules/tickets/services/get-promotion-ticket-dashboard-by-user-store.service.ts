@@ -24,8 +24,7 @@ class GetPromotionTicketDashboardTicketByUserStoreService {
 
     const userPermissions = (await this.userPermissionsRepository.find(userPermissionsQueryOptions)).at(0);
 
-    if (!userPermissions || !userPermissions.store)
-      throw new AppError(404, "User permissions not found or store not vinculated.", "Permissões do usuário não encontradas ou loja não vinculada.");
+    if (!userPermissions || !userPermissions.store) throw new AppError(404, "User permissions not found or store not vinculated.", "Permissões do usuário não encontradas ou loja não vinculada.");
 
     const promotionTicketCountDashboard = await this.promotionTicketRepository.getCountDashboardByStore(userPermissions.store.id, options);
 

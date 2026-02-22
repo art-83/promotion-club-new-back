@@ -112,6 +112,10 @@ userRoutes.delete(
   userController.deleteUserBenefit
 );
 
-userRoutes.get("/invoices", permissionMiddleware(Permissions.SHOW_USER_INVOICES), userController.showUserInvoices);
+userRoutes.get(
+  "/invoices",
+  permissionMiddleware(Permissions.SHOW_USER_INVOICES),
+  userController.showUserInvoices
+);
 
 export default userRoutes;
