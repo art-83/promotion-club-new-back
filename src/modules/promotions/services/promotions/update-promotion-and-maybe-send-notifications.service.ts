@@ -65,8 +65,8 @@ class UpdatePromotionService {
         userStoreOptions.some((userStoreOption) => userStoreOption.user.id === token.user_id)
       );
       if (tokens.length) {
-        const title = `Promoção quente na loja ${promotion.store.name}!`;
-        const description = `Confira a promoção do item ${promotion.name}! Apenas R$ ${promotion.final_price}`;
+        const title = `${promotion.store.name}`;
+        const description = `${promotion.name} por apenas R$ ${promotion.final_price}`;
         const notificationPushMessage = {
           title,
           description,
