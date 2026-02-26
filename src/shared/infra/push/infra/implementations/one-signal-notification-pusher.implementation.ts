@@ -1,16 +1,18 @@
 import NotificationPushMessageDTO from "../../dtos/notification-push-message.dto";
+import NotificationPushResponseDTO from "../../dtos/notification-push-response.dto";
 import NotificationPusherProvider from "../providers/notification-pusher.provider";
-import { createConfiguration, DefaultApi, Notification } from '@onesignal/node-onesignal';
+import Onesignal from '@onesignal/node-onesignal';
 
 class OneSignalNotificationPusher implements NotificationPusherProvider {
-    private client: DefaultApi;
+    private client: Onesignal.DefaultApi;
 
     constructor() {
         this.client = this.createOneSignalConfiguration();
     }
 
     async push(tokens: string[], message: NotificationPushMessageDTO): Promise<void> {
-        const notification = new Notification();
+        const notification = new Onesignal.Notification();
+        notification.app_id = String(process.env.ONESIGNAL_APP_ID);
         notification.headings = {
             en: message.title,
         };
@@ -20,16 +22,15 @@ class OneSignalNotificationPusher implements NotificationPusherProvider {
         notification.data = message.data;
         notification.include_subscription_ids = tokens;
         const response = await this.client.createNotification(notification);
-        console.log(response.errors);
+        console.log(`[ ${Date.now()} ] Notification pushed to OneSignal:`);
+        console.log(JSON.stringify(response, null, 2));
     }
 
-    private createOneSignalConfiguration(): DefaultApi {
-        const configuration = createConfiguration({
+    private createOneSignalConfiguration(): Onesignal.DefaultApi {
+        const configuration = Onesignal.createConfiguration({
             restApiKey: process.env.ONESIGNAL_API_KEY,
-            organizationApiKey: process.env.ONESIGNAL_ORGANIZATION_API_KEY,
         });
-        return new DefaultApi(configuration);
+        return new Onesignal.DefaultApi(configuration);
     }
-}
 
-export default OneSignalNotificationPusher;
+}
