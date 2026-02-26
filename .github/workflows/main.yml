@@ -77,10 +77,13 @@ jobs:
 
           # Ensure cert dirs exist; if cert missing and CERTBOT_EMAIL set, obtain cert via standalone (port 80 free while nginx is down)
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "sudo mkdir -p /etc/letsencrypt /var/www/certbot" || true
-          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST " \
             if [ ! -f $CERT_PATH ]; then \
               if [ -n \"$CERTBOT_EMAIL\" ]; then \
-                docker compose -f docker-compose.prod.yml run --no-deps --rm --network host certbot certonly \
+                docker run --rm --network host \
+                  -v /etc/letsencrypt:/etc/letsencrypt \
+                  -v /var/www/certbot:/var/www/certbot \
+                  certbot/certbot certonly \
                   --standalone \
                   -d api.appclubededescontos.com.br \
                   --email \"$CERTBOT_EMAIL\" \
@@ -101,7 +104,7 @@ jobs:
           # Install/update cert renewal cron job on the server (runs at 3am on the 1st and 15th)
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST " \
             ( crontab -l 2>/dev/null | grep -v 'certbot'; \
-              echo '0 3 1,15 * * cd $REMOTE_DIR && docker compose -f docker-compose.prod.yml run --rm --network host certbot renew --webroot -w /var/www/certbot --quiet && docker compose -f docker-compose.prod.yml exec nginx nginx -s reload' \
+              echo '0 3 1,15 * * docker run --rm --network host -v /etc/letsencrypt:/etc/letsencrypt -v /var/www/certbot:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose -f $REMOTE_DIR/docker-compose.prod.yml exec nginx nginx -s reload' \
             ) | crontab -"
 
       - name: Verify Deployment
