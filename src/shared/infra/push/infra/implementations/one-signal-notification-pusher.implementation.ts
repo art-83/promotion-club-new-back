@@ -32,5 +32,6 @@ class OneSignalNotificationPusher implements NotificationPusherProvider {
         });
         return new Onesignal.DefaultApi(configuration);
     }
-
 }
+
+export default OneSignalNotificationPusher;
