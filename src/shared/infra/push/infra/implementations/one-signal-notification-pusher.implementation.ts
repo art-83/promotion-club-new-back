@@ -21,8 +21,9 @@ class OneSignalNotificationPusher implements NotificationPusherProvider {
         notification.data = message.data;
         notification.include_subscription_ids = tokens;
         const response = await this.client.createNotification(notification);
-        console.log(`[ ${Date.now()} ] Notification pushed to OneSignal:`);
-        console.log(JSON.stringify(response, null, 2));
+        console.log(`[ ${new Date().toISOString()} ] Notification pushed to OneSignal:`);
+        console.log(`Notification: ${JSON.stringify(notification, null, 2)}`);
+        console.log(`Response: ${JSON.stringify(response, null, 2)}`);
     }
 
     private createOneSignalConfiguration(): DefaultApi {
