@@ -25,6 +25,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@onesignal/node-onesignal": "^5.3.1-beta1",
     "@types/cors": "^2.8.19",
     "bcrypt": "^6.0.0",
     "celebrate": "^15.0.3",

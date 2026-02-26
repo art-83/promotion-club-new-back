@@ -1,8 +1,7 @@
 import NotificationPushMessageDTO from "../../dtos/notification-push-message.dto";
-import NotificationPushResponseDTO from "../../dtos/notification-push-response.dto";
 
 interface NotificationPusherProvider {
-  push(tokens: string[], message: NotificationPushMessageDTO): Promise<NotificationPushResponseDTO>;
+  push(tokens: string[], message: NotificationPushMessageDTO): Promise<void>;
 }
 
 export default NotificationPusherProvider;

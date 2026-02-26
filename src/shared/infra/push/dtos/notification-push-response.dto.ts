@@ -1,6 +1,6 @@
 interface NotificationPushResponseDTO {
-  success: string[];
-  errors: string[];
+  success: number;
+  errors: number;
 }
 
 export default NotificationPushResponseDTO;

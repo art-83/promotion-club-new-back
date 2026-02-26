@@ -1,17 +1,16 @@
 import NotificationPusherProvider from "../providers/notification-pusher.provider";
 import NotificationPushMessageDTO from "../../dtos/notification-push-message.dto";
-import NotificationPushResponseDTO from "../../dtos/notification-push-response.dto";
 import * as admin from "firebase-admin";
 import * as fs from "fs";
 
-class NotificationPusher implements NotificationPusherProvider {
+class FirebaseNotificationPusher implements NotificationPusherProvider {
   private client: admin.messaging.Messaging;
 
   constructor() {
     this.client = this.initializeFirebaseSDK();
   }
 
-  public async push(tokens: string[], data: Partial<NotificationPushMessageDTO>): Promise<NotificationPushResponseDTO> {
+  public async push(tokens: string[], data: Partial<NotificationPushMessageDTO>): Promise<void> {
     const notificationPayload = {
       tokens: tokens,
       notification: {
@@ -36,12 +35,7 @@ class NotificationPusher implements NotificationPusherProvider {
       .filter((item) => !item.success)
       .map((item) => item.token);
 
-    const notificationPushResponse = {
-      success,
-      errors,
-    } as NotificationPushResponseDTO;
-
-    return notificationPushResponse;
+    console.log(success, errors);
   }
 
   private initializeFirebaseSDK(): admin.messaging.Messaging {
@@ -55,4 +49,4 @@ class NotificationPusher implements NotificationPusherProvider {
   }
 }
 
-export default NotificationPusher;
+export default FirebaseNotificationPusher;

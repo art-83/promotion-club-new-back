@@ -42,7 +42,7 @@ import UserPushToken from "../../modules/users/infra/orm/entities/user-push-toke
 import UserPushTokenRepository from "../../modules/users/infra/orm/repositories/implementations/user-push-token-repository.implementation";
 import UserStoreOptions from "../../modules/users/infra/orm/entities/user-store-options.entity";
 import UserStoreOptionsRepository from "../../modules/users/infra/orm/repositories/implementations/user-store-options-repository.implementation";
-import NotificationPusher from "../infra/push/infra/implementations/notification-pusher.implementation";
+import NotificationPusher from "../infra/push/infra/implementations/one-signal-notification-pusher.implementation";
 import NotificationPusherProvider from "../infra/push/infra/providers/notification-pusher.provider";
 import Benefit from "../../modules/benefits/infra/orm/entities/benefit.entity";
 import BenefitRepository from "../../modules/benefits/infra/orm/repositories/implementations/benefit-repository.implementation";

@@ -24,7 +24,7 @@ services:
       - app_storage:/storage:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
-    command: [nginx, '-g', 'daemon off; error_log /dev/null;']
+    command: [nginx, "-g", "daemon off; error_log /dev/null;"]
     depends_on:
       - app
 
