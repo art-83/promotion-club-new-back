@@ -25,11 +25,6 @@ jobs:
       - name: Build app
         run: npm run build
 
-      - name: Write firebase credentials
-        run: |
-          mkdir -p dist/config
-          echo '${{ secrets.FIREBASE_CREDENTIALS }}' > dist/config/promotion-club-pusher-firebase-credentials.json
-
       - name: Write SSL certificate
         env:
           SSL_CERTIFICATE: ${{ secrets.SSL_CERTIFICATE }}
@@ -80,12 +75,12 @@ jobs:
             docker compose -f docker-compose.prod.yml build --no-cache && \
             docker compose -f docker-compose.prod.yml up -d app redis"
 
-          # Ensure cert dirs exist; if cert missing and CERTBOT_EMAIL set, obtain cert (port 80 free while nginx is down)
+          # Ensure cert dirs exist; if cert missing and CERTBOT_EMAIL set, obtain cert via standalone (port 80 free while nginx is down)
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "sudo mkdir -p /etc/letsencrypt /var/www/certbot" || true
           ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && \
             if [ ! -f $CERT_PATH ]; then \
               if [ -n \"$CERTBOT_EMAIL\" ]; then \
-                docker compose -f docker-compose.prod.yml run --no-deps --rm -p 80:80 certbot certonly \
+                docker compose -f docker-compose.prod.yml run --no-deps --rm --network host certbot certonly \
                   --standalone \
                   -d api.appclubededescontos.com.br \
                   --email \"$CERTBOT_EMAIL\" \
@@ -102,6 +97,12 @@ jobs:
             docker compose -f docker-compose.prod.yml up -d nginx && \
             docker compose -f docker-compose.prod.yml ps && \
             docker compose -f docker-compose.prod.yml logs --tail=50"
+
+          # Install/update cert renewal cron job on the server (runs at 3am on the 1st and 15th)
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST " \
+            ( crontab -l 2>/dev/null | grep -v 'certbot'; \
+              echo '0 3 1,15 * * cd $REMOTE_DIR && docker compose -f docker-compose.prod.yml run --rm --network host certbot renew --webroot -w /var/www/certbot --quiet && docker compose -f docker-compose.prod.yml exec nginx nginx -s reload' \
+            ) | crontab -"
 
       - name: Verify Deployment
         env:
