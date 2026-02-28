@@ -9,7 +9,8 @@ services:
     volumes:
       - app_storage:/storage
     depends_on:
-      - redis
+      - redis-cache
+      - redis-password-reset
 
   nginx:
     image: nginx:alpine
@@ -36,14 +37,25 @@ services:
     depends_on:
       - nginx
 
-  redis:
+  redis-cache:
     image: "redis:alpine"
-    container_name: promotion-club-redis
+    container_name: promotion-club-redis-cache
+    command: redis-server --port 6379
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - redis_cache_data:/data
+
+  redis-password-reset:
+    image: "redis:alpine"
+    container_name: promotion-club-redis-password-reset
+    command: redis-server --port 6380
+    ports:
+      - "6380:6380"
+    volumes:
+      - redis_password_reset_data:/data
 
 volumes:
-  redis_data:
+  redis_cache_data:
+  redis_password_reset_data:
   app_storage:
