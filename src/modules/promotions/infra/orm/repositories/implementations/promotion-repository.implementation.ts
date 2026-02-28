@@ -73,11 +73,11 @@ class PromotionRepository implements PromotionRepositoryProvider {
     }
 
     if (options.start_date)
-      query.andWhere("promotions.create_at >= :start_date", {
+      query.andWhere("promotions.created_at >= :start_date", {
         start_date: options.start_date,
       });
     if (options.end_date)
-      query.andWhere("promotions.create_at <= :end_date", {
+      query.andWhere("promotions.created_at <= :end_date", {
         end_date: options.end_date,
       });
 
