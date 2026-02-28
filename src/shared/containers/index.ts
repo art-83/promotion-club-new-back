@@ -55,7 +55,7 @@ import PasswordResetTokenBlacklistCache from "../../modules/users/infra/cache/im
 import MailerProvider from "../infra/mailer/infra/providers/mailer.provider";
 import ResendMailer from "../infra/mailer/infra/implementations/resend-mailer.implementation";
 import PasswordResetJwt from "../../modules/users/infra/jwt/implementation/password-reset-jwt.implementation";
-import PasswordResetPayloadDTO from "../../modules/users/dtos/users/password-reset-payload.dto";
+import RequestPasswordResetPayloadDTO from "../../modules/users/dtos/users/request-password-reset-payload.dto";
 import JwtPayloadDTO from "../infra/jwt/dto/jwt-payload.dto";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
@@ -83,7 +83,7 @@ container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitReposit
 container.registerSingleton<FileRepositoryProvider>("FileRepository", FileRepository);
 container.registerSingleton<HashProvider>("Hash", Hash);
 container.registerSingleton<JwtProvider<JwtPayloadDTO>>("Jwt", Jwt);
-container.registerSingleton<JwtProvider<PasswordResetPayloadDTO>>("PasswordResetJwt", PasswordResetJwt);
+container.registerSingleton<JwtProvider<RequestPasswordResetPayloadDTO>>("PasswordResetJwt", PasswordResetJwt);
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);
 container.registerSingleton<CacheProvider<any>>("PasswordResetCache", PasswordResetCache);
 container.registerSingleton<CacheProvider<string>>("PasswordResetTokenBlacklistCache", PasswordResetTokenBlacklistCache);

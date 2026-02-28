@@ -1,5 +1,5 @@
-const passwordResetEmailHtmlTemplate = (code: string) => 
-`
+const passwordResetEmailHtmlTemplate = (code: string) =>
+  `
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,6 +66,6 @@ const passwordResetEmailHtmlTemplate = (code: string) =>
     </div>
 </body>
 </html>
-`
+`;
 
 export { passwordResetEmailHtmlTemplate };

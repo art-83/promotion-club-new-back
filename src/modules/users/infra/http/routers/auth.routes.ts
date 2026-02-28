@@ -54,4 +54,14 @@ authRouter.post(
   authController.validatePasswordResetCode
 );
 
+authRouter.post(
+  "/reset-password/change-password",
+  celebrate({
+    [Segments.BODY]: {
+      password: Joi.string().min(8).max(32).required(),
+    },
+  }),
+  authController.changePassword
+);
+
 export default authRouter;

@@ -6,7 +6,7 @@ const jwtConfig = {
   algorithm: "HS256",
   expiresIn: {
     passwordReset: 300,
-  }
+  },
 };
 
 export default jwtConfig;

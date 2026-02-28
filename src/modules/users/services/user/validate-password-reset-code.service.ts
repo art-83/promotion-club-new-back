@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import PasswordResetCache from "../../infra/cache/implementation/password-reset-cache.implementation";
 import ValidatePasswordResetDTO from "../../dtos/users/validate-password-reset.dto";
-import PasswordResetPayloadDTO from "../../dtos/users/password-reset-payload.dto";
+import RequestPasswordResetPayloadDTO from "../../dtos/users/request-password-reset-payload.dto";
 import CacheProvider from "../../../../shared/infra/cache/infra/providers/cache.provider";
 import JwtProvider from "../../../../shared/infra/jwt/infra/provider/jwt.provider";
 import AppError from "../../../../shared/infra/http/errors/app-error";
@@ -10,11 +10,11 @@ import AppError from "../../../../shared/infra/http/errors/app-error";
 class ValidatePasswordResetCodeService {
   constructor(
     @inject("PasswordResetCache")
-    private passwordResetCache: CacheProvider<PasswordResetPayloadDTO>,
+    private passwordResetCache: CacheProvider<RequestPasswordResetPayloadDTO>,
     @inject("PasswordResetJwt")
-    private passwordResetJwt: JwtProvider<PasswordResetPayloadDTO>,
+    private passwordResetJwt: JwtProvider<RequestPasswordResetPayloadDTO>,
     @inject("PasswordResetTokenBlacklistCache")
-    private passwordResetTokenBlacklistCache: CacheProvider<string>,
+    private passwordResetTokenBlacklistCache: CacheProvider<string>
   ) {}
 
   public async execute(data: ValidatePasswordResetDTO) {

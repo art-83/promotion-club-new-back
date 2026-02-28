@@ -1,5 +1,4 @@
-
-interface JwtProvider <T> {
+interface JwtProvider<T> {
   generate(data: T): string;
   validate(token: string): T;
 }
