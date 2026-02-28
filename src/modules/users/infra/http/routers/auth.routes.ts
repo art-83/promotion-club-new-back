@@ -23,7 +23,7 @@ authRouter.post(
 
 authRouter.post(
   "/sign-in",
-  telemetryMiddleware,
+  //telemetryMiddleware,
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),
@@ -34,7 +34,7 @@ authRouter.post(
 );
 
 authRouter.post(
-  "/password-reset",
+  "/reset-password/request",
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),
@@ -44,7 +44,7 @@ authRouter.post(
 );
 
 authRouter.post(
-  "/password-reset/validate",
+  "/reset-password/validate",
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),

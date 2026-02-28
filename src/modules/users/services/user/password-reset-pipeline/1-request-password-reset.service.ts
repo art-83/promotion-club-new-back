@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import PasswordResetCache from "../../infra/cache/implementation/password-reset-cache.implementation";
-import MailerProvider from "../../../../shared/infra/mailer/infra/providers/mailer.provider";
-import HashProvider from "../../../../shared/infra/hash/infra/providers/hash.provider";
+import PasswordResetCache from "../../../infra/cache/implementation/password-reset-cache.implementation";
+import MailerProvider from "../../../../../shared/infra/mailer/infra/providers/mailer.provider";
+import HashProvider from "../../../../../shared/infra/hash/infra/providers/hash.provider";
 import crypto from "crypto";
-import resendMailerConfig from "../../../../config/resend.config";
-import EmailBodyDTO from "../../../../shared/infra/mailer/dtos/email-body.dto";
-import { passwordResetEmailHtmlTemplate } from "../../../../shared/infra/mailer/utils/password-reset";
+import resendMailerConfig from "../../../../../config/resend.config";
+import EmailBodyDTO from "../../../../../shared/infra/mailer/dtos/email-body.dto";
+import { passwordResetEmailHtmlTemplate } from "../../../../../shared/infra/mailer/utils/password-reset";
 
 @injectable()
 class RequestPasswordResetService {

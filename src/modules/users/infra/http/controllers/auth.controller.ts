@@ -2,9 +2,9 @@ import { container } from "tsyringe";
 import CreateUserAndVinculateUserPermissionsService from "../../../services/user/create-user-and-vinculate-user-permissions.service";
 import { Request, Response } from "express";
 import CreateUserSessionService from "../../../services/user/create-user-session.service";
-import RequestPasswordResetService from "../../../services/user/request-password-reset.service";
-import ValidatePasswordResetCodeService from "../../../services/user/validate-password-reset-code.service";
-import ChangeUserPasswordService from "../../../services/user/change-user-password.service";
+import RequestPasswordResetService from "../../../services/user/password-reset-pipeline/1-request-password-reset.service";
+import ValidatePasswordResetCodeService from "../../../services/user/password-reset-pipeline/2-validate-password-reset-code.service";
+import ChangeUserPasswordService from "../../../services/user/password-reset-pipeline/3-change-user-password.service";
 
 class AuthController {
   public async signUp(request: Request, response: Response) {
