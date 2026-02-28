@@ -50,6 +50,13 @@ import BenefitTier from "../../modules/benefits/infra/orm/entities/benefit-tier.
 import BenefitTierRepository from "../../modules/benefits/infra/orm/repositories/implementations/benefit-tier-repository.implementation";
 import UserBenefit from "../../modules/benefits/infra/orm/entities/user-benefit.entity";
 import UserBenefitRepository from "../../modules/benefits/infra/orm/repositories/implementations/user-benefit-repository.implementation";
+import PasswordResetCache from "../../modules/users/infra/cache/implementation/password-reset-cache.implementation";
+import PasswordResetTokenBlacklistCache from "../../modules/users/infra/cache/implementation/password-reset-token-blacklist-cache.implementation";
+import MailerProvider from "../infra/mailer/infra/providers/mailer.provider";
+import ResendMailer from "../infra/mailer/infra/implementations/resend-mailer.implementation";
+import PasswordResetJwt from "../../modules/users/infra/jwt/implementation/password-reset-jwt.implementation";
+import PasswordResetPayloadDTO from "../../modules/users/dtos/users/password-reset-payload.dto";
+import JwtPayloadDTO from "../infra/jwt/dto/jwt-payload.dto";
 
 container.registerSingleton<RepositoryProvider<User>>("UserRepository", UserRepository);
 container.registerSingleton<RepositoryProvider<UserPermissions>>("UserPermissionsRepository", UserPermissionsRepository);
@@ -75,6 +82,10 @@ container.registerSingleton<RepositoryProvider<BenefitTier>>("BenefitTierReposit
 container.registerSingleton<RepositoryProvider<UserBenefit>>("UserBenefitRepository", UserBenefitRepository);
 container.registerSingleton<FileRepositoryProvider>("FileRepository", FileRepository);
 container.registerSingleton<HashProvider>("Hash", Hash);
-container.registerSingleton<JwtProvider>("Jwt", Jwt);
+container.registerSingleton<JwtProvider<JwtPayloadDTO>>("Jwt", Jwt);
+container.registerSingleton<JwtProvider<PasswordResetPayloadDTO>>("PasswordResetJwt", PasswordResetJwt);
 container.registerSingleton<CacheProvider<any>>("CacheProvider", QrCodeCache);
+container.registerSingleton<CacheProvider<any>>("PasswordResetCache", PasswordResetCache);
+container.registerSingleton<CacheProvider<string>>("PasswordResetTokenBlacklistCache", PasswordResetTokenBlacklistCache);
 container.registerSingleton<NotificationPusherProvider>("NotificationPusher", NotificationPusher);
+container.registerSingleton<MailerProvider>("Mailer", ResendMailer);

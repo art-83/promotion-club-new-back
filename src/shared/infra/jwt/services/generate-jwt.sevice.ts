@@ -6,7 +6,7 @@ import JwtPayloadDTO from "../dto/jwt-payload.dto";
 class GenerateJwtService {
   constructor(
     @inject("Jwt")
-    private jwt: JwtProvider
+    private jwt: JwtProvider<JwtPayloadDTO>
   ) {}
 
   public execute(data: JwtPayloadDTO): string {

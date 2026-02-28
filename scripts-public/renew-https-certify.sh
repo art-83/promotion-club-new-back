@@ -3,7 +3,7 @@ set -e
 
 # Define paths and container names
 COMPOSE_FILE="docker-compose.prod.yml"
-NGINX_CONTAINER="indaiatuba-new-back-nginx"
+NGINX_CONTAINER="promotion-club-nginx"
 SCRIPT_PATH="$(readlink -f "$0")"
 
 # 1. Ensure this script is in the crontab (runs daily at 3am)

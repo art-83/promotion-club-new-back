@@ -1,8 +1,7 @@
-import JwtPayloadDTO from "../../dto/jwt-payload.dto";
 
-interface JwtProvider {
-  generate(data: JwtPayloadDTO): string;
-  validate(token: string): JwtPayloadDTO;
+interface JwtProvider <T> {
+  generate(data: T): string;
+  validate(token: string): T;
 }
 
 export default JwtProvider;

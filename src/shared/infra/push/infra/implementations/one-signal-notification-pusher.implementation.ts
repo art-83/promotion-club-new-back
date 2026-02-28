@@ -1,6 +1,7 @@
 import NotificationPushMessageDTO from "../../dtos/notification-push-message.dto";
 import NotificationPusherProvider from "../providers/notification-pusher.provider";
 import { createConfiguration, DefaultApi, Notification } from '@onesignal/node-onesignal';
+import oneSignalConfig from '../../../../../config/one-signal.config';
 
 class OneSignalNotificationPusher implements NotificationPusherProvider {
     private client: DefaultApi;
@@ -11,7 +12,7 @@ class OneSignalNotificationPusher implements NotificationPusherProvider {
 
     async push(tokens: string[], message: NotificationPushMessageDTO): Promise<void> {
         const notification = new Notification();
-        notification.app_id = String(process.env.ONESIGNAL_APP_ID);
+        notification.app_id = oneSignalConfig.appId;
         notification.headings = {
             en: message.title,
         };
@@ -28,7 +29,7 @@ class OneSignalNotificationPusher implements NotificationPusherProvider {
 
     private createOneSignalConfiguration(): DefaultApi {
         const configuration = createConfiguration({
-            restApiKey: process.env.ONESIGNAL_API_KEY,
+            restApiKey: oneSignalConfig.apiKey,
         });
         return new DefaultApi(configuration);
     }

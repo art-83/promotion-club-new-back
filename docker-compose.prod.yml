@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: indaiatuba-new-back-app
+    container_name: promotion-club-app
     env_file:
       - .env
     volumes:
@@ -13,7 +13,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: indaiatuba-new-back-nginx
+    container_name: promotion-club-nginx
     ports:
       - "80:80"
       - "443:443"
@@ -28,7 +28,7 @@ services:
 
   certbot:
     image: certbot/certbot
-    container_name: indaiatuba-new-back-certbot
+    container_name: promotion-club-certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
@@ -38,7 +38,7 @@ services:
 
   redis:
     image: "redis:alpine"
-    container_name: indaiatuba-new-back-redis
+    container_name: promotion-club-redis
     ports:
       - "6379:6379"
     volumes:

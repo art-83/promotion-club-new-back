@@ -33,4 +33,25 @@ authRouter.post(
   authController.signIn
 );
 
+authRouter.post(
+  "/password-reset",
+  celebrate({
+    [Segments.BODY]: {
+      email: Joi.string().email().required(),
+    },
+  }),
+  authController.requestPasswordReset
+);
+
+authRouter.post(
+  "/password-reset/validate",
+  celebrate({
+    [Segments.BODY]: {
+      email: Joi.string().email().required(),
+      code: Joi.string().required(),
+    },
+  }),
+  authController.validatePasswordResetCode
+);
+
 export default authRouter;

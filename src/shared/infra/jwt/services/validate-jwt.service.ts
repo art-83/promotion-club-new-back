@@ -7,7 +7,7 @@ import AppError from "../../http/errors/app-error";
 class ValidateJwtService {
   constructor(
     @inject("Jwt")
-    private jwt: JwtProvider
+    private jwt: JwtProvider<JwtPayloadDTO>
   ) {}
 
   public execute(token: string): JwtPayloadDTO {

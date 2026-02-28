@@ -23,7 +23,7 @@ import telemetryMiddleware from "../middlewares/telemetry.middleware";
 const routes = Router();
 
 routes.use("/health", (req, res) => {
-  return res.status(200).json({ message: "Hello, World! v1.0.4" });
+  return res.status(200).json({ message: "Hello, World! v0.0.2 - 28/02/2026 [BETA]" });
 });
 routes.use("/auth", authRouter);
 

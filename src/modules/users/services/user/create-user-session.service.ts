@@ -4,6 +4,7 @@ import User from "../../infra/orm/entities/user.entity";
 import AppError from "../../../../shared/infra/http/errors/app-error";
 import HashProvider from "../../../../shared/infra/hash/infra/providers/hash.provider";
 import JwtProvider from "../../../../shared/infra/jwt/infra/provider/jwt.provider";
+import JwtPayloadDTO from "../../../../shared/infra/jwt/dto/jwt-payload.dto";
 
 @injectable()
 class CreateUserSessionService {
@@ -13,7 +14,7 @@ class CreateUserSessionService {
     @inject("Hash")
     private hash: HashProvider,
     @inject("Jwt")
-    private jwt: JwtProvider
+    private jwt: JwtProvider<JwtPayloadDTO>
   ) {}
 
   public async execute(email: string, password: string): Promise<{ message: string; token: string }> {
