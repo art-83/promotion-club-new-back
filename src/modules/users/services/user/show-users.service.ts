@@ -24,7 +24,7 @@ class ShowUsersServices {
       ]);
 
       if (!user) throw new AppError(404, "Resource not found.", "Recurso não encontrado.");
-
+      user.password = "*";
       const userWithTotalSpent = {
         ...user,
         total_spent: totalSpentByUser,
@@ -32,7 +32,11 @@ class ShowUsersServices {
       return [userWithTotalSpent];
     }
     // to /users
-    return await this.userRepository.find(options);
+    const users = await this.userRepository.find(options);
+    return users.map(user => {
+      user.password = "*";
+      return user;
+    });
   }
 }
 

@@ -10,7 +10,6 @@ promotionCategoryRoutes.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
-      store_id: Joi.string().uuid().required(),
     },
   }),
   promotionCategoryController.create
@@ -22,7 +21,6 @@ promotionCategoryRoutes.get(
     [Segments.QUERY]: {
       id: Joi.string().uuid().optional(),
       name: Joi.string().optional(),
-      store_id: Joi.string().uuid().optional(),
       offset: Joi.number().optional(),
       limit: Joi.number().optional(),
     },

@@ -24,7 +24,7 @@ class CreateUserAndVinculateUserPermissionsService {
     ]);
 
     // Generic message to avoid revealing whether email or CPF is already taken
-    if (hasUserByCPF || hasUserByEmail) throw new AppError(409, "Unable to complete registration.", "Não foi possível concluir o cadastro.");
+    if (hasUserByCPF || hasUserByEmail) throw new AppError(409, "Data provided is already in use.", "Os dados informados já estão vinculados a uma conta.");
 
     const passwordHash = await this.hash.encrypt(String(data.password));
     data.password = passwordHash;

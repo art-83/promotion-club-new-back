@@ -3,8 +3,6 @@ import RepositoryProvider from "../../../../../../shared/infra/orm/repositories/
 import PromotionCategory from "../../entities/promotion-category.entity";
 import dataSource from "../../../../../../shared/infra/orm/database";
 import PromotionCategoryQueryOptionsDto from "../../../../dtos/promotion-categories/promotion-category-query-options.dto";
-import CreatePromotionCategoryDto from "../../../../dtos/promotion-categories/create-promotion-category.dto";
-
 class PromotionCategoryRepository implements RepositoryProvider<PromotionCategory> {
   private repository: Repository<PromotionCategory>;
 
@@ -17,7 +15,6 @@ class PromotionCategoryRepository implements RepositoryProvider<PromotionCategor
 
     if (options.id) query.andWhere("promotion_categories.id = :id", { id: options.id });
     if (options.name) query.andWhere("promotion_categories.name ILIKE :name", { name: `%${options.name}%` });
-    if (options.store_id) query.andWhere("promotion_categories.store_id = :store_id", { store_id: options.store_id });
     if (options.offset) query.skip(options.offset);
     if (options.limit) query.take(options.limit);
 
@@ -26,7 +23,7 @@ class PromotionCategoryRepository implements RepositoryProvider<PromotionCategor
     return await query.getMany();
   }
 
-  public async create(data: Partial<CreatePromotionCategoryDto>): Promise<PromotionCategory> {
+  public async create(data: Partial<PromotionCategory>): Promise<PromotionCategory> {
     const promotionCategory = this.repository.create(data);
     return await this.repository.save(promotionCategory);
   }

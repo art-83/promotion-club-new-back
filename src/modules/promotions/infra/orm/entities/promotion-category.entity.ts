@@ -3,14 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import PromotionPromotionCategory from "./promotion-promotion-category.entity";
-import Store from "../../../../stores/infra/orm/entities/store.entity";
 
 @Entity({ name: "promotion_categories" })
 class PromotionCategory {
@@ -28,10 +25,6 @@ class PromotionCategory {
 
   @DeleteDateColumn()
   deleted_at: Date;
-
-  @ManyToOne(() => Store, (store) => store.promotion_categories)
-  @JoinColumn({ name: "store_id" })
-  store: Store;
 
   @OneToMany(() => PromotionPromotionCategory, (promotionPromotionCategory) => promotionPromotionCategory.promotion_category)
   promotion_promotion_categories: PromotionPromotionCategory[];

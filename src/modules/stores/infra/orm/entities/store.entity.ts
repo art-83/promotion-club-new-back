@@ -17,7 +17,6 @@ import StoreStoreCategory from "./store-store-category.entity";
 import Invoice from "../../../../invoices/infra/orm/entities/invoice.entity";
 import UserStoreOptions from "../../../../users/infra/orm/entities/user-store-options.entity";
 import StoreRating from "./store-rating.entity";
-import PromotionCategory from "../../../../promotions/infra/orm/entities/promotion-category.entity";
 
 @Entity({ name: "stores" })
 class Store {
@@ -79,9 +78,6 @@ class Store {
 
   @OneToMany(() => StoreRating, (store_rating) => store_rating.store)
   store_ratings: StoreRating[];
-
-  @OneToMany(() => PromotionCategory, (promotion_category) => promotion_category.store)
-  promotion_categories: PromotionCategory[];
 }
 
 export default Store;
