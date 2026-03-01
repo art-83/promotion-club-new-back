@@ -13,7 +13,11 @@ userRoutes.post(
   celebrate({
     [Segments.BODY]: {
       token: Joi.string().required(),
-      platform: Joi.string().required(),
+      platform: Joi.string().optional(),
+      os_version: Joi.string().optional(),
+      manufacturer: Joi.string().optional(),
+      device_name: Joi.string().optional(),
+      device_model: Joi.string().optional(),
     },
   }),
   userController.createUserPushToken

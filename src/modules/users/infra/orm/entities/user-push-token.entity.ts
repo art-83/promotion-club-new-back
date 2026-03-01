@@ -22,11 +22,20 @@ class UserPushToken {
   @Column()
   token: string;
 
-  @Column()
+  @Column({ nullable: true })
   platform: string;
 
-  @Column({ default: true })
-  enabled: boolean;
+  @Column({ nullable: true })
+  os_version: string;
+
+  @Column({ nullable: true })
+  manufacturer: string;
+
+  @Column({ nullable: true })
+  device_name: string;
+
+  @Column({ nullable: true })
+  device_model: string;
 
   @CreateDateColumn()
   created_at: Date;

@@ -22,10 +22,6 @@ class UserPushTokenRepository implements RepositoryProvider<UserPushToken> {
       query.andWhere("user_push_tokens.platform = :platform", { platform: options.platform });
     }
 
-    if (options.enabled !== undefined) {
-      query.andWhere("user_push_tokens.enabled = :enabled", { enabled: options.enabled });
-    }
-
     query.andWhere("user_push_tokens.deleted_at IS NULL");
 
     const userPushTokens = await query.getMany();
