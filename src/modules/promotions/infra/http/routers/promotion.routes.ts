@@ -13,6 +13,7 @@ promotionRoutes.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
+      description: Joi.string().required(),
       price: Joi.number().required(),
       discount_percentage: Joi.number().required(),
       expire_at: Joi.date().required(),

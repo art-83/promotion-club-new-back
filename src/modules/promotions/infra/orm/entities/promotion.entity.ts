@@ -24,6 +24,9 @@ class Promotion {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  description: string;
+
   @Column({ type: "decimal" })
   price: number;
 
