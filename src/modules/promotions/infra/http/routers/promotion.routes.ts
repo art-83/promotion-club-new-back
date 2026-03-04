@@ -60,6 +60,7 @@ promotionRoutes.put(
     },
     [Segments.BODY]: {
       name: Joi.string().optional(),
+      description: Joi.string().optional(),
       price: Joi.number().optional(),
       discount_percentage: Joi.number().optional(),
       expire_at: Joi.date().optional(),
