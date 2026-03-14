@@ -11,7 +11,7 @@ class ValidatePasswordResetCodeService {
     @inject("PasswordResetCache")
     private passwordResetCache: CacheProvider<RequestPasswordResetPayloadDTO>,
     @inject("PasswordResetJwt")
-    private passwordResetJwt: JwtProvider<RequestPasswordResetPayloadDTO>,
+    private passwordResetJwt: JwtProvider<RequestPasswordResetPayloadDTO>
   ) {}
 
   public async execute(data: ValidatePasswordResetDTO) {

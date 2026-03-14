@@ -10,6 +10,7 @@ import PromotionQueryOptionsDTO from "../../promotions/dtos/promotions/promotion
 import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
 import UserPermissionsQueryOptionsDTO from "../../users/dtos/users-permissions/user-permissions-query-options.dto";
 import UserPermissions from "../../users/infra/orm/entities/user-permissions.entity";
+import BenefitTier from "../../benefits/infra/orm/entities/benefit-tier.entity";
 
 @injectable()
 class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
@@ -23,7 +24,9 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
     @inject("PromotionRepository")
     private promotionRepository: RepositoryProvider<Promotion>,
     @inject("UserPermissionsRepository")
-    private userPermissionsRepository: RepositoryProvider<UserPermissions>
+    private userPermissionsRepository: RepositoryProvider<UserPermissions>,
+    @inject("BenefitTierRepository")
+    private benefitTierRepository: RepositoryProvider<BenefitTier>,
   ) {}
 
   public async execute(user_id: string): Promise<{ message: string; createPromotionTicket: Partial<PromotionTicket> }> {
@@ -70,10 +73,33 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
     const removeQrCode = await this.cache.delete(user_id);
     if (!removeQrCode) throw new AppError(404, "QrCode invalid or expired.", "QR Code inválido ou expirado.");
 
-    const newPoints = Number(Number(user.points) + Number(promotion.final_price));
-    await this.userRepository.update(user_id, { points: newPoints });
+    const newPoints = await this.calculateUserPoints(user, promotion);
+
+    const firstPromotionTicketIssuedAt = user.first_promotion_ticket_issued_at ? user.first_promotion_ticket_issued_at : new Date();
+
+    await this.userRepository.update(user_id, { points: newPoints, first_promotion_ticket_issued_at: firstPromotionTicketIssuedAt });
 
     return { message: "QrCode validated successfuly.", createPromotionTicket };
+  }
+
+  private async calculateUserPoints(user: User, promotion: Promotion): Promise<number> {
+    const userBenefitTier = (await this.benefitTierRepository.find({ minimum_points: user.points, maximum_points: user.points })).at(0);
+
+    if (!userBenefitTier) throw new AppError(404, "Benefit tier not found.", "Nível de benefício não encontrado.");
+
+    const multiplierMap = new Map<string, number>();
+
+    multiplierMap.set("BASIC", 1);
+    multiplierMap.set("PREMIUM", 1.5);
+    multiplierMap.set("VIP", 2);
+    
+    const formatedBenefitName = userBenefitTier.name.toUpperCase();
+
+    const multiplier = multiplierMap.get(formatedBenefitName);
+
+    if (!multiplier) throw new AppError(404, "Multiplier not found.", "Multiplicador não encontrado para o nível de benefício.");
+
+    return parseInt(((Number(user.points) + Number(promotion.final_price)) / 10).toString(), 10) * multiplier;
   }
 }
 

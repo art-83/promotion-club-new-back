@@ -33,7 +33,7 @@ class ShowUsersServices {
     }
     // to /users
     const users = await this.userRepository.find(options);
-    return users.map(user => {
+    return users.map((user) => {
       user.password = "*";
       return user;
     });

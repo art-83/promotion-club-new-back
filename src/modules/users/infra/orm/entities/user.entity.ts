@@ -41,6 +41,9 @@ class User {
   @Column({ type: "decimal", default: 0 })
   points: number;
 
+  @Column({ nullable: true })
+  first_promotion_ticket_issued_at: Date;
+
   @CreateDateColumn()
   created_at: Date;
 
