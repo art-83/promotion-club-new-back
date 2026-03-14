@@ -99,7 +99,9 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
 
     if (!multiplier) throw new AppError(404, "Multiplier not found.", "Multiplicador não encontrado para o nível de benefício.");
 
-    return parseInt(((Number(user.points) + Number(promotion.final_price)) / 10).toString(), 10) * multiplier;
+    const pointsEarned = (Number(promotion.final_price) / 10) * multiplier;
+    const newTotalPoints = Number(user.points) + pointsEarned;
+    return Math.floor(newTotalPoints);
   }
 }
 
