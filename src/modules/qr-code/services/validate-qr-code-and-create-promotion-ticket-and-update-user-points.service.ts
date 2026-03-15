@@ -103,7 +103,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
 
     const pointsEarned = (Number(promotion.final_price) / 10) * multiplier;
     const newTotalPoints = Number(user.points) + pointsEarned;
-    return Math.floor(newTotalPoints);
+    return newTotalPoints;
   }
 }
 
