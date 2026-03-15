@@ -11,6 +11,7 @@ import UserQueryOptionsDTO from "../../users/dtos/users/user-query-options.dto";
 import UserPermissionsQueryOptionsDTO from "../../users/dtos/users-permissions/user-permissions-query-options.dto";
 import UserPermissions from "../../users/infra/orm/entities/user-permissions.entity";
 import BenefitTier from "../../benefits/infra/orm/entities/benefit-tier.entity";
+import UserRepositoryProvider from "../../users/infra/orm/repositories/providers/user-repository.provider";
 
 @injectable()
 class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
@@ -20,7 +21,7 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
     @inject("PromotionTicketRepository")
     private promotionTicketRepository: RepositoryProvider<PromotionTicket>,
     @inject("UserRepository")
-    private userRepository: RepositoryProvider<User>,
+    private userRepository: UserRepositoryProvider,
     @inject("PromotionRepository")
     private promotionRepository: RepositoryProvider<Promotion>,
     @inject("UserPermissionsRepository")
@@ -83,7 +84,8 @@ class ValidateQrCodeAndCreatePromotionTicketAndUpdateUserPointsService {
   }
 
   private async calculateUserPoints(user: User, promotion: Promotion): Promise<number> {
-    const userBenefitTier = (await this.benefitTierRepository.find({ minimum_points: user.points, maximum_points: user.points })).at(0);
+    const totalSpent = await this.userRepository.totalSpentByUser(user.id);
+    const userBenefitTier = (await this.benefitTierRepository.find({ minimum_points: totalSpent, maximum_points: totalSpent })).at(0);
 
     if (!userBenefitTier) throw new AppError(404, "Benefit tier not found.", "Nível de benefício não encontrado.");
 
